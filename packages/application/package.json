@@ -1,0 +1,22 @@
+{
+  "name": "@workspace/application",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@workspace/domain": "workspace:*"
+  },
+  "devDependencies": {
+    "@workspace/config-eslint": "workspace:*",
+    "@workspace/config-typescript": "workspace:*",
+    "eslint": "^9.32.0"
+  },
+  "exports": {
+    "./dtos": "./src/dtos/index.ts",
+    "./ports": "./src/ports/index.ts",
+    "./use-cases/*": "./src/use-cases/*.ts"
+  }
+}

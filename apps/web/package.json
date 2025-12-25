@@ -7,12 +7,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "lint:fix": "next lint --fix",
+    "build:mobile": "MOBILE_BUILD=true next build",
+    "sync:ios": "npm run build:mobile && npx cap sync ios",
+    "sync:android": "npm run build:mobile && npx cap sync android",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@workspace/ui": "workspace:*",
+    "@workspace/ui-react": "workspace:*",
     "lucide-react": "^0.475.0",
     "next": "16.0.10",
     "next-themes": "^0.4.6",
@@ -24,8 +27,8 @@
     "@types/node": "^20.19.25",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
-    "@workspace/eslint-config": "workspace:^",
-    "@workspace/typescript-config": "workspace:*",
+    "@workspace/config-eslint": "workspace:^",
+    "@workspace/config-typescript": "workspace:*",
     "eslint": "^9.39.1",
     "typescript": "^5.9.3"
   }

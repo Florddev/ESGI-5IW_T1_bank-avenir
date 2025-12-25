@@ -1,0 +1,15 @@
+{
+  "extends": "@workspace/config-typescript/base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist",
+    "paths": {
+      "@workspace/db-in-memory/*": ["./src/*"],
+      "@workspace/domain/*": ["../../../domain/*"],
+      "@workspace/application/*": ["../../../application/*"],
+      "@workspace/shared/*": ["../../../shared/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
