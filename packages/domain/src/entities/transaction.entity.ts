@@ -1,4 +1,4 @@
-import { Money } from '../value-objects/money.js';
+import { Money } from '../value-objects/money';
 
 export enum TransactionType {
     TRANSFER = 'TRANSFER',

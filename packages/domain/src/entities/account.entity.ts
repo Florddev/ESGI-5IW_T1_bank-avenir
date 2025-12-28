@@ -1,6 +1,6 @@
-import { IBAN } from '../value-objects/iban.js';
-import { Money } from '../value-objects/money.js';
-import { Percentage } from '../value-objects/percentage.js';
+import { IBAN } from '../value-objects/iban';
+import { Money } from '../value-objects/money';
+import { Percentage } from '../value-objects/percentage';
 
 export enum AccountType {
     CHECKING = 'CHECKING',

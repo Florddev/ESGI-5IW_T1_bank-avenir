@@ -1,0 +1,31 @@
+{
+    "name": "@workspace/adapter-next",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "lint": "eslint . --max-warnings 0"
+    },
+    "dependencies": {
+        "@workspace/domain": "workspace:*",
+        "@workspace/application": "workspace:*",
+        "@workspace/shared": "workspace:*",
+        "@workspace/ui-react": "workspace:*",
+        "next": "^16.0.10",
+        "react": "^19.2.1",
+        "react-dom": "^19.2.1"
+    },
+    "devDependencies": {
+        "@workspace/config-eslint": "workspace:*",
+        "@workspace/config-typescript": "workspace:*",
+        "@types/react": "^19.2.7",
+        "@types/react-dom": "^19.2.3",
+        "eslint": "^9.32.0",
+        "typescript": "^5.9.3"
+    },
+    "exports": {
+        "./api/handlers": "./src/api/handlers/auth.handler.ts",
+        "./client/*": "./src/client/*.ts",
+        "./features/auth": "./src/features/auth/index.ts"
+    }
+}

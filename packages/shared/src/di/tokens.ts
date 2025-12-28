@@ -16,6 +16,7 @@ export const TOKENS = {
     ITokenService: 'ITokenService',
     INotificationService: 'INotificationService',
     IOrderMatchingService: 'IOrderMatchingService',
+    IStorageService: 'IStorageService',
 } as const;
 
 export type Token = (typeof TOKENS)[keyof typeof TOKENS];

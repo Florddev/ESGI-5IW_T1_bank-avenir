@@ -1,0 +1,28 @@
+import { LoginForm } from '@workspace/adapter-next/features/auth';
+import Link from 'next/link';
+
+export default function LoginPage() {
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+            <div className="w-full max-w-md space-y-8">
+                <div className="text-center">
+                    <h1 className="text-3xl font-bold tracking-tight">Connexion</h1>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                        Accédez à votre compte Avenir Bank
+                    </p>
+                </div>
+
+                <div className="bg-card p-8 rounded-lg border shadow-sm">
+                    <LoginForm />
+                </div>
+
+                <div className="text-center text-sm">
+                    <span className="text-muted-foreground">Vous n'avez pas de compte ? </span>
+                    <Link href="/auth/register" className="text-primary hover:underline font-medium">
+                        S'inscrire
+                    </Link>
+                </div>
+            </div>
+        </div>
+    );
+}

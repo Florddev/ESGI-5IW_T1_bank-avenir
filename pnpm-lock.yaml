@@ -29,6 +29,15 @@ importers:
 
   apps/web:
     dependencies:
+      '@workspace/adapter-next':
+        specifier: workspace:*
+        version: link:../../packages/infrastructure/adapters/next
+      '@workspace/db-in-memory':
+        specifier: workspace:*
+        version: link:../../packages/infrastructure/data/in-memory
+      '@workspace/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
       '@workspace/ui-react':
         specifier: workspace:*
         version: link:../../packages/ui/react
@@ -47,6 +56,9 @@ importers:
       react-dom:
         specifier: ^19.2.1
         version: 19.2.1(react@19.2.1)
+      reflect-metadata:
+        specifier: ^0.2.2
+        version: 0.2.2
     devDependencies:
       '@tailwindcss/postcss':
         specifier: ^4.1.17
@@ -78,6 +90,9 @@ importers:
       '@workspace/domain':
         specifier: workspace:*
         version: link:../domain
+      '@workspace/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@workspace/config-eslint':
         specifier: workspace:*
@@ -146,6 +161,49 @@ importers:
       eslint:
         specifier: ^9.32.0
         version: 9.39.1(jiti@2.6.1)
+
+  packages/infrastructure/adapters/next:
+    dependencies:
+      '@workspace/application':
+        specifier: workspace:*
+        version: link:../../../application
+      '@workspace/domain':
+        specifier: workspace:*
+        version: link:../../../domain
+      '@workspace/shared':
+        specifier: workspace:*
+        version: link:../../../shared
+      '@workspace/ui-react':
+        specifier: workspace:*
+        version: link:../../../ui/react
+      next:
+        specifier: ^16.0.10
+        version: 16.0.10(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      react:
+        specifier: ^19.2.1
+        version: 19.2.1
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.1(react@19.2.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.7
+        version: 19.2.7
+      '@types/react-dom':
+        specifier: ^19.2.3
+        version: 19.2.3(@types/react@19.2.7)
+      '@workspace/config-eslint':
+        specifier: workspace:*
+        version: link:../../../config/eslint
+      '@workspace/config-typescript':
+        specifier: workspace:*
+        version: link:../../../config/typescript
+      eslint:
+        specifier: ^9.32.0
+        version: 9.39.1(jiti@2.6.1)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/infrastructure/data/in-memory:
     dependencies:

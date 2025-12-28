@@ -1,4 +1,5 @@
-import { Email } from '../value-objects/email.js';
+import { Email } from '../value-objects/email';
+import { Password } from '../value-objects/password';
 
 export enum UserRole {
     CLIENT = 'CLIENT',
@@ -15,7 +16,7 @@ export enum UserStatus {
 export interface UserProps {
     id: string;
     email: Email;
-    passwordHash: string;
+    passwordHash: Password;
     firstName: string;
     lastName: string;
     role: UserRole;
@@ -92,7 +93,7 @@ export class User {
         return this.props.email;
     }
 
-    get passwordHash(): string {
+    get passwordHash(): Password {
         return this.props.passwordHash;
     }
 

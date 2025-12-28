@@ -1,5 +1,5 @@
-import { Money } from '../value-objects/money.js';
-import { Percentage } from '../value-objects/percentage.js';
+import { Money } from '../value-objects/money';
+import { Percentage } from '../value-objects/percentage';
 
 export enum LoanStatus {
     ACTIVE = 'ACTIVE',

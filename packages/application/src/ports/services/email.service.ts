@@ -1,9 +1,10 @@
 export interface IEmailService {
     sendConfirmationEmail(email: string, token: string): Promise<void>;
+    sendWelcomeEmail(email: string, firstName: string): Promise<void>;
     sendSavingsRateChangeNotification(
         email: string,
         oldRate: number,
-        newRate: number
+        newRate: number,
     ): Promise<void>;
     sendLoanPaymentReminder(email: string, amount: number, dueDate: Date): Promise<void>;
 }

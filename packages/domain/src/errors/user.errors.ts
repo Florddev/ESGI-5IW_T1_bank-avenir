@@ -1,4 +1,4 @@
-import { DomainError } from './domain.error.js';
+import { DomainError } from './domain.error';
 
 export class UserNotFoundError extends DomainError {
     constructor(identifier: string) {
@@ -33,5 +33,17 @@ export class UserBannedError extends DomainError {
 export class UnauthorizedError extends DomainError {
     constructor(action: string) {
         super(`Unauthorized to perform action: ${action}`);
+    }
+}
+
+export class InvalidCredentialsError extends DomainError {
+    constructor() {
+        super('Email ou mot de passe incorrect');
+    }
+}
+
+export class AccountNotConfirmedError extends DomainError {
+    constructor() {
+        super("Votre compte n'est pas encore confirmé. Veuillez vérifier vos emails.");
     }
 }

@@ -1,4 +1,4 @@
-import { DomainError } from './domain.error.js';
+import { DomainError } from './domain.error';
 
 export class TransactionNotFoundError extends DomainError {
     constructor(transactionId: string) {

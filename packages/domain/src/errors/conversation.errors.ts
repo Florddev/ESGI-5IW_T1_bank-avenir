@@ -1,4 +1,4 @@
-import { DomainError } from './domain.error.js';
+import { DomainError } from './domain.error';
 
 export class ConversationNotFoundError extends DomainError {
     constructor(conversationId: string) {
