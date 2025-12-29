@@ -6,6 +6,7 @@ export interface UserDto {
     role: string;
     status: string;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface UpdateUserProfileDto {

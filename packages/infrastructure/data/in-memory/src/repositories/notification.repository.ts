@@ -27,6 +27,11 @@ export class InMemoryNotificationRepository implements INotificationRepository {
         return notification;
     }
 
+    async update(notification: Notification): Promise<Notification> {
+        this.notifications.set(notification.id, notification);
+        return notification;
+    }
+
     async markAllAsRead(userId: string): Promise<void> {
         const notifications = await this.findByUserId(userId);
         for (const notification of notifications) {

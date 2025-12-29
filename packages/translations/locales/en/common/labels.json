@@ -1,0 +1,21 @@
+{
+  "name": "Name",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "email": "Email",
+  "phone": "Phone",
+  "address": "Address",
+  "city": "City",
+  "country": "Country",
+  "postalCode": "Postal code",
+  "description": "Description",
+  "status": "Status",
+  "date": "Date",
+  "startDate": "Start date",
+  "endDate": "End date",
+  "createdAt": "Created at",
+  "updatedAt": "Updated at",
+  "price": "Price",
+  "total": "Total",
+  "quantity": "Quantity"
+}

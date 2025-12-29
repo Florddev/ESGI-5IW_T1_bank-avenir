@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { AuthClient, type LoginInput } from '../../../client/auth.client';
+import { getAuthClient, type LoginInput } from '../../../client/auth.client';
 
 export function useLogin() {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ export function useLogin() {
         setError(null);
 
         try {
-            const authClient = new AuthClient();
+            const authClient = getAuthClient();
             const result = await authClient.login(data);
 
             setUser({

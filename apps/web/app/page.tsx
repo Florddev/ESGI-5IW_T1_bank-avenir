@@ -1,5 +1,18 @@
 import { Button } from '@workspace/ui-react/components/button';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Accueil',
+    description:
+        'Bienvenue sur Avenir Bank, votre partenaire bancaire de confiance. Découvrez nos services de banque en ligne : comptes, transactions, prêts et investissements.',
+    openGraph: {
+        title: 'Avenir Bank - Votre partenaire bancaire de confiance',
+        description:
+            'Découvrez nos services de banque en ligne : comptes, transactions, prêts et investissements.',
+        url: 'https://avenir-bank.com',
+    },
+};
 
 export default function Page() {
     return (

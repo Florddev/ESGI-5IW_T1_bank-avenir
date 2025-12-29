@@ -1,0 +1,15 @@
+{
+  "loginTitle": "Connectez-vous à votre compte",
+  "registerTitle": "Créer un compte",
+  "forgotPasswordTitle": "Mot de passe oublié",
+  "resetPasswordTitle": "Réinitialiser le mot de passe",
+  "verifyEmailTitle": "Vérifier votre email",
+  "welcomeBack": "Bon retour !",
+  "noAccount": "Vous n'avez pas de compte ?",
+  "hasAccount": "Vous avez déjà un compte ?",
+  "rememberMe": "Se souvenir de moi",
+  "forgotPasswordLink": "Mot de passe oublié ?",
+  "checkEmail": "Consultez votre email pour les instructions de réinitialisation",
+  "emailNotVerified": "Votre email n'est pas vérifié",
+  "resendVerification": "Renvoyer l'email de vérification"
+}

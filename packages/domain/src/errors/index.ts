@@ -6,3 +6,4 @@ export * from './stock.errors';
 export * from './order.errors';
 export * from './loan.errors';
 export * from './conversation.errors';
+export * from './notification.errors';

@@ -14,6 +14,7 @@ export interface TransactionDto {
     status: string;
     description?: string;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface TransactionHistoryDto {

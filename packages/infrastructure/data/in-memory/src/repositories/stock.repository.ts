@@ -34,6 +34,11 @@ export class InMemoryStockRepository implements IStockRepository {
         return stock;
     }
 
+    async update(stock: Stock): Promise<Stock> {
+        this.stocks.set(stock.id, stock);
+        return stock;
+    }
+
     async delete(id: string): Promise<void> {
         this.stocks.delete(id);
     }

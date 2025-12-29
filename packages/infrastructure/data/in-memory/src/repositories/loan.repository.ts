@@ -43,4 +43,9 @@ export class InMemoryLoanRepository implements ILoanRepository {
         this.loans.set(loan.id, loan);
         return loan;
     }
+
+    async update(loan: Loan): Promise<Loan> {
+        this.loans.set(loan.id, loan);
+        return loan;
+    }
 }

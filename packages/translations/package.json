@@ -1,0 +1,14 @@
+{
+  "name": "@workspace/translations",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/build.js",
+    "clean": "node scripts/clean.js"
+  }
+}

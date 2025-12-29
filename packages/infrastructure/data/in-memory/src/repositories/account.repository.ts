@@ -34,6 +34,11 @@ export class InMemoryAccountRepository implements IAccountRepository {
         return account;
     }
 
+    async update(account: Account): Promise<Account> {
+        this.accounts.set(account.id, account);
+        return account;
+    }
+
     async delete(id: string): Promise<void> {
         this.accounts.delete(id);
     }

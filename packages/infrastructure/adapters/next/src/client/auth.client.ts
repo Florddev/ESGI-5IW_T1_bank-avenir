@@ -26,6 +26,26 @@ export class AuthClient extends BaseClient {
         this.routesConfig = routesConfig || new RoutesConfigService();
     }
 
+    private static instance: AuthClient | null = null;
+
+    static configure(routesConfig?: RoutesConfigService): void {
+        if (AuthClient.instance) {
+            throw new Error('AuthClient already initialized. Call configure() before first use.');
+        }
+        AuthClient.instance = new AuthClient(routesConfig);
+    }
+
+    static getInstance(): AuthClient {
+        if (!AuthClient.instance) {
+            AuthClient.instance = new AuthClient();
+        }
+        return AuthClient.instance;
+    }
+
+    static resetInstance(): void {
+        AuthClient.instance = null;
+    }
+
     async register(data: RegisterInput): Promise<{ message: string }> {
         const routes = this.routesConfig.getAuthRoutes();
         return this.post<{ message: string }>(routes.register, data);
@@ -50,4 +70,8 @@ export class AuthClient extends BaseClient {
         const routes = this.routesConfig.getAuthRoutes();
         return this.get<AuthResponseDto>(routes.me);
     }
+}
+
+export function getAuthClient(): AuthClient {
+    return AuthClient.getInstance();
 }

@@ -1,0 +1,15 @@
+{
+  "success": "Succès",
+  "error": "Erreur",
+  "warning": "Avertissement",
+  "info": "Information",
+  "loading": "Chargement...",
+  "saving": "Enregistrement...",
+  "deleting": "Suppression...",
+  "processing": "Traitement en cours...",
+  "emptyState": "Aucune donnée disponible",
+  "noResults": "Aucun résultat trouvé",
+  "tryAgain": "Veuillez réessayer",
+  "actionSuccess": "Action effectuée avec succès",
+  "actionError": "Une erreur s'est produite lors de l'exécution de l'action"
+}

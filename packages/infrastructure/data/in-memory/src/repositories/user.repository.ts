@@ -41,6 +41,11 @@ export class InMemoryUserRepository implements IUserRepository {
         return user;
     }
 
+    async update(user: User): Promise<User> {
+        this.users.set(user.id, user);
+        return user;
+    }
+
     async delete(id: string): Promise<void> {
         this.users.delete(id);
     }

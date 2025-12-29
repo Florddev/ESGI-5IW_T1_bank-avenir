@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AuthClient } from '../../../client/auth.client';
+import { getAuthClient } from '../../../client/auth.client';
 
 export interface User {
     id: string;
@@ -31,7 +31,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useEffect(() => {
         const loadUser = async () => {
             try {
-                const authClient = new AuthClient();
+                const authClient = getAuthClient();
                 const userData = await authClient.getCurrentUser();
                 setUser({
                     id: userData.userId,

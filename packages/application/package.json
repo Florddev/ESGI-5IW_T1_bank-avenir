@@ -7,8 +7,9 @@
         "lint": "eslint . --max-warnings 0"
     },
     "dependencies": {
+        "@workspace/domain": "workspace:*",
         "@workspace/shared": "workspace:*",
-        "@workspace/domain": "workspace:*"
+        "tsyringe": "^4.10.0"
     },
     "devDependencies": {
         "@workspace/config-eslint": "workspace:*",
@@ -18,7 +19,6 @@
     "exports": {
         "./dtos": "./src/dtos/index.ts",
         "./ports": "./src/ports/index.ts",
-        "./use-cases/*": "./src/use-cases/*.ts",
-        "./use-cases/auth": "./src/use-cases/auth/index.ts"
+        "./use-cases": "./src/use-cases/index.ts"
     }
 }

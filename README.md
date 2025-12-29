@@ -1,31 +1,132 @@
-# shadcn/ui monorepo template
+# Avenir Bank v2
 
-This template is for creating a monorepo with shadcn/ui.
+Application bancaire construite avec une **architecture Clean/Hexagonale** en monorepo.
 
-## Usage
+## 🏗️ Architecture
 
-```bash
-pnpm dlx shadcn@latest init
+- **Domain** : Entités métier pures (User, Account, Transaction, etc.)
+- **Application** : Use cases et ports (interfaces)
+- **Infrastructure** : Implémentations concrètes (repositories, services, adapters)
+- **Apps** : Applications frontend (Next.js)
+
+## 🚀 Installation
+
+### Prérequis
+
+- Node.js >= 20
+- pnpm >= 10.4.1
+
+### Setup
+
+1. **Cloner le projet**
+   ```bash
+   git clone <url>
+   cd avenir-bank-v2
+   ```
+
+2. **Installer les dépendances**
+   ```bash
+   pnpm install
+   ```
+
+3. **Configurer les variables d'environnement**
+   ```bash
+   cd apps/web
+   cp .env.example .env.local
+   ```
+   
+   Éditer `.env.local` :
+   ```env
+   JWT_SECRET=your-super-secret-jwt-key-here
+   NODE_ENV=development
+   ```
+
+4. **Lancer l'application**
+   ```bash
+   pnpm dev
+   ```
+   
+   L'app sera disponible sur [http://localhost:3000](http://localhost:3000)
+
+## 🔐 Fonctionnalités d'authentification
+
+### Flux complet
+
+1. **Inscription** : `/auth/register`
+   - Formulaire avec email, mot de passe, prénom, nom
+   - Hash du mot de passe avec bcrypt
+   - Envoi email de confirmation (console en dev)
+   
+2. **Confirmation** : `/auth/confirm-email?token=xxx`
+   - Cliquer sur le lien dans l'email (console)
+   - Activation automatique du compte
+   - Redirection vers login
+
+3. **Connexion** : `/auth/login`
+   - Email + mot de passe
+   - JWT stocké dans cookie httpOnly (7 jours)
+   - Redirection vers dashboard
+
+4. **Dashboard** : `/dashboard`
+   - Accès protégé (redirection si non authentifié)
+   - Affichage infos utilisateur
+   - Déconnexion
+
+## 📦 Structure des packages
+
+```
+packages/
+├── domain/              # Entités, Value Objects, Erreurs
+├── application/         # Use Cases, DTOs, Ports
+├── infrastructure/
+│   ├── adapters/
+│   │   └── next/       # Handlers API, Hooks React, Composants
+│   ├── data/
+│   │   └── in-memory/  # Repositories in-memory
+│   └── services/
+│       ├── auth-jwt/   # Service JWT + bcrypt
+│       └── email-console/  # Service email console
+├── shared/             # DI (tsyringe)
+├── ui/react/          # Composants UI (shadcn/ui)
+└── config/            # Configs partagées (eslint, typescript, prettier)
 ```
 
-## Adding components
+## 🛠️ Scripts disponibles
 
-To add components to your app, run the following command at the root of your `web` app:
+```bash
+pnpm dev          # Lance tous les packages en mode dev
+pnpm build        # Build tous les packages
+pnpm lint         # Lint tous les packages
+pnpm format       # Format le code avec Prettier
+pnpm clean:all    # Nettoie node_modules et caches
+```
+
+## 🎨 Ajouter des composants shadcn/ui
 
 ```bash
 pnpm dlx shadcn@latest add button -c apps/web
 ```
 
-This will place the ui components in the `packages/ui/src/components` directory.
+Les composants sont placés dans `packages/ui-react/src/components/`.
 
-## Tailwind
+## 🧪 Tester l'authentification
 
-Your `tailwind.config.ts` and `globals.css` are already set up to use the components from the `ui` package.
+1. Créer un compte sur `/auth/register`
+2. Copier le lien de confirmation depuis la console
+3. Ouvrir le lien dans le navigateur
+4. Se connecter sur `/auth/login`
+5. Accéder au dashboard
 
-## Using components
+## 📚 Documentation
 
-To use the components in your app, import them from the `ui` package.
+- [Guide DI](docs/dependency-injection.md) - 873 lignes sur l'injection de dépendances
+- [Auth Example](docs/auth-example.md) - Exemples d'authentification
 
-```tsx
-import { Button } from '@workspace/ui-react/components/button';
-```
+## 🔧 Technologies
+
+- **Frontend** : Next.js 16, React 19, TailwindCSS, shadcn/ui
+- **Backend** : Next.js API Routes
+- **Auth** : JWT (jsonwebtoken), bcrypt
+- **DI** : tsyringe + reflect-metadata
+- **Monorepo** : pnpm workspaces + Turborepo
+- **TypeScript** : 5.7

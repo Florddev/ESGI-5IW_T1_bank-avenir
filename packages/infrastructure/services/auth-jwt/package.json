@@ -1,0 +1,24 @@
+{
+    "name": "@workspace/service-auth-jwt",
+    "version": "0.0.0",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "lint": "eslint . --max-warnings 0"
+    },
+    "dependencies": {
+        "@workspace/application": "workspace:*",
+        "@workspace/shared": "workspace:*",
+        "bcryptjs": "^3.0.3",
+        "jsonwebtoken": "^9.0.2"
+    },
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.7",
+        "@workspace/config-eslint": "workspace:*",
+        "@workspace/config-typescript": "workspace:*",
+        "eslint": "^9.32.0"
+    },
+    "exports": {
+        ".": "./src/index.ts"
+    }
+}

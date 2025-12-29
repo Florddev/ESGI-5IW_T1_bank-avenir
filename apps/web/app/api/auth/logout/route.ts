@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeDI } from '@/lib/di';
-import { logoutHandler } from '@workspace/adapter-next/api/handlers';
+import { successResponse } from '@workspace/adapter-next/utils/api.helpers';
 
-export async function POST(request: NextRequest): Promise<NextResponse> {
-    initializeDI();
-    return logoutHandler(request);
+export async function POST(request: NextRequest) {
+  const response = NextResponse.json({ message: 'Déconnexion réussie' }, { status: 200 });
+  response.cookies.set('auth_token', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 0,
+    path: '/',
+  });
+  return response;
 }
+

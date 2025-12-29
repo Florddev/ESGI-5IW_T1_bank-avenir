@@ -17,3 +17,9 @@ export class StockAlreadyExistsError extends DomainError {
         super(`Stock already exists with symbol: ${symbol}`);
     }
 }
+
+export class InsufficientStockError extends DomainError {
+    constructor(symbol: string, available: number, requested: number) {
+        super(`Insufficient stock for ${symbol}. Available: ${available}, Requested: ${requested}`);
+    }
+}

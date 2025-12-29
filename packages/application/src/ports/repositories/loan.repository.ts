@@ -7,4 +7,5 @@ export interface ILoanRepository {
     findActiveLoans(): Promise<Loan[]>;
     findDuePayments(date: Date): Promise<Loan[]>;
     save(loan: Loan): Promise<Loan>;
+    update(loan: Loan): Promise<Loan>;
 }

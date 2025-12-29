@@ -1,0 +1,32 @@
+{
+  "login": {
+    "success": "Connexion réussie",
+    "error": "Échec de la connexion",
+    "loading": "Connexion en cours..."
+  },
+  "logout": {
+    "success": "Déconnexion réussie",
+    "error": "Échec de la déconnexion",
+    "confirm": "Êtes-vous sûr de vouloir vous déconnecter ?"
+  },
+  "register": {
+    "success": "Compte créé avec succès",
+    "error": "Échec de la création du compte",
+    "loading": "Création du compte..."
+  },
+  "forgotPassword": {
+    "success": "Email de réinitialisation envoyé",
+    "error": "Échec de l'envoi de l'email",
+    "loading": "Envoi de l'email..."
+  },
+  "resetPassword": {
+    "success": "Mot de passe réinitialisé avec succès",
+    "error": "Échec de la réinitialisation du mot de passe",
+    "loading": "Réinitialisation du mot de passe..."
+  },
+  "verifyEmail": {
+    "success": "Email vérifié avec succès",
+    "error": "Échec de la vérification de l'email",
+    "loading": "Vérification de l'email..."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "loginTitle": "Sign in to your account",
+  "registerTitle": "Create an account",
+  "forgotPasswordTitle": "Forgot password",
+  "resetPasswordTitle": "Reset password",
+  "verifyEmailTitle": "Verify your email",
+  "welcomeBack": "Welcome back!",
+  "noAccount": "Don't have an account?",
+  "hasAccount": "Already have an account?",
+  "rememberMe": "Remember me",
+  "forgotPasswordLink": "Forgot your password?",
+  "checkEmail": "Check your email for reset instructions",
+  "emailNotVerified": "Your email is not verified",
+  "resendVerification": "Resend verification email"
+}

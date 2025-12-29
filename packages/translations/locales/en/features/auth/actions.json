@@ -1,0 +1,32 @@
+{
+  "login": {
+    "success": "Successfully logged in",
+    "error": "Login failed",
+    "loading": "Logging in..."
+  },
+  "logout": {
+    "success": "Successfully logged out",
+    "error": "Logout failed",
+    "confirm": "Are you sure you want to log out?"
+  },
+  "register": {
+    "success": "Account created successfully",
+    "error": "Registration failed",
+    "loading": "Creating account..."
+  },
+  "forgotPassword": {
+    "success": "Password reset email sent",
+    "error": "Failed to send reset email",
+    "loading": "Sending email..."
+  },
+  "resetPassword": {
+    "success": "Password reset successfully",
+    "error": "Failed to reset password",
+    "loading": "Resetting password..."
+  },
+  "verifyEmail": {
+    "success": "Email verified successfully",
+    "error": "Email verification failed",
+    "loading": "Verifying email..."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "email": {
+    "required": "L'email est requis",
+    "invalid": "Veuillez saisir une adresse email valide"
+  },
+  "password": {
+    "required": "Le mot de passe est requis",
+    "minLength": "Le mot de passe doit contenir au moins {{min}} caractères",
+    "maxLength": "Le mot de passe ne doit pas dépasser {{max}} caractères",
+    "mismatch": "Les mots de passe ne correspondent pas",
+    "weak": "Le mot de passe est trop faible"
+  },
+  "firstName": {
+    "required": "Le prénom est requis",
+    "minLength": "Le prénom doit contenir au moins {{min}} caractères"
+  },
+  "lastName": {
+    "required": "Le nom est requis",
+    "minLength": "Le nom doit contenir au moins {{min}} caractères"
+  }
+}

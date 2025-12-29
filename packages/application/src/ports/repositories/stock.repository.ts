@@ -6,5 +6,6 @@ export interface IStockRepository {
     findAll(): Promise<Stock[]>;
     findAvailable(): Promise<Stock[]>;
     save(stock: Stock): Promise<Stock>;
+    update(stock: Stock): Promise<Stock>;
     delete(id: string): Promise<void>;
 }

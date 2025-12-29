@@ -23,6 +23,7 @@ export interface AccountDto {
     balance: number;
     savingsRate?: number;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface AccountListDto {

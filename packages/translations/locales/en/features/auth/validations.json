@@ -1,0 +1,21 @@
+{
+  "email": {
+    "required": "Email is required",
+    "invalid": "Please enter a valid email address"
+  },
+  "password": {
+    "required": "Password is required",
+    "minLength": "Password must be at least {{min}} characters",
+    "maxLength": "Password must not exceed {{max}} characters",
+    "mismatch": "Passwords do not match",
+    "weak": "Password is too weak"
+  },
+  "firstName": {
+    "required": "First name is required",
+    "minLength": "First name must be at least {{min}} characters"
+  },
+  "lastName": {
+    "required": "Last name is required",
+    "minLength": "Last name must be at least {{min}} characters"
+  }
+}

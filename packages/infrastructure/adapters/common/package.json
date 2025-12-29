@@ -1,0 +1,18 @@
+{
+  "name": "@workspace/infrastructure-adapters-common",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "zod": "^3.25.76",
+    "@workspace/application": "workspace:*"
+  },
+  "devDependencies": {
+    "@workspace/config-eslint": "workspace:*",
+    "@workspace/config-typescript": "workspace:*"
+  }
+}

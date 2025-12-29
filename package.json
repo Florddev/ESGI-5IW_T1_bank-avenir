@@ -6,6 +6,7 @@
         "build": "turbo build",
         "dev": "turbo dev",
         "lint": "turbo lint",
+        "build:translations": "pnpm --filter @workspace/translations build",
         "format": "prettier --write \"**/*.{ts,tsx,md,json}\"",
         "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
         "clean": "pnpm --recursive exec rm -rf node_modules",

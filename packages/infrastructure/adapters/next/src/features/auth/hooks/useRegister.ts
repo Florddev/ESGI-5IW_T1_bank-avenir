@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { AuthClient, type RegisterInput } from '../../../client/auth.client';
+import { getAuthClient, type RegisterInput } from '../../../client/auth.client';
 
 export function useRegister() {
     const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ export function useRegister() {
         setError(null);
 
         try {
-            const authClient = new AuthClient();
+            const authClient = getAuthClient();
             await authClient.register(data);
 
             router.push('/auth/confirm-email');

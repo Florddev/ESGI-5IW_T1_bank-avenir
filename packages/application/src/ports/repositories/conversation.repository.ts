@@ -5,5 +5,7 @@ export interface IConversationRepository {
     findByClientId(clientId: string): Promise<Conversation[]>;
     findByAdvisorId(advisorId: string): Promise<Conversation[]>;
     findWaitingConversations(): Promise<Conversation[]>;
+    findByUserId(userId: string): Promise<Conversation[]>;
     save(conversation: Conversation): Promise<Conversation>;
+    update(conversation: Conversation): Promise<Conversation>;
 }

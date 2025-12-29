@@ -3,28 +3,30 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { AuthClient } from '../../../client/auth.client';
+import { getAuthClient } from '../../../client/auth.client';
 
 export function useLogout() {
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const { setUser } = useAuth();
     const router = useRouter();
 
     const logout = async () => {
         setIsLoading(true);
+        setError(null);
 
         try {
-            const authClient = new AuthClient();
+            const authClient = getAuthClient();
             await authClient.logout();
 
             setUser(null);
             router.push('/auth/login');
         } catch (err) {
-            console.error('Logout error:', err);
+            setError(err instanceof Error ? err.message : 'Une erreur est survenue');
         } finally {
             setIsLoading(false);
         }
     };
 
-    return { logout, isLoading };
+    return { logout, isLoading, error };
 }

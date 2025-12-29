@@ -1,6 +1,5 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IUserRepository } from '../../ports/repositories/user.repository';
-import { IAuthService } from '../../ports/services';
+import { IUserRepository, IAuthService } from '../../ports';
 import { LoginDto, AuthResponseDto } from '../../dtos/auth.dto';
 import { Email, Password } from '@workspace/domain/value-objects';
 import { UserStatus } from '@workspace/domain/entities';

@@ -6,6 +6,7 @@ export enum ConversationStatus {
 
 export interface ConversationProps {
     id: string;
+    subject: string;
     clientId: string;
     advisorId?: string;
     status: ConversationStatus;
@@ -16,9 +17,14 @@ export interface ConversationProps {
 export class Conversation {
     private constructor(private readonly props: ConversationProps) {}
 
-    static create(clientId: string): Conversation {
+    static create(clientId: string, subject: string): Conversation {
+        if (!subject.trim()) {
+            throw new Error('Conversation subject cannot be empty');
+        }
+
         return new Conversation({
             id: crypto.randomUUID(),
+            subject: subject.trim(),
             clientId,
             status: ConversationStatus.WAITING,
             createdAt: new Date(),
@@ -72,6 +78,10 @@ export class Conversation {
 
     get id(): string {
         return this.props.id;
+    }
+
+    get subject(): string {
+        return this.props.subject;
     }
 
     get clientId(): string {

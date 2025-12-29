@@ -1,30 +1,31 @@
 export interface CreateConversationDto {
-    clientId: string;
+    subject: string;
+    firstMessage: string;
 }
 
 export interface SendMessageDto {
     conversationId: string;
-    senderId: string;
     content: string;
 }
 
 export interface AssignConversationDto {
-    conversationId: string;
     advisorId: string;
 }
 
 export interface TransferConversationDto {
-    conversationId: string;
-    fromAdvisorId: string;
     toAdvisorId: string;
 }
 
 export interface ConversationDto {
     id: string;
+    subject: string;
     clientId: string;
+    clientName: string;
     advisorId?: string;
-    status: string;
-    lastMessage?: MessageDto;
+    advisorName?: string;
+    status: 'WAITING' | 'OPEN' | 'CLOSED';
+    lastMessage?: string;
+    lastMessageAt?: Date;
     unreadCount: number;
     createdAt: Date;
     updatedAt: Date;
@@ -33,18 +34,36 @@ export interface ConversationDto {
 export interface MessageDto {
     id: string;
     conversationId: string;
-    senderId: string;
-    senderName: string;
+    authorId: string;
+    authorName: string;
     content: string;
     isRead: boolean;
     createdAt: Date;
 }
 
 export interface ConversationDetailDto {
-    conversation: ConversationDto;
+    id: string;
+    subject: string;
+    clientId: string;
+    clientName: string;
+    advisorId?: string;
+    advisorName?: string;
+    status: 'WAITING' | 'OPEN' | 'CLOSED';
     messages: MessageDto[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+export interface WaitingConversationDto {
+    id: string;
+    subject: string;
+    clientId: string;
+    clientName: string;
+    firstMessage: string;
+    createdAt: Date;
 }
 
 export interface WaitingConversationsDto {
-    conversations: ConversationDto[];
+    conversations: WaitingConversationDto[];
+    count: number;
 }

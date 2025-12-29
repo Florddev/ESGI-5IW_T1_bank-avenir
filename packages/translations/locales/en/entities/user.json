@@ -1,0 +1,28 @@
+{
+  "singular": "User",
+  "plural": "Users",
+  "fields": {
+    "id": "ID",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "avatar": "Avatar",
+    "role": "Role",
+    "status": "Status",
+    "isVerified": "Verified",
+    "lastLogin": "Last login"
+  },
+  "roles": {
+    "admin": "Administrator",
+    "user": "User",
+    "owner": "Owner",
+    "guest": "Guest"
+  },
+  "status": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "suspended": "Suspended",
+    "pending": "Pending"
+  }
+}

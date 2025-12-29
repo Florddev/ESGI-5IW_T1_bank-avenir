@@ -7,5 +7,6 @@ export interface IUserRepository {
     findAll(): Promise<User[]>;
     findByRole(role: UserRole): Promise<User[]>;
     save(user: User): Promise<User>;
+    update(user: User): Promise<User>;
     delete(id: string): Promise<void>;
 }

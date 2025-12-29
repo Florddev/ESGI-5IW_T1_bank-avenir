@@ -16,9 +16,13 @@ export class InMemoryMessageRepository implements IMessageRepository {
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     }
 
-    async findUnreadByConversationId(conversationId: string): Promise<Message[]> {
+    async findUnreadByConversationId(conversationId: string, excludeUserId: string): Promise<Message[]> {
         return Array.from(this.messages.values())
-            .filter((message) => message.conversationId === conversationId && !message.isRead)
+            .filter((message) => 
+                message.conversationId === conversationId && 
+                !message.isRead && 
+                message.senderId !== excludeUserId
+            )
             .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
     }
 

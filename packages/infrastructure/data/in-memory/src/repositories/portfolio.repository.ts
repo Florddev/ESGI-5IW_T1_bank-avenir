@@ -30,6 +30,11 @@ export class InMemoryPortfolioRepository implements IPortfolioRepository {
         return portfolio;
     }
 
+    async update(portfolio: Portfolio): Promise<Portfolio> {
+        this.portfolios.set(portfolio.id, portfolio);
+        return portfolio;
+    }
+
     async delete(id: string): Promise<void> {
         this.portfolios.delete(id);
     }

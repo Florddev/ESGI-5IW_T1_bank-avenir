@@ -13,6 +13,7 @@ export interface NotificationDto {
     message: string;
     isRead: boolean;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface NotificationListDto {
