@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getNotificationsClient } from '../../../client/notifications.client';
+import { getNotificationsClient } from '@workspace/adapter-next/client';
 import type { NotificationDto } from '@workspace/application/dtos';
 
 export function useNotifications(userId: string | null) {

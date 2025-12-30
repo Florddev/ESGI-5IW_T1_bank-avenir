@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { INotificationRepository } from '@workspace/application/ports';
 import { Notification } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.INotificationRepository)
 export class InMemoryNotificationRepository implements INotificationRepository {
     private notifications: Map<string, Notification> = new Map();
 

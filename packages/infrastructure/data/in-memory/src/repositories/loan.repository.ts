@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { ILoanRepository } from '@workspace/application/ports';
 import { Loan, LoanStatus } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.ILoanRepository)
 export class InMemoryLoanRepository implements ILoanRepository {
     private loans: Map<string, Loan> = new Map();
 

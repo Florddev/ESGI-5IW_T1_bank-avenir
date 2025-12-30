@@ -15,6 +15,6 @@
         "hooks": "@/hooks",
         "lib": "@/lib",
         "utils": "@workspace/ui-react/lib/utils",
-        "ui": "@workspace/ui-react/components"
+        "ui": "@workspace/ui-react/components/ui"
     }
 }

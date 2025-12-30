@@ -3,24 +3,26 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTransactionOperations } from '../hooks/useTransactionOperations';
-import { depositSchema, withdrawSchema, transferSchema, type DepositFormData, type WithdrawFormData, type TransferFormData } from '@workspace/adapters-common/validators/transaction.validator';
+import { useAccounts } from '../../accounts/hooks/useAccounts';
+import { depositSchema, withdrawSchema, transferSchema, type DepositFormData, type WithdrawFormData, type TransferFormData } from '@workspace/adapter-common/validators';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui-react/components/select';
 
 interface TransactionFormProps {
-    accountId: string;
     onSuccess?: () => void;
 }
 
-export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) {
+export function TransactionForm({ onSuccess }: TransactionFormProps) {
     const { deposit, withdraw, transfer, isLoading, error } = useTransactionOperations();
+    const { accounts, isLoading: accountsLoading } = useAccounts();
 
     const depositForm = useForm<DepositFormData>({
         resolver: zodResolver(depositSchema),
         defaultValues: {
-            accountId,
+            accountId: '',
             amount: 0,
         },
     });
@@ -28,7 +30,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
     const withdrawForm = useForm<WithdrawFormData>({
         resolver: zodResolver(withdrawSchema),
         defaultValues: {
-            accountId,
+            accountId: '',
             amount: 0,
         },
     });
@@ -36,7 +38,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
     const transferForm = useForm<TransferFormData>({
         resolver: zodResolver(transferSchema),
         defaultValues: {
-            fromAccountId: accountId,
+            fromAccountId: '',
             toAccountId: '',
             amount: 0,
             description: '',
@@ -46,7 +48,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
     const onDeposit = async (data: DepositFormData) => {
         try {
             await deposit(data);
-            depositForm.reset({ accountId, amount: 0 });
+            depositForm.reset({ accountId: '', amount: 0 });
             onSuccess?.();
         } catch (err) {}
     };
@@ -54,7 +56,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
     const onWithdraw = async (data: WithdrawFormData) => {
         try {
             await withdraw(data);
-            withdrawForm.reset({ accountId, amount: 0 });
+            withdrawForm.reset({ accountId: '', amount: 0 });
             onSuccess?.();
         } catch (err) {}
     };
@@ -62,7 +64,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
     const onTransfer = async (data: TransferFormData) => {
         try {
             await transfer(data);
-            transferForm.reset({ fromAccountId: accountId, toAccountId: '', amount: 0, description: '' });
+            transferForm.reset({ fromAccountId: '', toAccountId: '', amount: 0, description: '' });
             onSuccess?.();
         } catch (err) {}
     };
@@ -78,6 +80,30 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
             <TabsContent value="deposit">
                 <Form {...depositForm}>
                     <form onSubmit={depositForm.handleSubmit(onDeposit)} className="space-y-4">
+                        <FormField
+                            control={depositForm.control}
+                            name="accountId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Compte à créditer</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner un compte" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {accounts?.map((account) => (
+                                                <SelectItem key={account.id} value={account.id}>
+                                                    {account.customName} - {account.balance.toFixed(2)} €
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={depositForm.control}
                             name="amount"
@@ -99,7 +125,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
                             )}
                         />
                         {error && <div className="text-sm text-destructive">{error}</div>}
-                        <Button type="submit" disabled={isLoading} className="w-full">
+                        <Button type="submit" disabled={isLoading || accountsLoading} className="w-full">
                             {isLoading ? 'Dépôt en cours...' : 'Déposer'}
                         </Button>
                     </form>
@@ -109,6 +135,30 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
             <TabsContent value="withdraw">
                 <Form {...withdrawForm}>
                     <form onSubmit={withdrawForm.handleSubmit(onWithdraw)} className="space-y-4">
+                        <FormField
+                            control={withdrawForm.control}
+                            name="accountId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Compte à débiter</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner un compte" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {accounts?.map((account) => (
+                                                <SelectItem key={account.id} value={account.id}>
+                                                    {account.customName} - {account.balance.toFixed(2)} €
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                         <FormField
                             control={withdrawForm.control}
                             name="amount"
@@ -130,7 +180,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
                             )}
                         />
                         {error && <div className="text-sm text-destructive">{error}</div>}
-                        <Button type="submit" disabled={isLoading} className="w-full">
+                        <Button type="submit" disabled={isLoading || accountsLoading} className="w-full">
                             {isLoading ? 'Retrait en cours...' : 'Retirer'}
                         </Button>
                     </form>
@@ -142,18 +192,48 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
                     <form onSubmit={transferForm.handleSubmit(onTransfer)} className="space-y-4">
                         <FormField
                             control={transferForm.control}
+                            name="fromAccountId"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Compte source</FormLabel>
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner un compte" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {accounts?.map((account) => (
+                                                <SelectItem key={account.id} value={account.id}>
+                                                    {account.customName} - {account.balance.toFixed(2)} €
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={transferForm.control}
                             name="toAccountId"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Compte destinataire</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            type="text"
-                                            disabled={isLoading}
-                                            placeholder="ID du compte"
-                                        />
-                                    </FormControl>
+                                    <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
+                                        <FormControl>
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="Sélectionner un compte" />
+                                            </SelectTrigger>
+                                        </FormControl>
+                                        <SelectContent>
+                                            {accounts?.map((account) => (
+                                                <SelectItem key={account.id} value={account.id}>
+                                                    {account.customName} - {account.balance.toFixed(2)} €
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
                                     <FormMessage />
                                 </FormItem>
                             )}
@@ -196,7 +276,7 @@ export function TransactionForm({ accountId, onSuccess }: TransactionFormProps) 
                             )}
                         />
                         {error && <div className="text-sm text-destructive">{error}</div>}
-                        <Button type="submit" disabled={isLoading} className="w-full">
+                        <Button type="submit" disabled={isLoading || accountsLoading} className="w-full">
                             {isLoading ? 'Transfert en cours...' : 'Transférer'}
                         </Button>
                     </form>

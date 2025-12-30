@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getTransactionsClient } from '../../../client/transactions.client';
+import { getTransactionsClient } from '@workspace/adapter-next/client';
 import type { DepositMoneyDto, WithdrawMoneyDto, TransferMoneyDto } from '@workspace/application/dtos';
 
 export function useTransactionOperations() {

@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IUserRepository } from '@workspace/application/ports';
 import { User, UserRole } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IUserRepository)
 export class InMemoryUserRepository implements IUserRepository {
     private users: Map<string, User> = new Map();
 

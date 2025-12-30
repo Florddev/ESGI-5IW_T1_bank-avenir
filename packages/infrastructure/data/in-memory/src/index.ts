@@ -1,2 +1,2 @@
 export * from './repositories';
-export * from './register-module';
+export * from './in-memory-module';

@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IConversationRepository } from '@workspace/application/ports';
 import { Conversation, ConversationStatus } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IConversationRepository)
 export class InMemoryConversationRepository implements IConversationRepository {
     private conversations: Map<string, Conversation> = new Map();
 

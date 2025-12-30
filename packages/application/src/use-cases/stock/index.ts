@@ -5,3 +5,5 @@ export * from './get-user-portfolio.use-case';
 export * from './create-stock.use-case';
 export * from './update-stock.use-case';
 export * from './delete-stock.use-case';
+export * from './match-orders.use-case';
+export * from './calculate-equilibrium-price.use-case';

@@ -30,7 +30,7 @@ export class RegisterUserUseCase {
             passwordHash: Password.fromHash(passwordHash),
             firstName: dto.firstName,
             lastName: dto.lastName,
-            role: UserRole.CLIENT,
+            role: UserRole.DIRECTOR,
             status: UserStatus.PENDING_CONFIRMATION,
             confirmationToken,
         });

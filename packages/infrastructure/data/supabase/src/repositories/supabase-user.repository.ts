@@ -1,9 +1,9 @@
-import { Injectable, Inject } from '@nextstack/shared/di';
+import { Repository, Inject, TOKENS } from '@workspace/shared/di';
 import { SupabaseClientService } from '../supabase.client';
-import type { IUserRepository } from '@nextstack/application/ports/repositories';
-import { User } from '@nextstack/domain/entities';
+import type { IUserRepository } from '@workspace/application/ports';
+import { User } from '@workspace/domain/entities';
 
-@Injectable()
+@Repository(TOKENS.IUserRepository)
 export class SupabaseUserRepository implements IUserRepository {
     constructor(
         @Inject(SupabaseClientService)

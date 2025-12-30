@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IStockRepository } from '@workspace/application/ports';
 import { Stock, StockStatus } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IStockRepository)
 export class InMemoryStockRepository implements IStockRepository {
     private stocks: Map<string, Stock> = new Map();
 

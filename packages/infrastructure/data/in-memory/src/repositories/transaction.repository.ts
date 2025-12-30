@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { ITransactionRepository } from '@workspace/application/ports';
 import { Transaction } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.ITransactionRepository)
 export class InMemoryTransactionRepository implements ITransactionRepository {
     private transactions: Map<string, Transaction> = new Map();
 

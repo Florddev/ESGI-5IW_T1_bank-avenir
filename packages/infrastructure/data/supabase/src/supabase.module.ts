@@ -1,11 +1,11 @@
-import { DependencyContainer } from 'tsyringe';
-import { TOKENS } from '@nextstack/shared/di';
+import { container, REPOSITORY_METADATA } from '@workspace/shared/di';
 import { SupabaseClientService } from './supabase.client';
-import { SupabaseUserRepository } from './repositories/supabase-user.repository';
-import { SupabaseProductRepository } from './repositories/supabase-product.repository';
+import './repositories';
 
-export function registerSupabaseModule(container: DependencyContainer): void {
+export function registerSupabaseModule(): void {
     container.registerSingleton(SupabaseClientService, SupabaseClientService);
-    container.registerSingleton(TOKENS.IUserRepository, SupabaseUserRepository);
-    container.registerSingleton(TOKENS.IProductRepository, SupabaseProductRepository);
+
+    REPOSITORY_METADATA.forEach(({ implementation, token }) => {
+        container.registerSingleton(token, implementation);
+    });
 }

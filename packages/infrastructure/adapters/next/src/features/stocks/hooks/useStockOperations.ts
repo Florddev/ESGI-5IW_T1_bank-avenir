@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getStocksClient } from '../../../client/stocks.client';
+import { getStocksClient } from '@workspace/adapter-next/client';
 
 export function useStockOperations() {
     const [isLoading, setIsLoading] = useState(false);

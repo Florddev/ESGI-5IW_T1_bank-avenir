@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getAccountsClient } from '../../../client/accounts.client';
+import { getAccountsClient } from '@workspace/adapter-next/client';
 import type { CreateAccountDto } from '@workspace/application/dtos';
 
 export function useCreateAccount() {

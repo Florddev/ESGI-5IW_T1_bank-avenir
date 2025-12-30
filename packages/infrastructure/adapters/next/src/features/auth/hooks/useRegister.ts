@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { getAuthClient, type RegisterInput } from '../../../client/auth.client';
+import { getAuthClient } from '@workspace/adapter-next/client';
+import type { RegisterUserDto } from '@workspace/application/dtos';
 
 export function useRegister() {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,7 @@ export function useRegister() {
     const { setUser } = useAuth();
     const router = useRouter();
 
-    const register = async (data: RegisterInput) => {
+    const register = async (data: RegisterUserDto) => {
         setIsLoading(true);
         setError(null);
 

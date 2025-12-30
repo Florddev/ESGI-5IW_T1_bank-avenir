@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getConversationsClient } from '../../../client/conversations.client';
+import { getConversationsClient } from '@workspace/adapter-next/client';
 import type { MessageDto } from '@workspace/application/dtos';
 
 export function useConversationMessages(conversationId: string | null) {

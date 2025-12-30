@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IPortfolioRepository } from '@workspace/application/ports';
 import { Portfolio } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IPortfolioRepository)
 export class InMemoryPortfolioRepository implements IPortfolioRepository {
     private portfolios: Map<string, Portfolio> = new Map();
 

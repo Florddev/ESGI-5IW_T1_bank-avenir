@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IOrderRepository } from '@workspace/application/ports';
 import { Order, OrderType, OrderStatus } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IOrderRepository)
 export class InMemoryOrderRepository implements IOrderRepository {
     private orders: Map<string, Order> = new Map();
 

@@ -33,7 +33,7 @@ export class AuthController {
     };
   }
 
-  async getCurrentUser(token: string): Promise<UserDto & { token: string }> {
+  async getCurrentUser(token: string): Promise<AuthResponseDto> {
     const authService = container.resolve<IAuthService>(TOKENS.IAuthService);
     const decoded = authService.verifyToken(token);
 
@@ -49,14 +49,11 @@ export class AuthController {
     }
 
     return {
-      id: user.id,
+      userId: user.id,
       email: user.email.toString(),
       firstName: user.firstName,
       lastName: user.lastName,
       role: user.role,
-      status: user.status,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
       token,
     };
   }

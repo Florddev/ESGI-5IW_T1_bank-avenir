@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { getAuthClient } from '../../../client/auth.client';
+import { getAuthClient } from '@workspace/adapter-next/client';
 
 export interface User {
     id: string;

@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
+import { Repository, TOKENS } from '@workspace/shared/di';
 import { IAccountRepository } from '@workspace/application/ports';
 import { Account, AccountType } from '@workspace/domain/entities';
 
-@Injectable()
+@Repository(TOKENS.IAccountRepository)
 export class InMemoryAccountRepository implements IAccountRepository {
     private accounts: Map<string, Account> = new Map();
 

@@ -1,0 +1,25 @@
+{
+    "name": "@workspace/service-realtime-sse",
+    "version": "0.0.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "lint": "eslint . --max-warnings 0"
+    },
+    "dependencies": {
+        "@workspace/application": "workspace:*",
+        "@workspace/domain": "workspace:*",
+        "@workspace/shared": "workspace:*",
+        "reflect-metadata": "^0.2.2",
+        "tsyringe": "^4.8.0"
+    },
+    "devDependencies": {
+        "@workspace/config-eslint": "workspace:*",
+        "@workspace/config-typescript": "workspace:*",
+        "eslint": "^9.32.0",
+        "typescript": "^5.9.2"
+    }
+}

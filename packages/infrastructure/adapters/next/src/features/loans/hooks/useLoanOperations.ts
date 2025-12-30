@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getLoansClient } from '../../../client/loans.client';
+import { getLoansClient } from '@workspace/adapter-next/client';
 import type { CreateLoanDto } from '@workspace/application/dtos';
 
 export function useLoanOperations() {

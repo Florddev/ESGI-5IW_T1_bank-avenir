@@ -6,7 +6,7 @@ import { useLogin } from '../hooks/useLogin';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';
-import { loginSchema } from '@workspace/infrastructure-adapters-common';
+import { loginSchema } from '@workspace/adapter-common';
 import type { z } from 'zod';
 
 type LoginFormData = z.infer<typeof loginSchema>;

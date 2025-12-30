@@ -12,7 +12,7 @@ liquidités, épargne et investissement.
 
 ## Fonctionnalités (15 points) :
 
-Client :
+### **Client :**
 ● **Authentification** : en tant que client, je dois pouvoir m’inscrire sur cette
 nouvelle plateforme. Je dois pouvoir renseigner mes informations afin de
 recevoir un lien me permettant de confirmer mon inscription et accéder à mon
@@ -40,7 +40,7 @@ nous sommes une banque moderne, nous n’avons pas de frais d’arbitrage. Les
 seuls frais sont de 1€ à l’achat, comme à la vente.
 
 
-Directeur de banque :
+### **Directeur de banque :**
 ● **Authentification :** en tant que directeur de banque, je dois pouvoir
 m’authentifier.
 ● Gestion des comptes : en tant que directeur de banque, je dois pouvoir
@@ -56,7 +56,8 @@ d’une action, mais c’est moi qui décide quelles sont les actions disponible
 de celles qui ne le sont pas. Les clients sont propriétaires de leur
 actions, contrairement à certains de nos concurrents qui ne le disent pas,
 nous l’affichons fièrement.
-Conseiller de banque :
+
+### **Conseiller de banque :**
 **● Authentification** : en tant que conseiller bancaire, je peux m’authentifier
 ● **Crédit** : en tant que conseiller bancaire, je peux être amené à octroyer des
 crédit. Un crédit a un taux annuel d’intérêts à rembourser sur le capital

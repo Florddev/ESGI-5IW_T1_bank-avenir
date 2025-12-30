@@ -1,38 +1,33 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getAccountsClient } from '../../../client/accounts.client';
+import { useState, useEffect, useCallback } from 'react';
+import { getAccountsClient } from '@workspace/adapter-next/client';
 import type { AccountDto } from '@workspace/application/dtos';
 
-export function useAccounts(userId: string | null) {
+export function useAccounts() {
     const [accounts, setAccounts] = useState<AccountDto[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        if (!userId) {
+    const loadAccounts = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
+
+        try {
+            const client = getAccountsClient();
+            const data = await client.getAllAccounts();
+            setAccounts(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Erreur lors du chargement des comptes');
             setAccounts([]);
+        } finally {
             setIsLoading(false);
-            return;
         }
+    }, []);
 
-        const loadAccounts = async () => {
-            setIsLoading(true);
-            setError(null);
-
-            try {
-                const client = getAccountsClient();
-                const data = await client.getUserAccounts(userId);
-                setAccounts(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Erreur lors du chargement des comptes');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
+    useEffect(() => {
         loadAccounts();
-    }, [userId]);
+    }, [loadAccounts]);
 
-    return { accounts, isLoading, error, refetch: () => {} };
+    return { accounts, isLoading, error, refetch: loadAccounts };
 }

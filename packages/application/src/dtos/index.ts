@@ -7,4 +7,5 @@ export * from './order.dto';
 export * from './loan.dto';
 export * from './conversation.dto';
 export * from './notification.dto';
+export * from './realtime.dto';
 export * from './settings.dto';

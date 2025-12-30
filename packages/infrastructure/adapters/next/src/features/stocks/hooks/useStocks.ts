@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getStocksClient } from '../../../client/stocks.client';
+import { useState, useEffect, useCallback } from 'react';
+import { getStocksClient } from '@workspace/adapter-next/client';
 import type { StockDto } from '@workspace/application/dtos';
 
 export function useStocks() {
@@ -9,24 +9,25 @@ export function useStocks() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const loadStocks = async () => {
-            setIsLoading(true);
-            setError(null);
+    const loadStocks = useCallback(async () => {
+        setIsLoading(true);
+        setError(null);
 
-            try {
-                const client = getStocksClient();
-                const data = await client.getAllStocks();
-                setStocks(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Erreur lors du chargement des actions');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadStocks();
+        try {
+            const client = getStocksClient();
+            const data = await client.getAllStocks();
+            setStocks(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Erreur lors du chargement des actions');
+            setStocks([]);
+        } finally {
+            setIsLoading(false);
+        }
     }, []);
 
-    return { stocks, isLoading, error, refetch: () => {} };
+    useEffect(() => {
+        loadStocks();
+    }, [loadStocks]);
+
+    return { stocks, isLoading, error, refetch: loadStocks };
 }

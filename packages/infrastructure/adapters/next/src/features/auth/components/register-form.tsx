@@ -6,7 +6,7 @@ import { useRegister } from '../hooks/useRegister';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';
-import { registerSchema } from '@workspace/infrastructure-adapters-common';
+import { registerSchema } from '@workspace/adapter-common';
 import type { z } from 'zod';
 
 type RegisterFormData = z.infer<typeof registerSchema>;

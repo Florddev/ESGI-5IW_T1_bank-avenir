@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { getAuthClient, type LoginInput } from '../../../client/auth.client';
+import { getAuthClient } from '@workspace/adapter-next/client';
+import type { LoginDto } from '@workspace/application/dtos';
 
 export function useLogin() {
     const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,7 @@ export function useLogin() {
     const { setUser } = useAuth();
     const router = useRouter();
 
-    const login = async (data: LoginInput) => {
+    const login = async (data: LoginDto) => {
         setIsLoading(true);
         setError(null);
 

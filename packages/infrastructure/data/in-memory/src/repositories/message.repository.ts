@@ -1,8 +1,8 @@
-import { Injectable } from '@workspace/shared/di';
 import { IMessageRepository } from '@workspace/application/ports';
 import { Message } from '@workspace/domain/entities';
+import { Repository, TOKENS } from '@workspace/shared/di';
 
-@Injectable()
+@Repository(TOKENS.IMessageRepository)
 export class InMemoryMessageRepository implements IMessageRepository {
     private messages: Map<string, Message> = new Map();
 

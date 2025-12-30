@@ -8,20 +8,22 @@
     },
     "dependencies": {
         "@hookform/resolvers": "^3.9.1",
+        "@workspace/adapter-common": "workspace:*",
         "@workspace/application": "workspace:*",
         "@workspace/db-in-memory": "workspace:*",
         "@workspace/domain": "workspace:*",
-        "@workspace/infrastructure-adapters-common": "workspace:*",
         "@workspace/service-auth-jwt": "workspace:*",
         "@workspace/service-email-console": "workspace:*",
         "@workspace/shared": "workspace:*",
         "@workspace/ui-react": "workspace:*",
+        "date-fns": "^4.1.0",
+        "lucide-react": "^0.469.0",
         "next": "^16.0.10",
         "react": "^19.2.1",
         "react-dom": "^19.2.1",
         "react-hook-form": "^7.54.2",
-        "tsyringe": "^4.10.0",
-        "reflect-metadata": "^0.2.2"
+        "reflect-metadata": "^0.2.2",
+        "tsyringe": "^4.10.0"
     },
     "devDependencies": {
         "@types/react": "^19.2.7",
@@ -32,8 +34,7 @@
         "typescript": "^5.9.3"
     },
     "exports": {
-        "./client/*": "./src/client/*.ts",
-        "./client/config/*": "./src/client/config/*.ts",
+        "./client": "./src/client/index.ts",
         "./components/*": "./src/components/*/index.ts",
         "./controllers": "./src/controllers/index.ts",
         "./features/*": "./src/features/*/index.ts",

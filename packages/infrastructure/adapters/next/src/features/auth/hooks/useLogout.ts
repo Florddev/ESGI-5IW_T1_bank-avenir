@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../contexts/auth.context';
-import { getAuthClient } from '../../../client/auth.client';
+import { getAuthClient } from '@workspace/adapter-next/client';
 
 export function useLogout() {
     const [isLoading, setIsLoading] = useState(false);

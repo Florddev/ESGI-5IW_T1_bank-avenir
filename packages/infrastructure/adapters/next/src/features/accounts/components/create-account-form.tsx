@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useCreateAccount } from '../hooks/useCreateAccount';
-import { createAccountSchema, type CreateAccountFormData } from '@workspace/adapters-common/validators/account.validator';
+import { createAccountSchema, type CreateAccountFormData } from '@workspace/adapter-common/validators';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';

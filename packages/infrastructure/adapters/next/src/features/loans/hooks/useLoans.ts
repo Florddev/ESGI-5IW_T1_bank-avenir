@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getLoansClient } from '../../../client/loans.client';
+import { useState, useEffect, useCallback } from 'react';
+import { getLoansClient } from '@workspace/adapter-next/client';
 import type { LoanDto } from '@workspace/application/dtos';
 
 export function useLoans(userId: string | null) {
@@ -9,30 +9,31 @@ export function useLoans(userId: string | null) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
+    const loadLoans = useCallback(async () => {
         if (!userId) {
             setLoans([]);
             setIsLoading(false);
             return;
         }
 
-        const loadLoans = async () => {
-            setIsLoading(true);
-            setError(null);
+        setIsLoading(true);
+        setError(null);
 
-            try {
-                const client = getLoansClient();
-                const data = await client.getUserLoans(userId);
-                setLoans(data);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Erreur lors du chargement des prêts');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadLoans();
+        try {
+            const client = getLoansClient();
+            const data = await client.getUserLoans(userId);
+            setLoans(data);
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Erreur lors du chargement des prêts');
+            setLoans([]);
+        } finally {
+            setIsLoading(false);
+        }
     }, [userId]);
 
-    return { loans, isLoading, error };
+    useEffect(() => {
+        loadLoans();
+    }, [loadLoans]);
+
+    return { loans, isLoading, error, refetch: loadLoans };
 }

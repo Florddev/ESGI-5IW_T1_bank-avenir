@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getNotificationsClient } from '../../../client/notifications.client';
+import { getNotificationsClient } from '@workspace/adapter-next/client';
 
 export function useMarkAsRead() {
     const [isLoading, setIsLoading] = useState(false);

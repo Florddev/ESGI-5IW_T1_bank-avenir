@@ -1,4 +1,4 @@
-import { Injectable } from '@nextstack/shared/di';
+import { Injectable } from '@workspace/shared/di';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 @Injectable()

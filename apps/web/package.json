@@ -20,6 +20,7 @@
         "@workspace/db-in-memory": "workspace:*",
         "@workspace/service-auth-jwt": "workspace:*",
         "@workspace/service-email-console": "workspace:*",
+        "@workspace/service-realtime-sse": "workspace:*",
         "@workspace/translations": "workspace:*",
         "@workspace/shared": "workspace:*",
         "@workspace/ui-react": "workspace:*",

@@ -6,5 +6,6 @@ export async function createMiddleware(request: NextRequest): Promise<NextRespon
   const i18nResponse = i18nMiddleware(request);
   if (i18nResponse.status !== 200) return i18nResponse;
 
+  return i18nResponse;
   return routeGuardMiddleware(request);
 }
