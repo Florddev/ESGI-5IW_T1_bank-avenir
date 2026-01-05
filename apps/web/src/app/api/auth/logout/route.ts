@@ -1,5 +1,5 @@
+import '@/lib/di';
 import { NextRequest, NextResponse } from 'next/server';
-import { successResponse } from '@workspace/adapter-next/utils/api.helpers';
 
 export async function POST(request: NextRequest) {
   const response = NextResponse.json({ message: 'Déconnexion réussie' }, { status: 200 });

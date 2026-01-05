@@ -1,3 +1,4 @@
+import '@/lib/di';
 import { NextRequest } from 'next/server';
 import { AuthController } from '@workspace/adapter-next/controllers';
 import { withErrorHandler } from '@workspace/adapter-next/middleware/error.middleware';

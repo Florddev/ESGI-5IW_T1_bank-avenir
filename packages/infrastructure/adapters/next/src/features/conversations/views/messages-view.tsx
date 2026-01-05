@@ -5,19 +5,22 @@ import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
 import { Textarea } from '@workspace/ui-react/components/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/components/card';
-import { useState } from 'react';
-import { 
-    useConversations, 
-    useConversationMessages, 
-    useSendMessage, 
+import { useState, useEffect } from 'react';
+import {
+    useConversations,
+    useConversationMessages,
+    useSendMessage,
     useCreateConversation,
     useWaitingConversations,
-    useAssignConversation
+    useAssignConversation,
+    useMarkConversationRead
 } from '@workspace/adapter-next/features/conversations';
 import { useAuth } from '@workspace/adapter-next/features/auth';
 import { UserRole } from '@workspace/domain/entities';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { useRealtimeMessages } from '@workspace/adapter-next/features/realtime';
+import { useRealtimeNotifications, useMarkAsRead } from '@workspace/adapter-next/features/notifications';
 
 export function MessagesView() {
     const { user } = useAuth();
@@ -27,11 +30,61 @@ export function MessagesView() {
     const [message, setMessage] = useState('');
     const [showNewMessage, setShowNewMessage] = useState(false);
     const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
-    const { messages, isLoading: messagesLoading, refresh: refreshMessages } = useConversationMessages(selectedConversationId);
+    const { messages: loadedMessages, isLoading: messagesLoading, refresh: refreshMessages } = useConversationMessages(selectedConversationId);
+    const [messages, setMessages] = useState(loadedMessages);
     const { sendMessage, isLoading: isSending } = useSendMessage();
     const [replyMessage, setReplyMessage] = useState('');
     const { waitingConversations, count: waitingCount, refresh: refreshWaiting } = useWaitingConversations();
     const { assignConversation } = useAssignConversation();
+    const { markAsRead: markConversationAsRead } = useMarkConversationRead();
+
+    const { events: realtimeEvents } = useRealtimeMessages(user?.id || '');
+    const { events: notificationEvents } = useRealtimeNotifications(user?.id || '');
+    const { markAsRead } = useMarkAsRead();
+
+    useEffect(() => {
+        setMessages(loadedMessages);
+    }, [loadedMessages]);
+
+    useEffect(() => {
+        if (selectedConversationId) {
+            markConversationAsRead(selectedConversationId);
+        }
+    }, [selectedConversationId, markConversationAsRead]);
+
+    useEffect(() => {
+        if (!realtimeEvents || realtimeEvents.length === 0) return;
+
+        const lastEvent = realtimeEvents[realtimeEvents.length - 1];
+        if (lastEvent.event === 'message_new') {
+            const messageData = lastEvent.data as any;
+            if (messageData?.conversationId === selectedConversationId) {
+                setMessages(prev => {
+                    if (prev.some(m => m.id === messageData.id)) return prev;
+                    return [...prev, {
+                        id: messageData.id,
+                        conversationId: messageData.conversationId,
+                        authorId: messageData.senderId,
+                        authorName: messageData.authorName || 'Unknown',
+                        content: messageData.content,
+                        isRead: false,
+                        createdAt: new Date(messageData.createdAt)
+                    }];
+                });
+            }
+        }
+    }, [realtimeEvents.length, selectedConversationId]);
+
+    useEffect(() => {
+        if (!notificationEvents || notificationEvents.length === 0) return;
+
+        const lastNotification = notificationEvents[notificationEvents.length - 1];
+        if (lastNotification.event === 'notification_new' &&
+            lastNotification.data.type === 'MESSAGE_RECEIVED' &&
+            !lastNotification.data.isRead) {
+            markAsRead(lastNotification.data.id);
+        }
+    }, [notificationEvents.length, markAsRead]);
 
     const handleCreateConversation = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -48,22 +101,37 @@ export function MessagesView() {
 
     const handleSendReply = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selectedConversationId || !replyMessage.trim()) return;
-        
+        if (!selectedConversationId || !replyMessage.trim() || !user?.id) return;
+
+        const tempId = `temp-${Date.now()}`;
+        const tempMessage = {
+            id: tempId,
+            conversationId: selectedConversationId,
+            authorId: user.id,
+            authorName: `${user.firstName} ${user.lastName}`,
+            content: replyMessage,
+            isRead: false,
+            createdAt: new Date()
+        };
+
+        setMessages(prev => [...prev, tempMessage]);
+        setReplyMessage('');
+
         const success = await sendMessage(selectedConversationId, replyMessage);
-        if (success) {
-            setReplyMessage('');
-            refreshMessages();
-            refresh();
+        if (!success) {
+            setMessages(prev => prev.filter(m => m.id !== tempId));
         }
+        refresh();
     };
 
     const handleAssignToMe = async (conversationId: string) => {
         if (!user?.id) return;
         const success = await assignConversation(conversationId, user.id);
         if (success) {
-            refreshWaiting();
-            refresh();
+            setSelectedConversationId(conversationId);
+            await refreshWaiting();
+            await refresh();
+            refreshMessages();
         }
     };
 
@@ -71,9 +139,9 @@ export function MessagesView() {
     const selectedConversation = conversations.find(c => c.id === selectedConversationId);
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-1 space-y-4">
-                <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+            <div className="lg:col-span-1 space-y-4 w-full">
+                <div className="flex items-center justify-between w-full">
                     <h3 className="text-lg font-semibold">Conversations</h3>
                     {!isAdvisor && (
                         <Button size="sm" onClick={() => setShowNewMessage(!showNewMessage)}>
@@ -204,11 +272,11 @@ export function MessagesView() {
 
             <div className="lg:col-span-2">
                 {selectedConversation ? (
-                    <Card className="h-full flex flex-col">
-                        <CardHeader className="border-b">
+                    <Card className="flex flex-col h-[600px]">
+                        <CardHeader className="border-b px-6 py-4 flex-shrink-0">
                             <div className="flex items-start justify-between">
                                 <div>
-                                    <CardTitle>{selectedConversation.subject}</CardTitle>
+                                    <CardTitle className="text-xl">{selectedConversation.subject}</CardTitle>
                                     {isAdvisor && (
                                         <p className="text-sm text-muted-foreground mt-1">
                                             Client: {selectedConversation.clientName}
@@ -221,64 +289,77 @@ export function MessagesView() {
                                     )}
                                 </div>
                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                                    selectedConversation.status === 'OPEN' 
-                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                                    selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN'
+                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
                                         : selectedConversation.status === 'WAITING'
                                         ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
                                         : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
                                 }`}>
-                                    {selectedConversation.status === 'OPEN' ? 'Ouverte' : 
+                                    {selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN' ? 'Ouverte' :
                                      selectedConversation.status === 'WAITING' ? 'En attente' : 'Fermée'}
                                 </span>
                             </div>
                         </CardHeader>
-                        <CardContent className="flex-1 flex flex-col p-4">
-                            <div className="flex-1 space-y-4 overflow-y-auto mb-4" style={{ maxHeight: '500px' }}>
+                        <CardContent className="flex-1 flex flex-col p-0 min-h-0">
+                            <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50 dark:bg-gray-950">
                                 {messagesLoading ? (
-                                    <p className="text-sm text-muted-foreground">Chargement des messages...</p>
+                                    <div className="flex items-center justify-center h-full">
+                                        <p className="text-sm text-muted-foreground">Chargement des messages...</p>
+                                    </div>
                                 ) : messages.length === 0 ? (
-                                    <p className="text-sm text-muted-foreground">Aucun message</p>
+                                    <div className="flex items-center justify-center h-full">
+                                        <p className="text-sm text-muted-foreground">Aucun message</p>
+                                    </div>
                                 ) : (
-                                    messages.map((msg) => {
-                                        const isCurrentUser = msg.authorId === user?.id;
-                                        return (
-                                            <div
-                                                key={msg.id}
-                                                className={`flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`}
-                                            >
+                                    <div className="space-y-4 w-full">
+                                        {messages.map((msg) => {
+                                            const isCurrentUser = msg.authorId === user?.id;
+                                            return (
                                                 <div
-                                                    className={`max-w-[80%] p-3 rounded-lg ${
-                                                        isCurrentUser
-                                                            ? 'bg-primary text-primary-foreground'
-                                                            : 'bg-gray-100 dark:bg-gray-800'
-                                                    }`}
+                                                    key={msg.id}
+                                                    className={`flex w-full ${isCurrentUser ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
                                                 >
-                                                    <p className="text-xs font-medium mb-1">{msg.authorName}</p>
-                                                    <p className="text-sm">{msg.content}</p>
-                                                    <p className="text-xs opacity-70 mt-1">
-                                                        {formatDistanceToNow(new Date(msg.createdAt), { 
-                                                            addSuffix: true, 
-                                                            locale: fr 
-                                                        })}
-                                                    </p>
+                                                    <div className={`flex flex-col ${isCurrentUser ? 'items-end' : 'items-start'} max-w-[75%]`}>
+                                                        <div
+                                                            className={`px-4 py-3 rounded-2xl shadow-sm ${
+                                                                isCurrentUser
+                                                                    ? 'bg-primary text-primary-foreground rounded-br-sm'
+                                                                    : 'bg-white dark:bg-gray-800 rounded-bl-sm'
+                                                            }`}
+                                                        >
+                                                            {!isCurrentUser && (
+                                                                <p className="text-xs font-semibold mb-1 opacity-70">{msg.authorName}</p>
+                                                            )}
+                                                            <p className="text-sm leading-relaxed whitespace-pre-wrap break-words">{msg.content}</p>
+                                                        </div>
+                                                        <p className={`text-xs text-muted-foreground mt-1 px-1 ${isCurrentUser ? 'text-right' : 'text-left'}`}>
+                                                            {formatDistanceToNow(new Date(msg.createdAt), {
+                                                                addSuffix: true,
+                                                                locale: fr
+                                                            })}
+                                                        </p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        );
-                                    })
+                                            );
+                                        })}
+                                    </div>
                                 )}
                             </div>
-                            {selectedConversation.status === 'OPEN' && (
-                                <form onSubmit={handleSendReply} className="flex gap-2">
-                                    <Input
-                                        placeholder="Votre réponse..."
-                                        value={replyMessage}
-                                        onChange={(e) => setReplyMessage(e.target.value)}
-                                        required
-                                    />
-                                    <Button type="submit" disabled={isSending}>
-                                        {isSending ? 'Envoi...' : 'Envoyer'}
-                                    </Button>
-                                </form>
+                            {(selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN') && (
+                                <div className="border-t bg-white dark:bg-gray-900 px-6 py-4 flex-shrink-0">
+                                    <form onSubmit={handleSendReply} className="flex gap-3">
+                                        <Input
+                                            placeholder="Écrivez votre message..."
+                                            value={replyMessage}
+                                            onChange={(e) => setReplyMessage(e.target.value)}
+                                            required
+                                            className="flex-1"
+                                        />
+                                        <Button type="submit" disabled={isSending} size="default">
+                                            {isSending ? 'Envoi...' : 'Envoyer'}
+                                        </Button>
+                                    </form>
+                                </div>
                             )}
                         </CardContent>
                     </Card>

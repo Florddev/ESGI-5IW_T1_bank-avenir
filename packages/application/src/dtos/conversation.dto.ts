@@ -23,7 +23,7 @@ export interface ConversationDto {
     clientName: string;
     advisorId?: string;
     advisorName?: string;
-    status: 'WAITING' | 'OPEN' | 'CLOSED';
+    status: 'WAITING' | 'ASSIGNED' | 'OPEN' | 'CLOSED';
     lastMessage?: string;
     lastMessageAt?: Date;
     unreadCount: number;
@@ -34,8 +34,9 @@ export interface ConversationDto {
 export interface MessageDto {
     id: string;
     conversationId: string;
-    authorId: string;
-    authorName: string;
+    authorId?: string;
+    senderId?: string;
+    authorName?: string;
     content: string;
     isRead: boolean;
     createdAt: Date;
@@ -48,7 +49,7 @@ export interface ConversationDetailDto {
     clientName: string;
     advisorId?: string;
     advisorName?: string;
-    status: 'WAITING' | 'OPEN' | 'CLOSED';
+    status: 'WAITING' | 'ASSIGNED' | 'OPEN' | 'CLOSED';
     messages: MessageDto[];
     createdAt: Date;
     updatedAt: Date;

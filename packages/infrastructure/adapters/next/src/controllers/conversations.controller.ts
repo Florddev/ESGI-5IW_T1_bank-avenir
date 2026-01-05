@@ -1,4 +1,4 @@
-import { container } from 'tsyringe';
+import { container } from '@workspace/shared/di';
 import {
   CreateConversationUseCase,
   GetUserConversationsUseCase,
@@ -8,6 +8,7 @@ import {
   TransferConversationUseCase,
   CloseConversationUseCase,
   GetWaitingConversationsUseCase,
+  MarkConversationReadUseCase,
 } from '@workspace/application/use-cases';
 
 export class ConversationsController {
@@ -49,5 +50,10 @@ export class ConversationsController {
   async getWaitingConversations() {
     const useCase = container.resolve(GetWaitingConversationsUseCase);
     return await useCase.execute();
+  }
+
+  async markConversationRead(conversationId: string) {
+    const useCase = container.resolve(MarkConversationReadUseCase);
+    return await useCase.execute(conversationId);
   }
 }

@@ -15,12 +15,15 @@
         "typecheck": "tsc --noEmit"
     },
     "dependencies": {
+        "@workspace/domain": "workspace:*",
         "@workspace/application": "workspace:*",
+        "@workspace/adapter-common": "workspace:*",
         "@workspace/adapter-next": "workspace:*",
         "@workspace/db-in-memory": "workspace:*",
         "@workspace/service-auth-jwt": "workspace:*",
         "@workspace/service-email-console": "workspace:*",
         "@workspace/service-realtime-sse": "workspace:*",
+        "@workspace/service-realtime-websocket": "workspace:*",
         "@workspace/translations": "workspace:*",
         "@workspace/shared": "workspace:*",
         "@workspace/ui-react": "workspace:*",

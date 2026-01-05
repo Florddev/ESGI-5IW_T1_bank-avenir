@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import '@/lib/di';
-import { getServerContainer } from '@/lib/di';
-import { SendRealtimeNotificationUseCase } from '@workspace/application/use-cases/notification';
+import { NextRequest, NextResponse } from 'next/server';
+import { RealtimeController } from '@workspace/adapter-next/controllers';
 import { NotificationType } from '@workspace/domain/entities';
 
 /**
@@ -28,15 +27,8 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const container = getServerContainer();
-        const useCase = container.resolve(SendRealtimeNotificationUseCase);
-
-        const notification = await useCase.execute({
-            userId,
-            type,
-            title,
-            message,
-        });
+        const controller = new RealtimeController();
+        const notification = await controller.sendNotification(userId, type, title, message);
 
         return NextResponse.json({
             success: true,

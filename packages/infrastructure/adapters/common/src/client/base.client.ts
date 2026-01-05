@@ -5,6 +5,7 @@ export interface HttpRequestOptions {
 }
 
 export class BaseClient {
+    private baseUrl: string = process.env.API_BASE_URL || ''; 
     private static instances = new Map<string, BaseClient>();
 
     public static getInstance<T extends BaseClient>(
@@ -27,7 +28,7 @@ export class BaseClient {
         endpoint: string,
         options?: RequestInit
     ): Promise<T> {
-        const response = await fetch(endpoint, {
+        const response = await fetch(`${this.baseUrl}${endpoint}`, {
             ...options,
             headers: {
                 'Content-Type': 'application/json',
@@ -75,6 +76,14 @@ export class BaseClient {
         return this.request<T>(endpoint, {
             ...options,
             method: 'DELETE',
+        });
+    }
+
+    protected async patch<T>(endpoint: string, data?: unknown, options?: RequestInit): Promise<T> {
+        return this.request<T>(endpoint, {
+            ...options,
+            method: 'PATCH',
+            body: data ? JSON.stringify(data) : undefined,
         });
     }
 }

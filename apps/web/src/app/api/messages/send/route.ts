@@ -1,6 +1,6 @@
+import '@/lib/di';
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerContainer } from '@/lib/init-server';
-import { SendRealtimeMessageUseCase } from '@workspace/application/use-cases/message';
+import { MessagesController } from '@workspace/adapter-next/controllers';
 
 /**
  * POST /api/messages/send
@@ -8,9 +8,7 @@ import { SendRealtimeMessageUseCase } from '@workspace/application/use-cases/mes
  */
 export async function POST(request: NextRequest) {
     try {
-        const container = await getServerContainer();
-        const useCase = container.resolve(SendRealtimeMessageUseCase);
-
+        const controller = new MessagesController();
         const body = await request.json();
 
         const { conversationId, senderId, recipientId, content } = body;
@@ -22,12 +20,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        await useCase.execute({
-            conversationId,
-            senderId,
-            recipientId,
-            content,
-        });
+        await controller.sendRealtimeMessage(conversationId, senderId, recipientId, content);
 
         return NextResponse.json({
             success: true,

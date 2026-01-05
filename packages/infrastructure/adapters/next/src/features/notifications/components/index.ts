@@ -1,2 +1,2 @@
-export * from './notification-list';
 export * from './notification-center';
+export * from './notification-badge';

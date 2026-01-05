@@ -10,9 +10,6 @@ export function useRealtimeMessages(userId: string) {
         userId,
         events: ['message_new', 'message_read', 'message_deleted', 'typing_start', 'typing_stop'],
         onEvent: (event, data) => {
-            console.log(`[Messages] Événement ${event}:`, data);
-            
-            // Logique spécifique aux messages
             if (event === 'message_new') {
                 // Jouer un son, afficher une notification, etc.
             }

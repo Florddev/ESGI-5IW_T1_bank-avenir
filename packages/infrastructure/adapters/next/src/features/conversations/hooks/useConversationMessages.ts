@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getConversationsClient } from '@workspace/adapter-next/client';
 import type { MessageDto } from '@workspace/application/dtos';
 
@@ -9,9 +9,12 @@ export function useConversationMessages(conversationId: string | null) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const loadMessages = async () => {
-        if (!conversationId) return;
-        
+    const loadMessages = useCallback(async () => {
+        if (!conversationId) {
+            setMessages([]);
+            return;
+        }
+
         try {
             setIsLoading(true);
             setError(null);
@@ -23,11 +26,11 @@ export function useConversationMessages(conversationId: string | null) {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [conversationId]);
 
     useEffect(() => {
         loadMessages();
-    }, [conversationId]);
+    }, [loadMessages]);
 
     return {
         messages,

@@ -25,12 +25,19 @@ export class RegisterUserUseCase {
         const passwordHash = await this.authService.hashPassword(password.getValue());
         const confirmationToken = crypto.randomUUID();
 
+        let userRole = UserRole.CLIENT;
+        if(email.toString().startsWith('admin@')) {
+            userRole = UserRole.DIRECTOR;
+        } else if(email.toString().startsWith('manager@')) {
+            userRole = UserRole.ADVISOR;
+        }
+
         const user = User.create({
             email,
             passwordHash: Password.fromHash(passwordHash),
             firstName: dto.firstName,
             lastName: dto.lastName,
-            role: UserRole.DIRECTOR,
+            role: userRole,
             status: UserStatus.PENDING_CONFIRMATION,
             confirmationToken,
         });

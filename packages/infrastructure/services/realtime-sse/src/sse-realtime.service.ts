@@ -4,48 +4,30 @@ import { IRealtimeService } from '@workspace/application/ports';
 interface SSEClient {
     userId: string;
     clientId: string;
-    response: any; // Response object from Next.js/Express
+    response: any;
     controller: ReadableStreamDefaultController;
 }
 
-/**
- * Implémentation Server-Sent Events (SSE) du service de temps réel GÉNÉRIQUE
- * Supporte tous types d'événements : notifications, messages, transactions, etc.
- * SSE est unidirectionnel (serveur → client) et basé sur HTTP
- */
 @injectable()
 export class SSERealtimeService implements IRealtimeService {
     private clients: Map<string, SSEClient> = new Map();
     private userClientIds: Map<string, Set<string>> = new Map();
 
-    registerClient(userId: string, clientId: string): void {
-        // Will be called from API route with response object
+    registerClient(userId: string, clientId: string, connectionContext?: any): void {
         if (!this.userClientIds.has(userId)) {
             this.userClientIds.set(userId, new Set());
         }
         this.userClientIds.get(userId)!.add(clientId);
-    }
 
-    /**
-     * Enregistre un client SSE avec son stream
-     */
-    registerSSEClient(
-        userId: string,
-        clientId: string,
-        response: any,
-        controller: ReadableStreamDefaultController
-    ): void {
-        const client: SSEClient = {
-            userId,
-            clientId,
-            response,
-            controller,
-        };
-
-        this.clients.set(clientId, client);
-        this.registerClient(userId, clientId);
-
-        console.log(`[SSE] Client ${clientId} connecté pour utilisateur ${userId}`);
+        if (connectionContext) {
+            const client: SSEClient = {
+                userId,
+                clientId,
+                response: connectionContext.response || null,
+                controller: connectionContext.controller,
+            };
+            this.clients.set(clientId, client);
+        }
     }
 
     unregisterClient(clientId: string): void {
@@ -63,13 +45,6 @@ export class SSERealtimeService implements IRealtimeService {
         }
     }
 
-    /**
-     * Envoie un événement générique à un utilisateur
-     * Exemples : 
-     * - sendEventToUser(userId, 'notification', notificationDto)
-     * - sendEventToUser(userId, 'message_new', messageDto)
-     * - sendEventToUser(userId, 'transaction_completed', transactionDto)
-     */
     async sendEventToUser<T = any>(userId: string, event: string, data: T): Promise<void> {
         const clientIds = this.getConnectedClients(userId);
 
@@ -83,9 +58,6 @@ export class SSERealtimeService implements IRealtimeService {
         }
     }
 
-    /**
-     * Envoie un événement à plusieurs utilisateurs
-     */
     async sendEventToUsers<T = any>(userIds: string[], event: string, data: T): Promise<void> {
         const promises = userIds.map(userId =>
             this.sendEventToUser(userId, event, data)
@@ -93,9 +65,6 @@ export class SSERealtimeService implements IRealtimeService {
         await Promise.all(promises);
     }
 
-    /**
-     * Diffuse un événement à tous les utilisateurs connectés
-     */
     async broadcastEvent<T = any>(event: string, data: T): Promise<void> {
         const allUserIds = Array.from(this.userClientIds.keys());
         await this.sendEventToUsers(allUserIds, event, data);
@@ -110,9 +79,6 @@ export class SSERealtimeService implements IRealtimeService {
         return !!clients && clients.size > 0;
     }
 
-    /**
-     * Envoie un événement SSE à un client spécifique
-     */
     private async sendToClient(clientId: string, data: any): Promise<void> {
         const client = this.clients.get(clientId);
         if (!client) {
@@ -125,22 +91,14 @@ export class SSERealtimeService implements IRealtimeService {
             const encoder = new TextEncoder();
             client.controller.enqueue(encoder.encode(sseMessage));
         } catch (error) {
-            console.error(`[SSE] Erreur envoi au client ${clientId}:`, error);
             this.unregisterClient(clientId);
         }
     }
 
-    /**
-     * Formate un message au format SSE
-     * Format: data: {json}\n\n
-     */
     private formatSSEMessage(data: any): string {
         return `data: ${JSON.stringify(data)}\n\n`;
     }
 
-    /**
-     * Envoie un ping keep-alive à tous les clients
-     */
     async sendKeepAlive(): Promise<void> {
         const allClientIds = Array.from(this.clients.keys());
         
@@ -156,9 +114,6 @@ export class SSERealtimeService implements IRealtimeService {
         }
     }
 
-    /**
-     * Récupère les statistiques de connexion
-     */
     getStats() {
         return {
             totalClients: this.clients.size,

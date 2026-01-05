@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "dev:ws": "tsx server-ws.ts",
+    "dev:all": "concurrently \"pnpm dev\" \"pnpm dev:ws\" --names \"next,ws\" --prefix-colors \"cyan,magenta\""
+  }
+}

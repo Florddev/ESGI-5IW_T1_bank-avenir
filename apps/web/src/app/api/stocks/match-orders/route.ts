@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { MatchOrdersUseCase, CalculateEquilibriumPriceUseCase } from '@workspace/application/use-cases';
-import { getServerContainer } from '@/lib/di';
 import '@/lib/di';
+import { NextRequest, NextResponse } from 'next/server';
+import { StocksController } from '@workspace/adapter-next/controllers';
 
 export async function POST(request: NextRequest) {
     try {
@@ -14,13 +13,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const container = getServerContainer();
-        const matchOrdersUseCase = container.resolve(MatchOrdersUseCase);
-        const calculateEquilibriumPriceUseCase = container.resolve(CalculateEquilibriumPriceUseCase);
-
-        const matches = await matchOrdersUseCase.execute(stockId);
-        
-        const equilibriumData = await calculateEquilibriumPriceUseCase.execute(stockId);
+        const controller = new StocksController();
+        const matches = await controller.matchOrders(stockId);
+        const equilibriumData = await controller.calculateEquilibriumPrice(stockId);
 
         return NextResponse.json({
             success: true,
@@ -54,10 +49,8 @@ export async function GET(request: NextRequest) {
             );
         }
 
-        const container = getServerContainer();
-        const calculateEquilibriumPriceUseCase = container.resolve(CalculateEquilibriumPriceUseCase);
-
-        const equilibriumData = await calculateEquilibriumPriceUseCase.execute(stockId);
+        const controller = new StocksController();
+        const equilibriumData = await controller.calculateEquilibriumPrice(stockId);
 
         return NextResponse.json(equilibriumData);
     } catch (error) {

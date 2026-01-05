@@ -1,8 +1,9 @@
+import '@/lib/di';
 import { NextRequest } from 'next/server';
 import { TransactionsController, AccountsController } from '@workspace/adapter-next/controllers';
 import { withErrorHandler } from '@workspace/adapter-next/middleware/error.middleware';
 import { requireAuth } from '@workspace/adapter-next/middleware/auth.middleware';
-//import { requireOwnership } from '@workspace/adapter-next/middleware/rbac.middleware';
+import { requireOwnership } from '@workspace/adapter-next/middleware/rbac.middleware';
 import { successResponse } from '@workspace/adapter-next/utils/api.helpers';
 
 const controller = new TransactionsController();
@@ -16,7 +17,7 @@ export const GET = withErrorHandler(async (
   const { accountId } = await params;
 
   const account = await accountsController.getAccount(accountId);
-  //await requireOwnership(account.userId)(auth);
+  await requireOwnership(account.userId)(auth);
 
   const transactions = await controller.getAccountTransactions(accountId);
   return successResponse(transactions);

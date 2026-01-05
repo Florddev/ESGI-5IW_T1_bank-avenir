@@ -20,15 +20,19 @@ export function useLogin() {
             const authClient = getAuthClient();
             const result = await authClient.login(data);
 
-            setUser({
-                id: result.userId,
-                email: result.email,
-                firstName: result.firstName,
-                lastName: result.lastName,
-                role: result.role,
-            });
+            if (result && result.userId) {
+                setUser({
+                    id: result.userId,
+                    email: result.email,
+                    firstName: result.firstName,
+                    lastName: result.lastName,
+                    role: result.role,
+                });
 
-            router.push('/dashboard');
+                router.push('/dashboard');
+            } else {
+                setError('Réponse du serveur invalide');
+            }
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Une erreur est survenue');
         } finally {

@@ -1,6 +1,7 @@
 'use client';
 
 import { useAuth, useLogout } from '@workspace/adapter-next/features/auth';
+import { NotificationBadge } from '@workspace/adapter-next/features/notifications';
 import { Button } from '@workspace/ui-react/components/button';
 import { DashboardShell, DashboardHeader, DashboardNav, DashboardUserInfo, DashboardLoading } from '@workspace/ui-react';
 import type { NavItem } from '@workspace/ui-react';
@@ -25,7 +26,7 @@ const CLIENT_NAV: NavItem[] = [
 const ADVISOR_NAV: NavItem[] = [
     { href: '/dashboard', label: 'Vue d\'ensemble', icon: '🏠' },
     { href: '/dashboard/clients', label: 'Mes clients', icon: '👥' },
-    { href: '/dashboard/loans', label: 'Crédits', icon: '🏦' },
+    // { href: '/dashboard/loans', label: 'Crédits', icon: '🏦' },
     { href: '/dashboard/messages', label: 'Messagerie', icon: '💬' },
 ];
 
@@ -89,15 +90,21 @@ export function DashboardLayoutClient({ children }: DashboardLayoutClientProps) 
                 />
             }
             actions={
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={logout}
-                    disabled={isLoggingOut}
-                    aria-label="Se déconnecter"
-                >
-                    {isLoggingOut ? '...' : 'Déconnexion'}
-                </Button>
+                <>
+                    <NotificationBadge 
+                        userId={user.id}
+                        onClick={() => router.push('/dashboard/notifications')}
+                    />
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={logout}
+                        disabled={isLoggingOut}
+                        aria-label="Se déconnecter"
+                    >
+                        {isLoggingOut ? '...' : 'Déconnexion'}
+                    </Button>
+                </>
             }
         />
     );

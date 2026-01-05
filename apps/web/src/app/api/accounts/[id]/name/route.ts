@@ -1,5 +1,6 @@
+import '@/lib/di';
 import { NextRequest } from 'next/server';
-import { AccountsController } from '@workspace/adapter-next/controllers/accounts.controller';
+import { AccountsController } from '@workspace/adapter-next/controllers';
 import { withErrorHandler } from '@workspace/adapter-next/middleware/error.middleware';
 import { requireAuth } from '@workspace/adapter-next/middleware/auth.middleware';
 import { requireOwnership } from '@workspace/adapter-next/middleware/rbac.middleware';

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { getNotificationsClient } from '@workspace/adapter-next/client';
 import type { NotificationDto } from '@workspace/application/dtos';
 
@@ -9,7 +9,7 @@ export function useNotifications(userId: string | null) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const loadNotifications = async () => {
+    const loadNotifications = useCallback(async () => {
         if (!userId) {
             setNotifications([]);
             setIsLoading(false);
@@ -28,11 +28,11 @@ export function useNotifications(userId: string | null) {
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [userId]);
 
     useEffect(() => {
         loadNotifications();
-    }, [userId]);
+    }, [loadNotifications]);
 
     return { notifications, isLoading, error, refetch: loadNotifications };
 }

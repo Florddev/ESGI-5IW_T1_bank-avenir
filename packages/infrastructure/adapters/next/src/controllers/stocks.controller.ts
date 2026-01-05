@@ -1,4 +1,4 @@
-import { container } from 'tsyringe';
+import { container } from '@workspace/shared/di';
 import {
   GetAllStocksUseCase,
   BuyStockUseCase,
@@ -7,6 +7,8 @@ import {
   CreateStockUseCase,
   UpdateStockUseCase,
   DeleteStockUseCase,
+  MatchOrdersUseCase,
+  CalculateEquilibriumPriceUseCase,
 } from '@workspace/application/use-cases';
 
 export class StocksController {
@@ -42,6 +44,16 @@ export class StocksController {
 
   async deleteStock(stockId: string) {
     const useCase = container.resolve(DeleteStockUseCase);
+    return await useCase.execute(stockId);
+  }
+
+  async matchOrders(stockId: string) {
+    const useCase = container.resolve(MatchOrdersUseCase);
+    return await useCase.execute(stockId);
+  }
+
+  async calculateEquilibriumPrice(stockId: string) {
+    const useCase = container.resolve(CalculateEquilibriumPriceUseCase);
     return await useCase.execute(stockId);
   }
 }

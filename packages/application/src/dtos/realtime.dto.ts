@@ -1,16 +1,11 @@
 import { NotificationType } from '@workspace/domain/entities';
 
-/**
- * DTO générique pour tous événements temps réel
- */
 export interface RealtimeEventDto<T = any> {
-    event: string; // notification, message, transaction, etc.
+    event: string;
     data: T;
     timestamp: string;
-    userId?: string; // Optionnel : ID utilisateur concerné
+    userId?: string;
 }
-
-// ==================== NOTIFICATIONS ====================
 
 export interface RealtimeNotificationDto {
     id: string;
@@ -28,8 +23,6 @@ export type NotificationEventType =
     | 'notification_read' 
     | 'notification_deleted';
 
-// ==================== MESSAGES ====================
-
 export interface RealtimeMessageDto {
     id: string;
     conversationId: string;
@@ -46,8 +39,6 @@ export type MessageEventType =
     | 'typing_start'
     | 'typing_stop';
 
-// ==================== TRANSACTIONS ====================
-
 export interface RealtimeTransactionDto {
     id: string;
     accountId: string;
@@ -62,11 +53,9 @@ export type TransactionEventType =
     | 'transaction_completed'
     | 'transaction_failed';
 
-// ==================== GENERIC ====================
-
 export interface SubscribeToRealtimeDto {
     userId: string;
-    channel?: string; // Optional: 'notifications', 'messages', 'transactions'
+    channel?: string;
 }
 
 export interface UnsubscribeDto {

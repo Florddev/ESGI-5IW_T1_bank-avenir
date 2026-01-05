@@ -1,6 +1,6 @@
+import '@/lib/di';
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerContainer } from '@/lib/init-server';
-import { NotifyTypingUseCase } from '@workspace/application/use-cases/message';
+import { MessagesController } from '@workspace/adapter-next/controllers';
 
 /**
  * POST /api/messages/typing
@@ -8,9 +8,7 @@ import { NotifyTypingUseCase } from '@workspace/application/use-cases/message';
  */
 export async function POST(request: NextRequest) {
     try {
-        const container = await getServerContainer();
-        const useCase = container.resolve(NotifyTypingUseCase);
-
+        const controller = new MessagesController();
         const body = await request.json();
         const { conversationId, userId, recipientId, isTyping } = body;
 
@@ -21,12 +19,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        await useCase.execute({
-            conversationId,
-            userId,
-            recipientId,
-            isTyping,
-        });
+        await controller.notifyTyping(conversationId, userId, recipientId, isTyping);
 
         return NextResponse.json({ success: true });
     } catch (error) {

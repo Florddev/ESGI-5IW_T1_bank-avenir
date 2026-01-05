@@ -10,6 +10,16 @@ export const createStockSchema = z.object({
     .string()
     .min(2, 'Le nom de la société doit contenir au moins 2 caractères')
     .max(100, 'Le nom de la société ne peut pas dépasser 100 caractères'),
+  description: z
+    .string()
+    .min(10, 'La description doit contenir au moins 10 caractères')
+    .max(500, 'La description ne peut pas dépasser 500 caractères')
+    .optional(),
+  initialPrice: z
+    .number()
+    .positive('Le prix initial doit être positif')
+    .min(0.01, 'Le prix minimum est de 0.01€')
+    .max(100000, 'Le prix maximum est de 100 000€'),
 });
 
 export const updateStockSchema = z.object({

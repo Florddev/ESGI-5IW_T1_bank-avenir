@@ -1,9 +1,10 @@
+import '@/lib/di';
 import { NextRequest } from 'next/server';
 import { TransactionsController } from '@workspace/adapter-next/controllers';
 import { AccountsController } from '@workspace/adapter-next/controllers';
 import { withErrorHandler } from '@workspace/adapter-next/middleware/error.middleware';
 import { requireAuth } from '@workspace/adapter-next/middleware/auth.middleware';
-//import { requireOwnership } from '@workspace/adapter-next/middleware/rbac.middleware';
+import { requireOwnership } from '@workspace/adapter-next/middleware/rbac.middleware';
 import { successResponse, parseBody } from '@workspace/adapter-next/utils/api.helpers';
 
 const controller = new TransactionsController();
@@ -18,7 +19,7 @@ export const POST = withErrorHandler(async (request: NextRequest) => {
   }>(request);
 
   const fromAccount = await accountsController.getAccount(body.fromAccountId);
-  //await requireOwnership(fromAccount.userId)(auth);
+  await requireOwnership(fromAccount.userId)(auth);
 
   const transaction = await controller.transfer(
     body.fromAccountId,

@@ -5,3 +5,7 @@ export * from './loans.client';
 export * from './stocks.client';
 export * from './notifications.client';
 export * from './conversations.client';
+export * from './admin.client';
+export * from './messages.client';
+export * from './realtime.client';
+export * from './advisor.client';

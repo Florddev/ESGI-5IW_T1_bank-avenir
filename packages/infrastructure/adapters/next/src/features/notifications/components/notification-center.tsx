@@ -12,40 +12,17 @@ export interface NotificationCenterProps {
     onNotificationClick?: (notification: RealtimeNotificationDto) => void;
 }
 
-/**
- * Composant NotificationCenter avec temps réel
- * Affiche les notifications en temps réel et permet de les marquer comme lues
- * 
- * @example
- * ```tsx
- * <NotificationCenter userId={currentUser.id} />
- * ```
- */
 export function NotificationCenter({ userId, onNotificationClick }: NotificationCenterProps) {
-    const { data: existingNotifications, refetch } = useNotifications(userId);
-    const { mutate: markAsRead } = useMarkAsRead();
+    const { notifications: existingNotifications, refetch } = useNotifications(userId);
+    const { markAsRead } = useMarkAsRead();
+    const { events, isConnected, connectionError } = useRealtimeNotifications(userId);
 
-    const {
-        notifications: realtimeNotifications,
-        isConnected,
-        connectionError,
-    } = useRealtimeNotifications({
-        userId,
-        onNotification: (notification) => {
-            // Nouvelle notification reçue - refresh la liste
+    useEffect(() => {
+        if (events.length > 0 && events[0].event === 'notification_new') {
             refetch();
-            
-            // Notification sonore optionnelle
-            if ('Notification' in window && Notification.permission === 'granted') {
-                new Notification(notification.title, {
-                    body: notification.message,
-                    icon: '/icon-notification.png',
-                });
-            }
-        },
-    });
+        }
+    }, [events.length, refetch]);
 
-    // Demander permission notifications navigateur
     useEffect(() => {
         if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
@@ -55,16 +32,12 @@ export function NotificationCenter({ userId, onNotificationClick }: Notification
     const unreadCount = existingNotifications?.filter((n) => !n.isRead).length || 0;
 
     const handleMarkAsRead = (notificationId: string) => {
-        markAsRead(notificationId, {
-            onSuccess: () => {
-                refetch();
-            },
-        });
+        markAsRead(notificationId);
+        refetch();
     };
 
     return (
         <div className="relative">
-            {/* Bouton notification avec badge */}
             <button
                 type="button"
                 className="relative p-2 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
@@ -78,7 +51,6 @@ export function NotificationCenter({ userId, onNotificationClick }: Notification
                 )}
             </button>
 
-            {/* Indicateur de connexion temps réel */}
             <div className="absolute top-0 right-0">
                 {isConnected ? (
                     <div
@@ -96,9 +68,6 @@ export function NotificationCenter({ userId, onNotificationClick }: Notification
     );
 }
 
-/**
- * Liste des notifications avec support temps réel
- */
 export interface NotificationListProps {
     userId: string;
     maxHeight?: string;
@@ -110,26 +79,20 @@ export function NotificationList({
     maxHeight = '400px',
     onNotificationClick,
 }: NotificationListProps) {
-    const { data: notifications, isLoading, refetch } = useNotifications(userId);
-    const { mutate: markAsRead } = useMarkAsRead();
+    const { notifications, isLoading, refetch } = useNotifications(userId);
+    const { markAsRead } = useMarkAsRead();
+    const { events, isConnected } = useRealtimeNotifications(userId);
 
-    const {
-        notifications: realtimeNotifications,
-        isConnected,
-    } = useRealtimeNotifications({
-        userId,
-        onNotification: () => {
+    useEffect(() => {
+        if (events.length > 0 && events[0].event === 'notification_new') {
             refetch();
-        },
-    });
+        }
+    }, [events.length, refetch]);
 
-    const handleMarkAsRead = (notificationId: string, e: React.MouseEvent) => {
+    const handleMarkAsRead = async (notificationId: string, e: React.MouseEvent) => {
         e.stopPropagation();
-        markAsRead(notificationId, {
-            onSuccess: () => {
-                refetch();
-            },
-        });
+        await markAsRead(notificationId);
+        refetch();
     };
 
     if (isLoading) {

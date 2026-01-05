@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
+import { RealtimeConnectionFactory } from '@workspace/adapter-common/client';
 
 export interface UseRealtimeOptions<T> {
     userId: string;
-    events: string[]; // Liste des événements à écouter : ['message_new', 'message_read', 'typing_start']
+    events: string[];
     onEvent?: (event: string, data: T) => void;
     onError?: (error: Event) => void;
     autoReconnect?: boolean;
-    reconnectInterval?: number; // ms
+    reconnectInterval?: number;
 }
 
 export interface RealtimeEvent<T = any> {
@@ -16,76 +17,65 @@ export interface RealtimeEvent<T = any> {
     userId?: string;
 }
 
-/**
- * Hook générique pour se connecter au système temps réel
- * Peut être utilisé pour n'importe quel type d'événement
- */
 export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
     const [isConnected, setIsConnected] = useState(false);
     const [connectionError, setConnectionError] = useState<string | null>(null);
     const [events, setEvents] = useState<RealtimeEvent<T>[]>([]);
-    
-    const eventSourceRef = useRef<EventSource | null>(null);
+
+    const connectionRef = useRef<ReturnType<typeof RealtimeConnectionFactory.create> | null>(null);
     const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const clientIdRef = useRef<string>(crypto.randomUUID());
+    const optionsRef = useRef(options);
+
+    useEffect(() => {
+        optionsRef.current = options;
+    }, [options]);
 
     const connect = useCallback(() => {
-        const params = new URLSearchParams({
-            userId: options.userId,
-            clientId: crypto.randomUUID(),
-        });
+        const connection = RealtimeConnectionFactory.create();
+        connectionRef.current = connection;
+        const currentOptions = optionsRef.current;
 
-        const eventSource = new EventSource(`/api/realtime/sse?${params.toString()}`);
-        eventSourceRef.current = eventSource;
-
-        eventSource.onopen = () => {
-            setIsConnected(true);
-            setConnectionError(null);
-            console.log('[Realtime] Connecté');
-        };
-
-        eventSource.onerror = (error) => {
-            setIsConnected(false);
-            setConnectionError('Erreur de connexion');
-            options.onError?.(error);
-            
-            eventSource.close();
-
-            // Auto-reconnexion
-            if (options.autoReconnect !== false) {
-                const interval = options.reconnectInterval || 5000;
-                reconnectTimeoutRef.current = setTimeout(() => {
-                    console.log('[Realtime] Tentative de reconnexion...');
-                    connect();
-                }, interval);
-            }
-        };
-
-        // Écouter les événements spécifiques
-        options.events.forEach((eventName) => {
-            eventSource.addEventListener(eventName, (e: MessageEvent) => {
+        connection.connect(
+            currentOptions.userId,
+            clientIdRef.current,
+            (message) => {
                 try {
-                    const data = JSON.parse((e as MessageEvent).data);
-                    const realtimeEvent: RealtimeEvent<T> = {
-                        event: eventName,
-                        data: data.data || data,
-                        timestamp: data.timestamp || new Date().toISOString(),
-                        userId: data.userId,
-                    };
+                    if (currentOptions.events.includes(message.event)) {
+                        const realtimeEvent: RealtimeEvent<T> = {
+                            event: message.event,
+                            data: message.data,
+                            timestamp: message.timestamp || new Date().toISOString(),
+                            userId: message.userId,
+                        };
 
-                    setEvents((prev) => [realtimeEvent, ...prev]);
-                    options.onEvent?.(eventName, realtimeEvent.data);
+                        setEvents((prev) => [realtimeEvent, ...prev]);
+                        currentOptions.onEvent?.(message.event, realtimeEvent.data);
+                    }
+
+                    if (message.event === 'connected') {
+                        setIsConnected(true);
+                        setConnectionError(null);
+                    }
                 } catch (error) {
-                    console.error('[Realtime] Erreur parse:', error);
+                    currentOptions.onError?.(error as Event);
                 }
-            });
-        });
+            },
+            (error) => {
+                setIsConnected(false);
+                setConnectionError('Erreur de connexion');
+                currentOptions.onError?.(error);
 
-        // Ping keep-alive
-        eventSource.addEventListener('ping', () => {
-            // Juste pour garder la connexion vivante
-        });
+                if (currentOptions.autoReconnect !== false) {
+                    const interval = currentOptions.reconnectInterval || 5000;
+                    reconnectTimeoutRef.current = setTimeout(() => {
+                        connect();
+                    }, interval);
+                }
+            }
+        );
 
-    }, [options]);
+    }, []);
 
     useEffect(() => {
         connect();
@@ -94,8 +84,8 @@ export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
             if (reconnectTimeoutRef.current) {
                 clearTimeout(reconnectTimeoutRef.current);
             }
-            if (eventSourceRef.current) {
-                eventSourceRef.current.close();
+            if (connectionRef.current) {
+                connectionRef.current.disconnect();
             }
         };
     }, [connect]);
@@ -104,9 +94,9 @@ export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
         if (reconnectTimeoutRef.current) {
             clearTimeout(reconnectTimeoutRef.current);
         }
-        if (eventSourceRef.current) {
-            eventSourceRef.current.close();
-            eventSourceRef.current = null;
+        if (connectionRef.current) {
+            connectionRef.current.disconnect();
+            connectionRef.current = null;
         }
         setIsConnected(false);
     }, []);
@@ -120,6 +110,12 @@ export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
         setEvents([]);
     }, []);
 
+    const sendMessage = useCallback((data: any) => {
+        if (connectionRef.current && 'send' in connectionRef.current) {
+            connectionRef.current.send?.(data);
+        }
+    }, []);
+
     return {
         isConnected,
         connectionError,
@@ -127,5 +123,6 @@ export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
         reconnect,
         disconnect,
         clearEvents,
+        sendMessage,
     };
 }

@@ -30,9 +30,13 @@ export interface RoutesConfig {
     stocks: {
         list: string | undefined;
         get: string | undefined;
+        create: string | undefined;
+        update: string | undefined;
+        delete: string | undefined;
         portfolio: string | undefined;
         buy: string | undefined;
         sell: string | undefined;
+        matchOrders: string | undefined;
     };
     notifications: {
         list: string | undefined;
@@ -48,6 +52,24 @@ export interface RoutesConfig {
         transfer: string | undefined;
         close: string | undefined;
         waiting: string | undefined;
+    };
+    admin: {
+        getAllUsers: string | undefined;
+        createUser: string | undefined;
+        updateUser: string | undefined;
+        deleteUser: string | undefined;
+        banUser: string | undefined;
+        updateSavingsRate: string | undefined;
+        applySavingsInterest: string | undefined;
+    };
+    messages: {
+        send: string | undefined;
+        typing: string | undefined;
+    };
+    realtime: {
+        notify: string | undefined;
+        stats: string | undefined;
+        sse: string | undefined;
     };
 }
 
@@ -75,35 +97,43 @@ export class RoutesConfigService {
         RoutesConfigService.sharedInstance = null;
     }
 
-    getAllRoutes(): RoutesConfig | {} {
-        return this.config || {};
-    }
-
     getAuthRoutes(): RoutesConfig['auth'] | undefined {
         return this.config.auth;
     }
 
-    getAccountsRoutes(): RoutesConfig['accounts'] | {} {
-        return this.config.accounts || {};
+    getAccountsRoutes(): RoutesConfig['accounts'] | undefined {
+        return this.config.accounts;
     }
 
-    getTransactionsRoutes(): RoutesConfig['transactions'] | {} {
-        return this.config.transactions || {};
+    getTransactionsRoutes(): RoutesConfig['transactions'] | undefined {
+        return this.config.transactions;
     }
 
-    getLoansRoutes(): RoutesConfig['loans'] | {} {
-        return this.config.loans || {};
+    getLoansRoutes(): RoutesConfig['loans'] | undefined {
+        return this.config.loans;
     }
 
-    getStocksRoutes(): RoutesConfig['stocks'] | {} {
-        return this.config.stocks || {};
+    getStocksRoutes(): RoutesConfig['stocks'] | undefined {
+        return this.config.stocks;
     }
 
-    getNotificationsRoutes(): RoutesConfig['notifications'] | {} {
-        return this.config.notifications || {};
+    getNotificationsRoutes(): RoutesConfig['notifications'] | undefined {
+        return this.config.notifications;
     }
 
-    getConversationsRoutes(): RoutesConfig['conversations'] | {} {
-        return this.config.conversations || {};
+    getConversationsRoutes(): RoutesConfig['conversations'] | undefined {
+        return this.config.conversations;
+    }
+
+    getAdminRoutes(): RoutesConfig['admin'] | undefined {
+        return this.config.admin;
+    }
+
+    getMessagesRoutes(): RoutesConfig['messages'] | undefined {
+        return this.config.messages;
+    }
+
+    getRealtimeRoutes(): RoutesConfig['realtime'] | undefined {
+        return this.config.realtime;
     }
 }

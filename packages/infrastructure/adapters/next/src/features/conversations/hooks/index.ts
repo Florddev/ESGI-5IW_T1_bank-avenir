@@ -4,3 +4,4 @@ export { useSendMessage } from './useSendMessage';
 export { useCreateConversation } from './useCreateConversation';
 export { useWaitingConversations } from './useWaitingConversations';
 export { useAssignConversation } from './useAssignConversation';
+export { useMarkConversationRead } from './useMarkConversationRead';

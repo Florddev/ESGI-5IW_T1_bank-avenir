@@ -73,6 +73,6 @@ export function Injectable() {
  * constructor(@Inject(TOKENS.IUserRepository) private userRepo: IUserRepository) {}
  * ```
  */
-export function Inject(token: string) {
+export function Inject(token: symbol) {
     return tsyringeInject(token);
 }

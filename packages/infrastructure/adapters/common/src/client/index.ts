@@ -4,3 +4,4 @@ export { RoutesConfigService, getRoute, type RoutesConfig } from './config/route
 export { configureClients } from './config/configure-clients';
 
 export * from './api';
+export * from './realtime';

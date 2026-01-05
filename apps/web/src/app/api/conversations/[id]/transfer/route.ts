@@ -1,5 +1,6 @@
+import '@/lib/di';
 import { NextRequest } from 'next/server';
-import { ConversationsController } from '@workspace/adapter-next/controllers/conversations.controller';
+import { ConversationsController } from '@workspace/adapter-next/controllers';
 import { withErrorHandler } from '@workspace/adapter-next/middleware/error.middleware';
 import { requireAuth } from '@workspace/adapter-next/middleware/auth.middleware';
 import { requireRole, UserRole } from '@workspace/adapter-next/middleware/rbac.middleware';
@@ -9,13 +10,14 @@ const controller = new ConversationsController();
 
 export const PATCH = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.ADVISOR, UserRole.DIRECTOR])(auth);
-  
+
   const body = await parseBody<{ newAdvisorId: string }>(request);
 
-  const conversation = await controller.transferConversation(params.id, body.newAdvisorId);
+  const { id } = await params;
+  const conversation = await controller.transferConversation(id, body.newAdvisorId);
   return successResponse(conversation);
 });

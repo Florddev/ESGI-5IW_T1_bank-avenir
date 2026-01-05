@@ -1,0 +1,41 @@
+{
+  "name": "@workspace/adapter-express",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@workspace/adapter-common": "workspace:*",
+    "@workspace/application": "workspace:*",
+    "@workspace/db-in-memory": "workspace:*",
+    "@workspace/domain": "workspace:*",
+    "@workspace/service-auth-jwt": "workspace:*",
+    "@workspace/service-email-console": "workspace:*",
+    "@workspace/shared": "workspace:*",
+    "express": "^4.18.2",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/node": "^22.0.0",
+    "@workspace/config-eslint": "workspace:*",
+    "@workspace/config-typescript": "workspace:*",
+    "eslint": "^9.32.0",
+    "typescript": "^5.9.3"
+  },
+  "exports": {
+    "./controllers": "./src/controllers/index.ts",
+    "./routes": "./src/routes/index.ts",
+    "./middleware": "./src/middleware/index.ts",
+    "./middleware/*": "./src/middleware/*.ts",
+    "./server": "./src/server.ts"
+  }
+}

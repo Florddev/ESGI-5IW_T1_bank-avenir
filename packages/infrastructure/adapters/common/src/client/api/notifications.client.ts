@@ -1,11 +1,11 @@
 import { BaseClient, ApiClient } from '@workspace/adapter-common/client';
-import { RoutesConfigService, getRoute } from '../config/routes.config';
+import { RoutesConfig, RoutesConfigService, getRoute } from '../config/routes.config';
 import type { NotificationDto } from '@workspace/application/dtos';
 
 @ApiClient()
 export class NotificationsClient extends BaseClient {
     private routesConfig: RoutesConfigService;
-    private routes: ReturnType<RoutesConfigService['getNotificationsRoutes']>;
+    private routes: RoutesConfig['notifications'] | undefined;
 
     constructor(routesConfig?: RoutesConfigService) {
         super();
@@ -14,12 +14,12 @@ export class NotificationsClient extends BaseClient {
     }
 
     async getUserNotifications(userId: string): Promise<NotificationDto[]> {
-        const route = getRoute(this.routes.list, '/api/notifications');
+        const route = getRoute(this.routes?.list, '/api/notifications');
         return this.get<NotificationDto[]>(`${route}?userId=${userId}`);
     }
 
     async markAsRead(notificationId: string): Promise<NotificationDto> {
-        const route = getRoute(this.routes.markAsRead, '/api/notifications/:id/read');
+        const route = getRoute(this.routes?.markAsRead, '/api/notifications/:id/read');
         return this.put<NotificationDto>(route.replace(':id', notificationId), {});
     }
 }

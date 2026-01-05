@@ -1,7 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
 import '@/lib/di';
-import { getServerContainer } from '@/lib/di';
-import { SSERealtimeService } from '@workspace/service-realtime-sse';
+import { NextRequest, NextResponse } from 'next/server';
+import { RealtimeController } from '@workspace/adapter-next/controllers';
 
 /**
  * GET /api/realtime/stats
@@ -12,25 +11,10 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams;
         const userId = searchParams.get('userId');
 
-        const container = getServerContainer();
-        const realtimeService = container.resolve(SSERealtimeService);
+        const controller = new RealtimeController();
+        const stats = await controller.getStats(userId || undefined);
 
-        if (userId) {
-            // Stats pour un utilisateur spécifique
-            const isConnected = realtimeService.isUserConnected(userId);
-            const clientIds = realtimeService.getConnectedClients(userId);
-
-            return NextResponse.json({
-                userId,
-                isConnected,
-                connectedClients: clientIds.length,
-                clientIds,
-            });
-        } else {
-            // Stats globales
-            const stats = realtimeService.getStats();
-            return NextResponse.json(stats);
-        }
+        return NextResponse.json(stats);
     } catch (error) {
         console.error('Error getting realtime stats:', error);
         return NextResponse.json(
