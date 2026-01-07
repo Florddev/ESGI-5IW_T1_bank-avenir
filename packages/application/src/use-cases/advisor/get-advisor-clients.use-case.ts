@@ -1,5 +1,6 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IUserRepository, IConversationRepository } from '@workspace/application/ports/repositories';
+import type { IUserRepository, IConversationRepository } from '../../ports';
+import { Conversation } from '@workspace/domain/entities';
 
 export interface AdvisorClientDto {
     id: string;
@@ -22,7 +23,7 @@ export class GetAdvisorClientsUseCase {
     async execute(advisorId: string): Promise<AdvisorClientDto[]> {
         const conversations = await this.conversationRepository.findByAdvisorId(advisorId);
 
-        const clientIds = [...new Set(conversations.map(c => c.clientId))];
+        const clientIds = [...new Set(conversations.map((c: Conversation) => c.clientId))];
 
         const clients = await Promise.all(
             clientIds.map(async (clientId) => {
@@ -30,7 +31,7 @@ export class GetAdvisorClientsUseCase {
                 if (!user) return null;
 
                 const activeConversations = conversations.filter(
-                    c => c.clientId === clientId &&
+                    (c: Conversation) => c.clientId === clientId &&
                     (c.status === 'OPEN' || c.status === 'ASSIGNED')
                 ).length;
 

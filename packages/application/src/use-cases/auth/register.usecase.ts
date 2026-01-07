@@ -1,6 +1,6 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IUserRepository, IAuthService, IEmailService } from '../../ports';
-import { RegisterUserDto } from '../../dtos/auth.dto';
+import type { IUserRepository, IAuthService, IEmailService } from '../../ports';
+import type { RegisterUserDto } from '../../dtos/auth.dto';
 import { User, UserRole, UserStatus } from '@workspace/domain/entities';
 import { Email, Password } from '@workspace/domain/value-objects';
 import { UserAlreadyExistsError } from '@workspace/domain/errors';

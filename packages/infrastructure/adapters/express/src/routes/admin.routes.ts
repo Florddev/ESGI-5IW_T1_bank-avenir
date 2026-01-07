@@ -5,11 +5,6 @@ import { asyncHandler, requireAuth, requireRole, UserRole } from '../middleware'
 const router = Router();
 const controller = new AdminController();
 
-// GET /api/admin/users - Get all users
-router.get('/users', requireAuth, requireRole([UserRole.DIRECTOR]), asyncHandler(async (req, res) => {
-  const users = await controller.getAllUsers();
-  res.json({ success: true, data: users });
-}));
 
 // POST /api/admin/users - Create user
 router.post('/users', requireAuth, requireRole([UserRole.DIRECTOR]), asyncHandler(async (req, res) => {

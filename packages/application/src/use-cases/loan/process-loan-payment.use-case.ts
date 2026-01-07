@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { ILoanRepository } from '../../ports';
-import { LoanPaymentDto } from '../../dtos';
+import type { ILoanRepository } from '../../ports';
+import type { LoanPaymentDto } from '../../dtos';
 import { LoanNotFoundError } from '@workspace/domain';
 
 @UseCase()

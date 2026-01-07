@@ -46,7 +46,6 @@ import {
   ConfirmDialog,
 } from '@workspace/adapter-vue';
 import { useStockManagement } from '@workspace/adapter-vue/composables';
-import type { StockDto } from '@workspace/application/dtos';
 
 const {
   stocks,
@@ -82,7 +81,7 @@ async function handleStockFormSubmit(data: any) {
   }
 }
 
-async function handleToggle(stock: StockDto) {
+async function handleToggle(stock: any) {
   try {
     const newAvailability = stock.status === 'AVAILABLE' ? false : true;
     await handleToggleAvailability(stock.id, newAvailability);

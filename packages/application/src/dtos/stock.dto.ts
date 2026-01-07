@@ -20,6 +20,7 @@ export interface StockDto {
     status: string;
     currentPrice?: number;
     createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface StockListDto {

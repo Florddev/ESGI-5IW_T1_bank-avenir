@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IStockRepository } from '../../ports';
+import type { IStockRepository } from '../../ports';
 import { Stock } from '@workspace/domain';
-import { StockDto } from '../../dtos';
+import type { StockDto } from '../../dtos';
 
 @UseCase()
 export class CreateStockUseCase {

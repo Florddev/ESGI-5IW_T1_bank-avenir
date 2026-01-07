@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IPortfolioRepository, IStockRepository } from '../../ports';
-import { PortfolioDto, PortfolioListDto } from '../../dtos';
+import type { IPortfolioRepository, IStockRepository } from '../../ports';
+import type { PortfolioDto, PortfolioListDto } from '../../dtos';
 import { Money } from '@workspace/domain';
 
 @UseCase()

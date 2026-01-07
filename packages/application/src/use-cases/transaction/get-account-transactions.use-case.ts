@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { ITransactionRepository } from '../../ports';
-import { TransactionDto } from '../../dtos';
+import type { ITransactionRepository } from '../../ports';
+import type { TransactionDto } from '../../dtos';
 
 @UseCase()
 export class GetAccountTransactionsUseCase {

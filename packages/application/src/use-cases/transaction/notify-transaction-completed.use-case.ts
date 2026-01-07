@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '@workspace/shared/di';
-import { IRealtimeService } from '../../ports';
-import { RealtimeTransactionDto } from '../../dtos';
+import type { IRealtimeService } from '../../ports';
+import type { RealtimeTransactionDto } from '../../dtos';
 
 export interface NotifyTransactionCompletedInput {
     transactionId: string;

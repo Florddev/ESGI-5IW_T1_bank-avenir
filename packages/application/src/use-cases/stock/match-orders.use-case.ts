@@ -1,5 +1,5 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IOrderRepository, IStockRepository } from '../../ports';
+import type { IOrderRepository, IStockRepository } from '../../ports';
 import { Order, OrderStatus, OrderType } from '@workspace/domain/entities';
 import { Money } from '@workspace/domain/value-objects';
 
@@ -21,7 +21,7 @@ export class MatchOrdersUseCase {
         const buyOrders = (await this.orderRepository.findPendingByStock(stockId, OrderType.BUY))
             .filter(order => order.status !== OrderStatus.FILLED)
             .sort((a, b) => {
-                const priceDiff = b.pricePerShare.amount - a.pricePerShare.amount;
+                const priceDiff = b.pricePerShare.getAmount() - a.pricePerShare.getAmount();
                 if (priceDiff !== 0) return priceDiff;
                 return a.createdAt.getTime() - b.createdAt.getTime();
             });
@@ -29,7 +29,7 @@ export class MatchOrdersUseCase {
         const sellOrders = (await this.orderRepository.findPendingByStock(stockId, OrderType.SELL))
             .filter(order => order.status !== OrderStatus.FILLED)
             .sort((a, b) => {
-                const priceDiff = a.pricePerShare.amount - b.pricePerShare.amount;
+                const priceDiff = a.pricePerShare.getAmount() - b.pricePerShare.getAmount();
                 if (priceDiff !== 0) return priceDiff;
                 return a.createdAt.getTime() - b.createdAt.getTime();
             });
@@ -42,13 +42,13 @@ export class MatchOrdersUseCase {
             for (const sellOrder of sellOrders) {
                 if (sellOrder.remainingQuantity === 0) continue;
 
-                if (buyOrder.pricePerShare.amount >= sellOrder.pricePerShare.amount) {
+                if (buyOrder.pricePerShare.getAmount() >= sellOrder.pricePerShare.getAmount()) {
                     const matchQuantity = Math.min(
                         buyOrder.remainingQuantity,
                         sellOrder.remainingQuantity
                     );
 
-                    const executionPrice = (buyOrder.pricePerShare.amount + sellOrder.pricePerShare.amount) / 2;
+                    const executionPrice = (buyOrder.pricePerShare.getAmount() + sellOrder.pricePerShare.getAmount()) / 2;
 
                     buyOrder.fill(matchQuantity);
                     sellOrder.fill(matchQuantity);

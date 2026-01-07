@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
 import { Order, OrderType, Portfolio } from '@workspace/domain';
-import { IOrderRepository, IStockRepository, IPortfolioRepository } from '../../ports';
-import { OrderDto } from '../../dtos';
+import type { IOrderRepository, IStockRepository, IPortfolioRepository } from '../../ports';
+import type { OrderDto } from '../../dtos';
 import { StockNotFoundError } from '@workspace/domain';
 
 @UseCase()

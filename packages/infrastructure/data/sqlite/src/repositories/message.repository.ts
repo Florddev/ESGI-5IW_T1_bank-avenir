@@ -8,7 +8,9 @@ interface MessageRow {
     conversation_id: string;
     sender_id: string;
     content: string;
+    is_read: number;
     created_at: number;
+    updated_at: number;
 }
 
 @Repository(TOKENS.IMessageRepository)
@@ -19,7 +21,9 @@ export class SqliteMessageRepository implements IMessageRepository {
             conversationId: row.conversation_id,
             senderId: row.sender_id,
             content: row.content,
+            isRead: row.is_read === 1,
             createdAt: new Date(row.created_at),
+            updatedAt: new Date(row.updated_at),
         });
     }
 
@@ -35,31 +39,38 @@ export class SqliteMessageRepository implements IMessageRepository {
         return rows.map((row) => this.rowToMessage(row));
     }
 
-    async findAll(): Promise<Message[]> {
-        const stmt = db.prepare('SELECT * FROM messages ORDER BY created_at DESC');
-        const rows = stmt.all() as MessageRow[];
+    async findUnreadByConversationId(conversationId: string, excludeUserId: string): Promise<Message[]> {
+        const stmt = db.prepare('SELECT * FROM messages WHERE conversation_id = ? AND is_read = 0 AND sender_id != ? ORDER BY created_at ASC');
+        const rows = stmt.all(conversationId, excludeUserId) as MessageRow[];
         return rows.map((row) => this.rowToMessage(row));
     }
 
     async save(message: Message): Promise<Message> {
         const stmt = db.prepare(`
-            INSERT INTO messages (id, conversation_id, sender_id, content, created_at)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO messages (id, conversation_id, sender_id, content, is_read, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `);
-        
+
         stmt.run(
             message.id,
             message.conversationId,
             message.senderId,
             message.content,
-            message.createdAt.getTime()
+            message.isRead ? 1 : 0,
+            message.createdAt.getTime(),
+            message.updatedAt.getTime()
         );
-        
+
         return message;
     }
 
-    async delete(id: string): Promise<void> {
-        const stmt = db.prepare('DELETE FROM messages WHERE id = ?');
-        stmt.run(id);
+    async markAllAsRead(conversationId: string): Promise<void> {
+        const stmt = db.prepare(`
+            UPDATE messages
+            SET is_read = 1, updated_at = ?
+            WHERE conversation_id = ? AND is_read = 0
+        `);
+
+        stmt.run(Date.now(), conversationId);
     }
 }

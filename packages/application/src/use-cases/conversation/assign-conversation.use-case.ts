@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IConversationRepository, IUserRepository } from '../../ports';
-import { ConversationDto } from '../../dtos';
+import type { IConversationRepository, IUserRepository } from '../../ports';
+import type { ConversationDto } from '../../dtos';
 import { ConversationNotFoundError } from '@workspace/domain';
 
 @UseCase()

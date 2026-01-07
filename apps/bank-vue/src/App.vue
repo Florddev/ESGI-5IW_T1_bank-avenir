@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useAuthStore } from '@workspace/adapter-vue/stores';
+import { useRouter } from 'vue-router';
+
+const authStore = useAuthStore();
+const router = useRouter();
+
+const isAuthenticated = computed(() => authStore.isAuthenticated);
+
+const handleLogout = async () => {
+  await authStore.logout();
+  router.push('/login');
+};
+</script>
+
 <template>
   <div id="app" class="min-h-screen bg-gray-50">
     <nav v-if="isAuthenticated" class="bg-slate-800 text-white shadow-md">

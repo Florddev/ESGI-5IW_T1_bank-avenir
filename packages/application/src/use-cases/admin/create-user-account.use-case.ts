@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IUserRepository, IAccountRepository } from '../../ports';
+import type { IUserRepository, IAccountRepository } from '../../ports';
 import { User, UserRole, UserStatus, Email, Password, Account, AccountType } from '@workspace/domain';
-import { UserDto } from '../../dtos';
+import type { UserDto } from '../../dtos';
 
 @UseCase()
 export class CreateUserAccountUseCase {

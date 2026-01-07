@@ -18,4 +18,22 @@ export class EmailConsoleService implements IEmailService {
         console.log(`Contenu: Votre compte est maintenant actif !`);
         console.log('==========================\n');
     }
+
+    async sendSavingsRateChangeNotification(email: string, oldRate: number, newRate: number): Promise<void> {
+        console.log('=== Notification de changement de taux ===');
+        console.log(`À: ${email}`);
+        console.log(`Sujet: Changement du taux d'épargne`);
+        console.log(`Ancien taux: ${(oldRate * 100).toFixed(2)}%`);
+        console.log(`Nouveau taux: ${(newRate * 100).toFixed(2)}%`);
+        console.log('==========================================\n');
+    }
+
+    async sendLoanPaymentReminder(email: string, amount: number, dueDate: Date): Promise<void> {
+        console.log('=== Rappel de paiement de prêt ===');
+        console.log(`À: ${email}`);
+        console.log(`Sujet: Rappel de paiement`);
+        console.log(`Montant: ${amount.toFixed(2)} EUR`);
+        console.log(`Date d'échéance: ${dueDate.toLocaleDateString('fr-FR')}`);
+        console.log('===================================\n');
+    }
 }

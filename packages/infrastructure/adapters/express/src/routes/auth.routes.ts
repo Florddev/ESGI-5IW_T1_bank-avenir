@@ -35,14 +35,15 @@ router.post('/confirm', asyncHandler(async (req, res) => {
 // GET /api/auth/me
 router.get('/me', asyncHandler(async (req, res) => {
   const token = req.cookies?.auth_token || req.headers.authorization?.replace('Bearer ', '');
-  
+
   if (!token) {
-    return res.status(401).json({
+    res.status(401).json({
       success: false,
       error: 'Authentication required',
     });
+    return;
   }
-  
+
   const result = await controller.getCurrentUser(token);
   res.json({ success: true, data: result });
 }));

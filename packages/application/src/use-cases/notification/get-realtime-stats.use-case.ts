@@ -1,5 +1,5 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IRealtimeService } from '../../ports';
+import type { IRealtimeService } from '../../ports';
 
 @UseCase()
 export class GetRealtimeStatsUseCase {

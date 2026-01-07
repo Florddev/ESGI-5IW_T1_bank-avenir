@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { INotificationRepository } from '../../ports';
-import { NotificationDto } from '../../dtos';
+import type { INotificationRepository } from '../../ports';
+import type { NotificationDto } from '../../dtos';
 
 @UseCase()
 export class GetUserNotificationsUseCase {

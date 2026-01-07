@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
 import { Account, AccountType, Percentage } from '@workspace/domain';
-import { IAccountRepository } from '../../ports';
-import { AccountDto } from '../../dtos';
+import type { IAccountRepository } from '../../ports';
+import type { AccountDto } from '../../dtos';
 
 const DEFAULT_SAVINGS_RATE = 2; // 2% par défaut
 

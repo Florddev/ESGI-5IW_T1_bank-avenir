@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IUserRepository } from '../../ports';
-import { UserDto } from '../../dtos';
+import type { IUserRepository } from '../../ports';
+import type { UserDto } from '../../dtos';
 import { UserNotFoundError } from '@workspace/domain';
 
 @UseCase()

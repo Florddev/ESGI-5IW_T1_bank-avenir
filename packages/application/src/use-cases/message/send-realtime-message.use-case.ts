@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '@workspace/shared/di';
-import { IRealtimeService } from '../../ports';
-import { RealtimeMessageDto } from '../../dtos';
+import type { IRealtimeService } from '../../ports';
+import type { RealtimeMessageDto } from '../../dtos';
 
 export interface SendRealtimeMessageInput {
     conversationId: string;

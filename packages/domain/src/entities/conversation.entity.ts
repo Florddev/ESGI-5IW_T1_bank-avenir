@@ -1,6 +1,7 @@
 export enum ConversationStatus {
     WAITING = 'WAITING',
     ASSIGNED = 'ASSIGNED',
+    OPEN = 'OPEN',
     CLOSED = 'CLOSED',
 }
 

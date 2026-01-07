@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { INotificationRepository, IRealtimeService } from '../../ports';
+import type { INotificationRepository, IRealtimeService } from '../../ports';
 import { NotificationNotFoundError } from '@workspace/domain';
 
 @UseCase()

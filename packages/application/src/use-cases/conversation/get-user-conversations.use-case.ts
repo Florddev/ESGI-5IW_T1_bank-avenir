@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IConversationRepository, IMessageRepository, IUserRepository } from '../../ports';
-import { ConversationDto } from '../../dtos';
+import type { IConversationRepository, IMessageRepository, IUserRepository } from '../../ports';
+import type { ConversationDto } from '../../dtos';
 
 @UseCase()
 export class GetUserConversationsUseCase {

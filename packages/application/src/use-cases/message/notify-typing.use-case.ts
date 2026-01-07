@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import { TOKENS } from '@workspace/shared/di';
-import { IRealtimeService } from '../../ports';
+import type { IRealtimeService } from '../../ports';
 
 export interface NotifyTypingInput {
     conversationId: string;

@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IAccountRepository, INotificationRepository } from '../../ports';
+import type { IAccountRepository, INotificationRepository } from '../../ports';
 import { Notification, NotificationType, Percentage } from '@workspace/domain';
 
 @UseCase()

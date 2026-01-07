@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IUserRepository, IAccountRepository } from '../../ports';
+import type { IUserRepository, IAccountRepository } from '../../ports';
 import { UserNotFoundError } from '@workspace/domain';
 import { Money } from '@workspace/domain';
 

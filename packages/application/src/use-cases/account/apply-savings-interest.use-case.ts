@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IAccountRepository, ITransactionRepository } from '../../ports';
+import type { IAccountRepository, ITransactionRepository } from '../../ports';
 
 @UseCase()
 export class ApplySavingsInterestUseCase {

@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IAccountRepository } from '../../ports';
-import { AccountDto } from '../../dtos';
+import type { IAccountRepository } from '../../ports';
+import type { AccountDto } from '../../dtos';
 
 @UseCase()
 export class ListUserAccountsUseCase {

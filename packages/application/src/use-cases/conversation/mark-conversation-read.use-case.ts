@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IMessageRepository } from '@workspace/application/ports/repositories';
+import type { IMessageRepository } from '../../ports';
 
 @UseCase()
 export class MarkConversationReadUseCase {

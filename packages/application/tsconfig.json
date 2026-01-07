@@ -3,6 +3,8 @@
     "compilerOptions": {
         "baseUrl": ".",
         "outDir": "./dist",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
         "paths": {
             "@workspace/application/*": ["./src/*"],
             "@workspace/domain/*": ["../domain/*"]

@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IStockRepository } from '../../ports';
+import type { IStockRepository } from '../../ports';
 import { StockNotFoundError } from '@workspace/domain';
 
 @UseCase()

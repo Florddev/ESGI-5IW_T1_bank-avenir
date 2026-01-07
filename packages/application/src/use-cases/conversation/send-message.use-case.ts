@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
 import { Message, Notification, NotificationType } from '@workspace/domain';
-import { IMessageRepository, IRealtimeService, IConversationRepository, INotificationRepository } from '../../ports';
-import { MessageDto, RealtimeMessageDto } from '../../dtos';
+import type { IMessageRepository, IRealtimeService, IConversationRepository, INotificationRepository } from '../../ports';
+import type { MessageDto, RealtimeMessageDto } from '../../dtos';
 
 @UseCase()
 export class SendMessageUseCase {

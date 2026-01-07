@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IStockRepository } from '../../ports';
-import { StockDto } from '../../dtos';
+import type { IStockRepository } from '../../ports';
+import type { StockDto } from '../../dtos';
 
 @UseCase()
 export class GetAllStocksUseCase {
@@ -19,6 +19,7 @@ export class GetAllStocksUseCase {
       status: stock.status,
       currentPrice: stock.currentPrice?.getAmount(),
       createdAt: stock.createdAt,
+      updatedAt: stock.updatedAt,
     }));
   }
 }

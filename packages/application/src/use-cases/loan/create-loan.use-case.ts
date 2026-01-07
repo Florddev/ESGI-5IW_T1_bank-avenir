@@ -1,7 +1,7 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
 import { Loan, Money, Percentage } from '@workspace/domain';
-import { ILoanRepository } from '../../ports';
-import { LoanDto } from '../../dtos';
+import type { ILoanRepository } from '../../ports';
+import type { LoanDto } from '../../dtos';
 
 @UseCase()
 export class CreateLoanUseCase {

@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IStockRepository } from '../../ports';
-import { StockDto } from '../../dtos';
+import type { IStockRepository } from '../../ports';
+import type { StockDto } from '../../dtos';
 import { StockNotFoundError } from '@workspace/domain';
 
 @UseCase()

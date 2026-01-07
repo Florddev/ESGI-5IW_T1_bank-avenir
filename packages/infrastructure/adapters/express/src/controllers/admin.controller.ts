@@ -1,6 +1,5 @@
 import { container } from 'tsyringe';
 import {
-  GetAllUsersUseCase,
   CreateUserAccountUseCase,
   UpdateUserAccountUseCase,
   DeleteUserAccountUseCase,
@@ -10,10 +9,6 @@ import {
 } from '@workspace/application/use-cases';
 
 export class AdminController {
-  async getAllUsers() {
-    const useCase = container.resolve(GetAllUsersUseCase);
-    return await useCase.execute();
-  }
 
   async createUser(
     email: string,

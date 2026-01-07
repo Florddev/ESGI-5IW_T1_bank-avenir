@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { IConversationRepository } from '../../ports';
-import { ConversationDto } from '../../dtos';
+import type { IConversationRepository } from '../../ports';
+import type { ConversationDto } from '../../dtos';
 import { ConversationNotFoundError } from '@workspace/domain';
 
 @UseCase()
@@ -22,9 +22,12 @@ export class TransferConversationUseCase {
 
     return {
       id: updatedConversation.id,
+      subject: updatedConversation.subject,
       clientId: updatedConversation.clientId,
+      clientName: '',
       advisorId: updatedConversation.advisorId,
       status: updatedConversation.status,
+      unreadCount: 0,
       createdAt: updatedConversation.createdAt,
       updatedAt: updatedConversation.updatedAt,
     };

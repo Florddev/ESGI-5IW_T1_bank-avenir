@@ -1,7 +1,7 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
 import { Transaction, TransactionType, Money } from '@workspace/domain';
-import { ITransactionRepository, IAccountRepository } from '../../ports';
-import { TransactionDto } from '../../dtos';
+import type { ITransactionRepository, IAccountRepository } from '../../ports';
+import type { TransactionDto } from '../../dtos';
 import { AccountNotFoundError } from '@workspace/domain';
 
 @UseCase()

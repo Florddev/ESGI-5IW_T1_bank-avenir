@@ -1,5 +1,5 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IRealtimeService, INotificationRepository } from '../../ports';
+import type { IRealtimeService, INotificationRepository } from '../../ports';
 import { Notification, NotificationType } from '@workspace/domain/entities';
 
 interface SendRealtimeNotificationDto {

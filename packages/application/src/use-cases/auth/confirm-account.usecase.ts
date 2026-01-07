@@ -1,6 +1,6 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import { IUserRepository, IEmailService, IAccountRepository } from '../../ports';
-import { ConfirmAccountDto } from '../../dtos/auth.dto';
+import type { IUserRepository, IEmailService, IAccountRepository } from '../../ports';
+import type { ConfirmAccountDto } from '../../dtos/auth.dto';
 import { InvalidConfirmationTokenError } from '@workspace/domain/errors';
 import { Account, AccountType, UserRole } from '@workspace/domain/entities';
 
