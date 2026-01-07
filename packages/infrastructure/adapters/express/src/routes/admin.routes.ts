@@ -5,6 +5,10 @@ import { asyncHandler, requireAuth, requireRole, UserRole } from '../middleware'
 const router = Router();
 const controller = new AdminController();
 
+router.get('/users', requireAuth, requireRole([UserRole.DIRECTOR]), asyncHandler(async (req, res) => {
+  const users = await controller.getAllUsers();
+  res.json({ success: true, data: users });
+}));
 
 // POST /api/admin/users - Create user
 router.post('/users', requireAuth, requireRole([UserRole.DIRECTOR]), asyncHandler(async (req, res) => {
@@ -34,8 +38,8 @@ router.post('/users/:id/ban', requireAuth, requireRole([UserRole.DIRECTOR]), asy
 
 // PATCH /api/admin/savings/rate - Update savings rate
 router.patch('/savings/rate', requireAuth, requireRole([UserRole.DIRECTOR]), asyncHandler(async (req, res) => {
-  const { newRate } = req.body;
-  const result = await controller.updateSavingsRate(newRate);
+  const { newRate, message } = req.body;
+  const result = await controller.updateSavingsRate(newRate, message);
   res.json({ success: true, data: result });
 }));
 

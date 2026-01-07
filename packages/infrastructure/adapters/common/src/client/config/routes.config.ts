@@ -37,6 +37,7 @@ export interface RoutesConfig {
         buy: string | undefined;
         sell: string | undefined;
         matchOrders: string | undefined;
+        placeOrder: string | undefined;
     };
     notifications: {
         list: string | undefined;

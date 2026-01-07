@@ -8,3 +8,4 @@ export * from './loan.entity';
 export * from './conversation.entity';
 export * from './message.entity';
 export * from './notification.entity';
+export * from './settings.entity';

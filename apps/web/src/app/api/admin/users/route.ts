@@ -8,6 +8,14 @@ import { successResponse, parseBody } from '@workspace/adapter-next/utils/api.he
 
 const controller = new AdminController();
 
+export const GET = withErrorHandler(async (request: NextRequest) => {
+  const auth = await requireAuth()(request);
+  await requireRole([UserRole.DIRECTOR])(auth);
+
+  const users = await controller.getAllUsers();
+  return successResponse(users);
+});
+
 export const POST = withErrorHandler(async (request: NextRequest) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);

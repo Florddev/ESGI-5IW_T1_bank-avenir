@@ -5,17 +5,31 @@ import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
 import { Textarea } from '@workspace/ui-react/components/textarea';
 import { useState } from 'react';
+import { useUpdateSavingsRate, useCurrentSavingsRate } from '../hooks';
 
 export function SavingsRateView() {
-    const [currentRate, setCurrentRate] = useState('2.5');
+    const { updateSavingsRate, isLoading, error } = useUpdateSavingsRate();
+    const { currentRate: fetchedRate, isLoading: isLoadingRate, refetch } = useCurrentSavingsRate();
+
+    const currentRate = fetchedRate?.toFixed(2) || '2.5';
     const [newRate, setNewRate] = useState('');
     const [notificationMessage, setNotificationMessage] = useState('');
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [success, setSuccess] = useState(false);
+    const [result, setResult] = useState<{ accountsUpdated: number; notificationsSent: number } | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setIsUpdating(true);
-        setIsUpdating(false);
+        setSuccess(false);
+
+        try {
+            const data = await updateSavingsRate(parseFloat(newRate), notificationMessage);
+            setResult(data);
+            await refetch();
+            setNewRate('');
+            setNotificationMessage('');
+            setSuccess(true);
+        } catch (err) {
+        }
     };
 
     return (
@@ -79,6 +93,24 @@ export function SavingsRateView() {
                         </p>
                     </div>
 
+                    {error && (
+                        <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                            <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
+                        </div>
+                    )}
+
+                    {success && result && (
+                        <div className="bg-green-50 dark:bg-green-950 p-4 rounded-lg border border-green-200 dark:border-green-800">
+                            <h4 className="font-semibold text-green-900 dark:text-green-100 mb-2">✅ Taux mis à jour avec succès</h4>
+                            <p className="text-sm text-green-700 dark:text-green-300">
+                                {result.accountsUpdated} compte(s) d'épargne mis à jour
+                            </p>
+                            <p className="text-sm text-green-700 dark:text-green-300">
+                                {result.notificationsSent} notification(s) envoyée(s) en temps réel
+                            </p>
+                        </div>
+                    )}
+
                     <div className="bg-yellow-50 dark:bg-yellow-950 p-4 rounded-lg border border-yellow-200 dark:border-yellow-800">
                         <h4 className="font-semibold text-yellow-900 dark:text-yellow-100 mb-2">⚠️ Attention</h4>
                         <p className="text-sm text-yellow-700 dark:text-yellow-300">
@@ -92,8 +124,8 @@ export function SavingsRateView() {
                     </div>
 
                     <div className="flex gap-2">
-                        <Button type="submit" disabled={isUpdating}>
-                            {isUpdating ? 'Modification en cours...' : 'Modifier le taux'}
+                        <Button type="submit" disabled={isLoading}>
+                            {isLoading ? 'Modification en cours...' : 'Modifier le taux'}
                         </Button>
                         <Button type="button" variant="outline" onClick={() => {
                             setNewRate('');

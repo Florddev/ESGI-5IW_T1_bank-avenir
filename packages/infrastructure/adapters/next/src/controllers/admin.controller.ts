@@ -4,11 +4,18 @@ import {
   UpdateUserAccountUseCase,
   DeleteUserAccountUseCase,
   BanUserUseCase,
+  GetAllUsersUseCase,
   UpdateGlobalSavingsRateUseCase,
   ApplySavingsInterestUseCase,
+  GetCurrentSavingsRateUseCase,
 } from '@workspace/application/use-cases';
 
 export class AdminController {
+  async getAllUsers() {
+    const useCase = container.resolve(GetAllUsersUseCase);
+    return await useCase.execute();
+  }
+
   async createUser(
     email: string,
     password: string,
@@ -35,13 +42,18 @@ export class AdminController {
     return await useCase.execute(userId);
   }
 
-  async updateSavingsRate(newRate: number) {
+  async updateSavingsRate(newRate: number, message?: string) {
     const useCase = container.resolve(UpdateGlobalSavingsRateUseCase);
-    return await useCase.execute(newRate);
+    return await useCase.execute(newRate, message);
   }
 
   async applySavingsInterest() {
     const useCase = container.resolve(ApplySavingsInterestUseCase);
+    return await useCase.execute();
+  }
+
+  async getCurrentSavingsRate() {
+    const useCase = container.resolve(GetCurrentSavingsRateUseCase);
     return await useCase.execute();
   }
 }

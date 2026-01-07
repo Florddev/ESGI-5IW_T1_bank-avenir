@@ -8,13 +8,20 @@ import { successResponse, parseBody } from '@workspace/adapter-next/utils/api.he
 
 const controller = new AdminController();
 
+export const GET = withErrorHandler(async (request: NextRequest) => {
+  await requireAuth()(request);
+
+  const currentRate = await controller.getCurrentSavingsRate();
+  return successResponse(currentRate);
+});
+
 export const PATCH = withErrorHandler(async (request: NextRequest) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);
-  
-  const body = await parseBody<{ newRate: number }>(request);
 
-  const result = await controller.updateSavingsRate(body.newRate);
+  const body = await parseBody<{ newRate: number; message?: string }>(request);
+
+  const result = await controller.updateSavingsRate(body.newRate, body.message);
   return successResponse(result);
 });
 

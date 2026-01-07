@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '../../auth';
-import { useStocks } from '../hooks';
+import { useStocks, usePortfolio } from '../hooks';
 import { StockList } from '../components';
 import { Button } from '@workspace/ui-react/components/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
@@ -9,10 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/co
 export function StocksView() {
     const { user } = useAuth();
     const { stocks, isLoading } = useStocks();
-    const { portfolio, isLoading: portfolioLoading } = useStocks();
+    const { portfolio, isLoading: portfolioLoading } = usePortfolio();
 
     const portfolioValue = portfolio?.totalValue || 0;
-    const portfolioGain = portfolio?.totalGain || 0;
+    const portfolioGain = portfolio?.totalGainLoss || 0;
     const portfolioGainPercent = portfolioValue > 0 ? ((portfolioGain / (portfolioValue - portfolioGain)) * 100) : 0;
 
     return (
@@ -53,7 +53,7 @@ export function StocksView() {
                     {portfolioLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
-                        <p className="text-4xl font-bold">{portfolio?.stocks?.length || 0}</p>
+                        <p className="text-4xl font-bold">{portfolio?.portfolio?.length || 0}</p>
                     )}
                 </div>
 
@@ -100,29 +100,36 @@ export function StocksView() {
                                     <div key={i} className="h-20 bg-muted animate-pulse rounded" />
                                 ))}
                             </div>
-                        ) : portfolio?.stocks && portfolio.stocks.length > 0 ? (
+                        ) : portfolio?.portfolio && portfolio.portfolio.length > 0 ? (
                             <div className="divide-y">
-                                {portfolio.stocks.map((stock: any) => (
-                                    <div key={stock.id} className="p-6 flex items-center justify-between hover:bg-muted/50 transition">
-                                        <div className="flex-1">
-                                            <h4 className="font-semibold">{stock.name}</h4>
-                                            <p className="text-sm text-muted-foreground">{stock.symbol}</p>
+                                {portfolio.portfolio.map((item: any) => {
+                                    const gainLoss = item.gainLoss || 0;
+                                    const totalValue = item.totalValue || 0;
+                                    const investedValue = totalValue - gainLoss;
+                                    const gainPercent = investedValue > 0 ? (gainLoss / investedValue) * 100 : 0;
+
+                                    return (
+                                        <div key={item.id} className="p-6 flex items-center justify-between hover:bg-muted/50 transition">
+                                            <div className="flex-1">
+                                                <h4 className="font-semibold">{item.stockSymbol}</h4>
+                                                <p className="text-sm text-muted-foreground">ID: {item.stockId}</p>
+                                            </div>
+                                            <div className="text-right mr-8">
+                                                <p className="font-semibold">{item.quantity} actions</p>
+                                                <p className="text-sm text-muted-foreground">
+                                                    Prix moyen: {item.averagePurchasePrice.toFixed(2)} €
+                                                </p>
+                                            </div>
+                                            <div className="text-right mr-8">
+                                                <p className="font-semibold">{totalValue.toFixed(2)} €</p>
+                                                <p className={`text-sm ${gainLoss >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                                    {gainLoss >= 0 ? '+' : ''}{gainLoss.toFixed(2)} € ({gainLoss >= 0 ? '+' : ''}{gainPercent.toFixed(2)}%)
+                                                </p>
+                                            </div>
+                                            <Button variant="outline" size="sm">Vendre</Button>
                                         </div>
-                                        <div className="text-right mr-8">
-                                            <p className="font-semibold">{stock.quantity} actions</p>
-                                            <p className="text-sm text-muted-foreground">
-                                                Prix moyen: {stock.averagePrice.toFixed(2)} €
-                                            </p>
-                                        </div>
-                                        <div className="text-right mr-8">
-                                            <p className="font-semibold">{(stock.quantity * stock.currentPrice).toFixed(2)} €</p>
-                                            <p className={`text-sm ${stock.gain >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                                {stock.gain >= 0 ? '+' : ''}{stock.gain.toFixed(2)} € ({stock.gainPercent >= 0 ? '+' : ''}{stock.gainPercent.toFixed(2)}%)
-                                            </p>
-                                        </div>
-                                        <Button variant="outline" size="sm">Vendre</Button>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         ) : (
                             <div className="p-12 text-center text-muted-foreground">

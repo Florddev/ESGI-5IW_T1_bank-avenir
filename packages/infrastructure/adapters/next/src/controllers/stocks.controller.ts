@@ -3,6 +3,8 @@ import {
   GetAllStocksUseCase,
   BuyStockUseCase,
   SellStockUseCase,
+  PlaceBuyOrderUseCase,
+  PlaceSellOrderUseCase,
   GetUserPortfolioUseCase,
   CreateStockUseCase,
   UpdateStockUseCase,
@@ -55,5 +57,15 @@ export class StocksController {
   async calculateEquilibriumPrice(stockId: string) {
     const useCase = container.resolve(CalculateEquilibriumPriceUseCase);
     return await useCase.execute(stockId);
+  }
+
+  async placeBuyOrder(userId: string, stockId: string, quantity: number, pricePerShare: number) {
+    const useCase = container.resolve(PlaceBuyOrderUseCase);
+    return await useCase.execute(userId, stockId, quantity, pricePerShare);
+  }
+
+  async placeSellOrder(userId: string, stockId: string, quantity: number, pricePerShare: number) {
+    const useCase = container.resolve(PlaceSellOrderUseCase);
+    return await useCase.execute(userId, stockId, quantity, pricePerShare);
   }
 }

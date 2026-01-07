@@ -4,16 +4,16 @@ import { useAccounts } from '@workspace/adapter-next/features/accounts';
 import { useAuth } from '@workspace/adapter-next/features/auth';
 import { Button } from '@workspace/ui-react/components/button';
 import Link from 'next/link';
+import { useCurrentSavingsRate } from '../hooks';
 
 export function SavingsView() {
     const { user } = useAuth();
     const { accounts, isLoading } = useAccounts();
+    const { currentRate: fetchedRate, isLoading: isLoadingRate } = useCurrentSavingsRate();
 
     const savingsAccounts = accounts?.filter(acc => acc.type === 'SAVINGS') || [];
     const totalSavings = savingsAccounts.reduce((sum, acc) => sum + acc.balance, 0);
-    const currentRate = savingsAccounts.length > 0 && savingsAccounts[0].savingsRate
-        ? (savingsAccounts[0].savingsRate * 100).toFixed(2)
-        : '2.00';
+    const currentRate = fetchedRate?.toFixed(2) || '2.00';
 
     return (
         <div className="space-y-6">
@@ -34,7 +34,7 @@ export function SavingsView() {
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">Taux actuel</h3>
-                    {isLoading ? (
+                    {isLoadingRate ? (
                         <div className="h-10 w-24 bg-muted animate-pulse rounded" />
                     ) : (
                         <>

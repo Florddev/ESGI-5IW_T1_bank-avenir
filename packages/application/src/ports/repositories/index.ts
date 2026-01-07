@@ -8,3 +8,4 @@ export * from './loan.repository';
 export * from './conversation.repository';
 export * from './message.repository';
 export * from './notification.repository';
+export * from './settings.repository';

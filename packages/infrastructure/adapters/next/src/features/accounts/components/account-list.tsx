@@ -20,7 +20,7 @@ export function AccountList({ accounts, onEdit, onDelete }: AccountListProps) {
     }
 
     return (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 p-6">
             {accounts.map((account) => (
                 <Card key={account.id}>
                     <CardHeader>

@@ -6,17 +6,34 @@ import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
 import { Textarea } from '@workspace/ui-react/components/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
+import { useStocks, useCreateStock } from '../hooks';
 
 export function StocksManagementView() {
+    const { stocks, isLoading, refetch } = useStocks();
+    const { createStock, isLoading: isCreating, error: createError } = useCreateStock();
+
     const [showCreateForm, setShowCreateForm] = useState(false);
     const [symbol, setSymbol] = useState('');
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [initialPrice, setInitialPrice] = useState('');
 
+    const availableStocks = stocks?.filter(s => s.status === 'AVAILABLE') || [];
+    const suspendedStocks = stocks?.filter(s => s.status === 'UNAVAILABLE') || [];
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setShowCreateForm(false);
+
+        try {
+            await createStock({ symbol, companyName: name });
+            setSymbol('');
+            setName('');
+            setDescription('');
+            setInitialPrice('');
+            setShowCreateForm(false);
+            await refetch();
+        } catch (err) {
+        }
     };
 
     return (
@@ -85,8 +102,16 @@ export function StocksManagementView() {
                             />
                         </div>
 
+                        {createError && (
+                            <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg border border-red-200 dark:border-red-800">
+                                <p className="text-sm text-red-700 dark:text-red-300">{createError}</p>
+                            </div>
+                        )}
+
                         <div className="flex gap-2">
-                            <Button type="submit">Créer l'action</Button>
+                            <Button type="submit" disabled={isCreating}>
+                                {isCreating ? 'Création...' : 'Créer l\'action'}
+                            </Button>
                             <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
                                 Annuler
                             </Button>
@@ -98,19 +123,29 @@ export function StocksManagementView() {
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
                     <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions disponibles</h3>
-                    <p className="text-4xl font-bold">0</p>
+                    {isLoading ? (
+                        <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                    ) : (
+                        <p className="text-4xl font-bold">{availableStocks.length}</p>
+                    )}
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Volume total</h3>
-                    <p className="text-4xl font-bold">0</p>
-                    <p className="text-xs text-muted-foreground mt-1">Ordres en attente</p>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions suspendues</h3>
+                    {isLoading ? (
+                        <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                    ) : (
+                        <p className="text-4xl font-bold">{suspendedStocks.length}</p>
+                    )}
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Capitalisation</h3>
-                    <p className="text-4xl font-bold">0 €</p>
-                    <p className="text-xs text-muted-foreground mt-1">Total marché</p>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Total actions</h3>
+                    {isLoading ? (
+                        <div className="h-10 w-16 bg-muted animate-pulse rounded" />
+                    ) : (
+                        <p className="text-4xl font-bold">{stocks.length}</p>
+                    )}
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
@@ -132,12 +167,37 @@ export function StocksManagementView() {
                         <div className="p-6 border-b">
                             <h3 className="text-xl font-semibold">Actions disponibles à la négociation</h3>
                         </div>
-                        <div className="p-12 text-center text-muted-foreground">
-                            <p className="mb-4">Aucune action disponible</p>
-                            <Button onClick={() => setShowCreateForm(true)}>
-                                Ajouter la première action
-                            </Button>
-                        </div>
+                        {isLoading ? (
+                            <div className="p-6 space-y-3">
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className="h-20 bg-muted animate-pulse rounded" />
+                                ))}
+                            </div>
+                        ) : availableStocks.length > 0 ? (
+                            <div className="divide-y">
+                                {availableStocks.map((stock) => (
+                                    <div key={stock.id} className="p-6 flex items-center justify-between">
+                                        <div>
+                                            <h4 className="font-semibold text-lg">{stock.symbol}</h4>
+                                            <p className="text-sm text-muted-foreground">{stock.companyName}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-2xl font-bold">
+                                                {stock.currentPrice ? `${stock.currentPrice.toFixed(2)} €` : 'N/A'}
+                                            </p>
+                                            <p className="text-xs text-muted-foreground">Prix actuel</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="p-12 text-center text-muted-foreground">
+                                <p className="mb-4">Aucune action disponible</p>
+                                <Button onClick={() => setShowCreateForm(true)}>
+                                    Ajouter la première action
+                                </Button>
+                            </div>
+                        )}
                     </div>
                 </TabsContent>
 
@@ -146,9 +206,33 @@ export function StocksManagementView() {
                         <div className="p-6 border-b">
                             <h3 className="text-xl font-semibold">Actions temporairement suspendues</h3>
                         </div>
-                        <div className="p-12 text-center text-muted-foreground">
-                            <p>Aucune action suspendue</p>
-                        </div>
+                        {isLoading ? (
+                            <div className="p-6 space-y-3">
+                                {[1, 2].map((i) => (
+                                    <div key={i} className="h-20 bg-muted animate-pulse rounded" />
+                                ))}
+                            </div>
+                        ) : suspendedStocks.length > 0 ? (
+                            <div className="divide-y">
+                                {suspendedStocks.map((stock) => (
+                                    <div key={stock.id} className="p-6 flex items-center justify-between">
+                                        <div>
+                                            <h4 className="font-semibold text-lg">{stock.symbol}</h4>
+                                            <p className="text-sm text-muted-foreground">{stock.companyName}</p>
+                                        </div>
+                                        <div className="text-right">
+                                            <span className="text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded">
+                                                Suspendue
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="p-12 text-center text-muted-foreground">
+                                <p>Aucune action suspendue</p>
+                            </div>
+                        )}
                     </div>
                 </TabsContent>
 

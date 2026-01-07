@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import type { IAccountRepository, INotificationRepository } from '../../ports';
+import type { IAccountRepository, INotificationRepository, IRealtimeService, ISettingsRepository } from '../../ports';
 import { Notification, NotificationType, Percentage } from '@workspace/domain';
 
 @UseCase()
@@ -8,20 +8,26 @@ export class UpdateGlobalSavingsRateUseCase {
     @Inject(TOKENS.IAccountRepository)
     private accountRepository: IAccountRepository,
     @Inject(TOKENS.INotificationRepository)
-    private notificationRepository: INotificationRepository
+    private notificationRepository: INotificationRepository,
+    @Inject(TOKENS.IRealtimeService)
+    private realtimeService: IRealtimeService,
+    @Inject(TOKENS.ISettingsRepository)
+    private settingsRepository: ISettingsRepository
   ) {}
 
-  async execute(newRate: number): Promise<{ accountsUpdated: number; notificationsSent: number }> {
+  async execute(newRate: number, customMessage?: string): Promise<{ accountsUpdated: number; notificationsSent: number }> {
     const rate = Percentage.fromDecimal(newRate / 100);
 
-    // Récupérer tous les comptes d'épargne
+    const settings = await this.settingsRepository.get();
+    settings.updateSavingsRate(rate);
+    await this.settingsRepository.save(settings);
+
     const savingsAccounts = await this.accountRepository.findSavingsAccounts();
 
     let accountsUpdated = 0;
     let notificationsSent = 0;
     const userIds: string[] = [];
 
-    // Mettre à jour tous les comptes d'épargne
     for (const account of savingsAccounts) {
       try {
         account.updateSavingsRate(rate);
@@ -35,16 +41,27 @@ export class UpdateGlobalSavingsRateUseCase {
       }
     }
 
-    // Envoyer une notification à chaque client concerné
     for (const userId of userIds) {
       try {
+        const message = customMessage || `Le nouveau taux d'épargne est maintenant de ${newRate}% par an.`;
         const notification = Notification.create(
           userId,
           NotificationType.SAVINGS_RATE_CHANGE,
           'Changement de taux d\'épargne',
-          `Le nouveau taux d'épargne est maintenant de ${newRate}% par an.`
+          message
         );
         await this.notificationRepository.save(notification);
+
+        await this.realtimeService.sendEventToUser(userId, 'notification', {
+          id: notification.id,
+          userId: notification.userId,
+          type: notification.type,
+          title: notification.title,
+          message: notification.message,
+          isRead: notification.isRead,
+          createdAt: notification.createdAt,
+        });
+
         notificationsSent++;
       } catch (error) {
         console.error(`Failed to send notification to user ${userId}:`, error);

@@ -27,9 +27,9 @@ export class StocksClient extends BaseClient {
         return this.get<StockDto>(route.replace(':id', stockId));
     }
 
-    async getUserPortfolio(userId: string): Promise<any[]> {
-        const route = getRoute(this.routes?.portfolio, '/api/stocks/portfolio/:userId');
-        return this.get<any[]>(route.replace(':userId', userId));
+    async getUserPortfolio(): Promise<any> {
+        const route = getRoute(this.routes?.portfolio, '/api/portfolio');
+        return this.get<any>(route);
     }
 
     async buyStock(stockId: string, data: { accountId: string; quantity: number }): Promise<any> {
@@ -65,6 +65,11 @@ export class StocksClient extends BaseClient {
     async calculateEquilibriumPrice(stockId: string): Promise<any> {
         const route = getRoute(this.routes?.matchOrders, '/api/stocks/match-orders');
         return this.get<any>(`${route}?stockId=${stockId}`);
+    }
+
+    async placeOrder(data: { stockId: string; type: 'BUY' | 'SELL'; quantity: number; pricePerShare: number }): Promise<any> {
+        const route = getRoute(this.routes?.placeOrder, '/api/stocks/orders');
+        return this.post<any>(route, data);
     }
 }
 

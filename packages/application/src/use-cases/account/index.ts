@@ -5,3 +5,4 @@ export * from './update-account-name.use-case';
 export * from './delete-account.use-case';
 export * from './apply-savings-interest.use-case';
 export * from './update-global-savings-rate.use-case';
+export * from './get-current-savings-rate.use-case';

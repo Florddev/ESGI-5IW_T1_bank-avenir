@@ -37,7 +37,7 @@ export class AccountsClient extends BaseClient {
 
     async updateAccountName(accountId: string, customName: string): Promise<AccountDto> {
         const route = getRoute(this.routes?.updateName, '/api/accounts/:id/name');
-        return this.put<AccountDto>(route.replace(':id', accountId), { customName });
+        return this.patch<AccountDto>(route.replace(':id', accountId), { customName });
     }
 
     async deleteAccount(accountId: string): Promise<{ message: string }> {

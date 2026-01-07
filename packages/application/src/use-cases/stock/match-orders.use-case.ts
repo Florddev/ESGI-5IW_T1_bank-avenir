@@ -1,6 +1,6 @@
 import { UseCase, Inject, TOKENS } from '@workspace/shared/di';
-import type { IOrderRepository, IStockRepository } from '../../ports';
-import { Order, OrderStatus, OrderType } from '@workspace/domain/entities';
+import type { IOrderRepository, IStockRepository, IPortfolioRepository } from '../../ports';
+import { Order, OrderStatus, OrderType, Portfolio } from '@workspace/domain/entities';
 import { Money } from '@workspace/domain/value-objects';
 
 interface MatchedOrder {
@@ -15,6 +15,7 @@ export class MatchOrdersUseCase {
     constructor(
         @Inject(TOKENS.IOrderRepository) private readonly orderRepository: IOrderRepository,
         @Inject(TOKENS.IStockRepository) private readonly stockRepository: IStockRepository,
+        @Inject(TOKENS.IPortfolioRepository) private readonly portfolioRepository: IPortfolioRepository,
     ) {}
 
     async execute(stockId: string): Promise<MatchedOrder[]> {
@@ -52,6 +53,23 @@ export class MatchOrdersUseCase {
 
                     buyOrder.fill(matchQuantity);
                     sellOrder.fill(matchQuantity);
+
+                    const executionPriceMoney = Money.fromAmount(executionPrice);
+
+                    const buyerPortfolio = await this.portfolioRepository.findByUserIdAndStockId(buyOrder.userId, stockId);
+                    if (buyerPortfolio) {
+                        buyerPortfolio.addShares(matchQuantity, executionPriceMoney);
+                        await this.portfolioRepository.update(buyerPortfolio);
+                    } else {
+                        const newBuyerPortfolio = Portfolio.create(buyOrder.userId, stockId, matchQuantity, executionPriceMoney);
+                        await this.portfolioRepository.save(newBuyerPortfolio);
+                    }
+
+                    const sellerPortfolio = await this.portfolioRepository.findByUserIdAndStockId(sellOrder.userId, stockId);
+                    if (sellerPortfolio) {
+                        sellerPortfolio.removeShares(matchQuantity);
+                        await this.portfolioRepository.update(sellerPortfolio);
+                    }
 
                     matches.push({
                         buyOrder,
