@@ -2,7 +2,7 @@
   "success": "Success",
   "error": "Error",
   "warning": "Warning",
-  "info": "Information",
+  "info": "Your trusted banking partner",
   "loading": "Loading...",
   "saving": "Saving...",
   "deleting": "Deleting...",
@@ -11,5 +11,8 @@
   "noResults": "No results found",
   "tryAgain": "Please try again",
   "actionSuccess": "Action completed successfully",
-  "actionError": "An error occurred while performing the action"
+  "actionError": "An error occurred while performing the action",
+  "accountsDescription": "Manage your bank accounts securely with an intuitive interface",
+  "transactionsDescription": "Make instant transactions and track your history in real-time",
+  "investmentsDescription": "Invest in stocks and manage your portfolio with our advanced tools"
 }

@@ -79,10 +79,16 @@ export function MessagesView() {
         if (!notificationEvents || notificationEvents.length === 0) return;
 
         const lastNotification = notificationEvents[notificationEvents.length - 1];
-        if (lastNotification.event === 'notification_new' &&
-            lastNotification.data.type === 'MESSAGE_RECEIVED' &&
-            !lastNotification.data.isRead) {
-            markAsRead(lastNotification.data.id);
+        if (!lastNotification || !lastNotification.data) return;
+
+        const { event, data } = lastNotification;
+
+        // Check for both 'notification' and 'notification_new' events for compatibility
+        if ((event === 'notification' || event === 'notification_new') &&
+            data.type === 'MESSAGE_RECEIVED' &&
+            !data.isRead &&
+            data.id) {
+            markAsRead(data.id);
         }
     }, [notificationEvents.length, markAsRead]);
 
@@ -187,9 +193,9 @@ export function MessagesView() {
                 )}
 
                 {isAdvisor && waitingCount > 0 && (
-                    <Card className="border-orange-200 bg-orange-50 dark:bg-orange-950">
+                    <Card className="border-amber-500/20 bg-amber-500/5">
                         <CardHeader>
-                            <CardTitle className="text-orange-900 dark:text-orange-100">
+                            <CardTitle className="text-amber-700 dark:text-amber-500">
                                 En attente ({waitingCount})
                             </CardTitle>
                         </CardHeader>
@@ -197,7 +203,7 @@ export function MessagesView() {
                             {waitingConversations.map((conv) => (
                                 <div
                                     key={conv.id}
-                                    className="p-3 bg-white dark:bg-gray-900 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
+                                    className="p-3 bg-background rounded-lg cursor-pointer hover:bg-accent transition-colors"
                                     onClick={() => setSelectedConversationId(conv.id)}
                                 >
                                     <div className="flex items-start justify-between">
@@ -241,7 +247,7 @@ export function MessagesView() {
                                         className={`p-3 rounded-lg cursor-pointer transition-colors ${
                                             selectedConversationId === conv.id
                                                 ? 'bg-primary text-primary-foreground'
-                                                : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+                                                : 'hover:bg-accent hover:text-accent-foreground'
                                         }`}
                                         onClick={() => setSelectedConversationId(conv.id)}
                                     >
@@ -251,15 +257,15 @@ export function MessagesView() {
                                                 <p className="text-xs opacity-80 truncate">{conv.lastMessage}</p>
                                             </div>
                                             {conv.unreadCount > 0 && (
-                                                <span className="ml-2 px-2 py-0.5 bg-red-500 text-white text-xs rounded-full">
+                                                <span className="ml-2 px-2 py-0.5 bg-destructive text-destructive-foreground text-xs rounded-full">
                                                     {conv.unreadCount}
                                                 </span>
                                             )}
                                         </div>
-                                        <p className="text-xs opacity-70 mt-1">
-                                            {conv.lastMessageAt && formatDistanceToNow(new Date(conv.lastMessageAt), { 
-                                                addSuffix: true, 
-                                                locale: fr 
+                                        <p className="text-xs text-muted-foreground mt-1">
+                                            {conv.lastMessageAt && formatDistanceToNow(new Date(conv.lastMessageAt), {
+                                                addSuffix: true,
+                                                locale: fr
                                             })}
                                         </p>
                                     </div>
@@ -290,10 +296,10 @@ export function MessagesView() {
                                 </div>
                                 <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                                     selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN'
-                                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+                                        ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-500 border border-emerald-500/20'
                                         : selectedConversation.status === 'WAITING'
-                                        ? 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
-                                        : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                                        ? 'bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/20'
+                                        : 'bg-muted text-muted-foreground border border-border'
                                 }`}>
                                     {selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN' ? 'Ouverte' :
                                      selectedConversation.status === 'WAITING' ? 'En attente' : 'Fermée'}
@@ -301,7 +307,7 @@ export function MessagesView() {
                             </div>
                         </CardHeader>
                         <CardContent className="flex-1 flex flex-col p-0 min-h-0">
-                            <div className="flex-1 overflow-y-auto px-6 py-4 bg-gray-50 dark:bg-gray-950">
+                            <div className="flex-1 overflow-y-auto px-6 py-4 bg-muted/30">
                                 {messagesLoading ? (
                                     <div className="flex items-center justify-center h-full">
                                         <p className="text-sm text-muted-foreground">Chargement des messages...</p>
@@ -324,7 +330,7 @@ export function MessagesView() {
                                                             className={`px-4 py-3 rounded-2xl shadow-sm ${
                                                                 isCurrentUser
                                                                     ? 'bg-primary text-primary-foreground rounded-br-sm'
-                                                                    : 'bg-white dark:bg-gray-800 rounded-bl-sm'
+                                                                    : 'bg-card text-card-foreground border rounded-bl-sm'
                                                             }`}
                                                         >
                                                             {!isCurrentUser && (
@@ -346,7 +352,7 @@ export function MessagesView() {
                                 )}
                             </div>
                             {(selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN') && (
-                                <div className="border-t bg-white dark:bg-gray-900 px-6 py-4 flex-shrink-0">
+                                <div className="border-t bg-background px-6 py-4 flex-shrink-0">
                                     <form onSubmit={handleSendReply} className="flex gap-3">
                                         <Input
                                             placeholder="Écrivez votre message..."

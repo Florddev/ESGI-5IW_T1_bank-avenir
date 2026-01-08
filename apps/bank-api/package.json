@@ -12,6 +12,7 @@
     "@workspace/adapter-express": "workspace:*",
     "@workspace/db-in-memory": "workspace:*",
     "@workspace/service-auth-jwt": "workspace:*",
+    "@workspace/db-postgres": "workspace:*",
     "@workspace/service-email-console": "workspace:*",
     "@workspace/service-realtime-sse": "workspace:*",
     "@workspace/shared": "workspace:*",

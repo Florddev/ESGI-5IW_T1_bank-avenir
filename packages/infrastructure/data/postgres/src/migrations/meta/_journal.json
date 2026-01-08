@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1767813679318,
+      "tag": "0000_daily_micromacro",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1767821556467,
+      "tag": "0001_yummy_molly_hayes",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1767861130634,
+      "tag": "0002_perpetual_king_cobra",
+      "breakpoints": true
+    }
+  ]
+}

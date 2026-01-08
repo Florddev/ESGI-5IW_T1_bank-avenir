@@ -6,13 +6,9 @@ export interface NotifyTypingInput {
     conversationId: string;
     userId: string;
     recipientId: string;
-    isTyping: boolean; // true = start, false = stop
+    isTyping: boolean;
 }
 
-/**
- * Use Case : Notifier qu'un utilisateur est en train d'écrire
- * Exemple d'utilisation légère du temps réel (événements éphémères)
- */
 @injectable()
 export class NotifyTypingUseCase {
     constructor(

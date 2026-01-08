@@ -1,5 +1,6 @@
 {
   "login": {
+    "label": "Se connecter",
     "success": "Connexion réussie",
     "error": "Échec de la connexion",
     "loading": "Connexion en cours..."
@@ -10,6 +11,7 @@
     "confirm": "Êtes-vous sûr de vouloir vous déconnecter ?"
   },
   "register": {
+    "label": "S'inscrire",
     "success": "Compte créé avec succès",
     "error": "Échec de la création du compte",
     "loading": "Création du compte..."

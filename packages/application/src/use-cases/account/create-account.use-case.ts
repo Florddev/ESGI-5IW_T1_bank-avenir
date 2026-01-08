@@ -3,7 +3,7 @@ import { Account, AccountType, Percentage } from '@workspace/domain';
 import type { IAccountRepository } from '../../ports';
 import type { AccountDto } from '../../dtos';
 
-const DEFAULT_SAVINGS_RATE = 2; // 2% par défaut
+const DEFAULT_SAVINGS_RATE = 2;
 
 @UseCase()
 export class CreateAccountUseCase {
@@ -16,18 +16,15 @@ export class CreateAccountUseCase {
     let account: Account;
 
     if (type === AccountType.SAVINGS) {
-      // Si c'est un compte épargne, récupérer le taux depuis les comptes existants ou utiliser le défaut
       let rate: Percentage;
 
       if (savingsRate !== undefined) {
         rate = Percentage.fromDecimal(savingsRate / 100);
       } else {
-        // Essayer de récupérer le taux d'un compte épargne existant
         const existingSavingsAccounts = await this.accountRepository.findSavingsAccounts();
         if (existingSavingsAccounts.length > 0 && existingSavingsAccounts[0].savingsRate) {
           rate = existingSavingsAccounts[0].savingsRate;
         } else {
-          // Utiliser le taux par défaut
           rate = Percentage.fromDecimal(DEFAULT_SAVINGS_RATE / 100);
         }
       }

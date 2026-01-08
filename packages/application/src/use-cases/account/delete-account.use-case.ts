@@ -17,7 +17,6 @@ export class DeleteAccountUseCase {
       throw new AccountNotFoundError(accountId);
     }
 
-    // Vérifier que le solde est à zéro avant suppression
     if (!account.balance.equals(Money.fromAmount(0))) {
       throw new InsufficientFundsError(accountId);
     }

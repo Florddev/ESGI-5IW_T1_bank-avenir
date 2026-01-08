@@ -1,5 +1,5 @@
 import 'reflect-metadata';
-import { registerInMemoryModule } from '@workspace/db-in-memory';
+import { registerPostgresModule } from '@workspace/db-postgres';
 import { container, TOKENS } from '@workspace/shared/di';
 import { AuthJwtService } from '@workspace/service-auth-jwt';
 import { EmailConsoleService } from '@workspace/service-email-console';
@@ -12,7 +12,7 @@ function initializeDI() {
         return;
     }
 
-    registerInMemoryModule();
+    registerPostgresModule();
     container.registerSingleton(TOKENS.IAuthService, AuthJwtService);
     container.registerSingleton(TOKENS.IEmailService, EmailConsoleService);
     container.registerSingleton(TOKENS.IRealtimeService, SSERealtimeService);

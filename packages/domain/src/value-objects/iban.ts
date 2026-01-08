@@ -18,10 +18,14 @@ export class IBAN {
     }
 
     static fromString(value: string): IBAN {
+        if (!value || typeof value !== 'string') {
+            throw new Error(`Invalid IBAN format: value is ${typeof value} (${value})`);
+        }
+
         const normalized = value.replace(/\s/g, '').toUpperCase();
 
         if (!this.isValid(normalized)) {
-            throw new Error('Invalid IBAN format');
+            throw new Error(`Invalid IBAN format: "${normalized}" (length: ${normalized.length})`);
         }
 
         return new IBAN(normalized);

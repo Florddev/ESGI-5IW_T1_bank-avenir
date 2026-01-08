@@ -23,9 +23,11 @@ function mergeDeep(target, source) {
 function buildNestedObject(relativePath, content) {
     const parts = relativePath.replace('.json', '').split(path.sep);
 
+    /*
     if (parts[0] === 'common') {
         return content;
     }
+        */
 
     const result = {};
     let current = result;

@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { registerInMemoryModule } from '@workspace/db-in-memory';
+//import { registerInMemoryModule } from '@workspace/db-in-memory';
+import { registerPostgresModule } from '@workspace/db-postgres';
 import { container, TOKENS } from '@workspace/shared/di';
 import { AuthJwtService } from '@workspace/service-auth-jwt';
 import { EmailConsoleService } from '@workspace/service-email-console';
@@ -14,7 +15,8 @@ function initializeDI() {
     }
 
     // Register data layer (repositories)
-    registerInMemoryModule();
+    //registerInMemoryModule();
+    registerPostgresModule();
 
     // Register services
     container.registerSingleton(TOKENS.IAuthService, AuthJwtService);

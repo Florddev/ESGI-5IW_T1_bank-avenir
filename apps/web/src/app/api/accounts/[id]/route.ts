@@ -10,26 +10,28 @@ const controller = new AccountsController();
 
 export const GET = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
-  
-  const account = await controller.getAccount(params.id);
-  
+  const { id } = await params;
+
+  const account = await controller.getAccount(id);
+
   await requireOwnership(account.userId)(auth);
-  
+
   return successResponse(account);
 });
 
 export const DELETE = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
-  
-  const account = await controller.getAccount(params.id);
+  const { id } = await params;
+
+  const account = await controller.getAccount(id);
   await requireOwnership(account.userId)(auth);
-  
-  await controller.deleteAccount(params.id);
+
+  await controller.deleteAccount(id);
   return successResponse({ message: 'Account deleted successfully' });
 });

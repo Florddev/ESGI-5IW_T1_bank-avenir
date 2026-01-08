@@ -17,5 +17,8 @@
   "updatedAt": "Updated at",
   "price": "Price",
   "total": "Total",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+  "accounts": "Accounts",
+  "transactions": "Transactions",
+  "investments": "Investments"
 }

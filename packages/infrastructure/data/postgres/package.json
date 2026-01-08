@@ -1,0 +1,29 @@
+{
+  "name": "@workspace/db-postgres",
+  "version": "1.0.0",
+  "description": "PostgreSQL database adapter using Drizzle ORM",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "migrate": "drizzle-kit push --config=drizzle.config.ts",
+    "generate": "drizzle-kit generate --config=drizzle.config.ts",
+    "studio": "drizzle-kit studio --config=drizzle.config.ts",
+    "seed": "tsx src/seeders/index.ts",
+    "lint": "eslint . --max-warnings 0"
+  },
+  "dependencies": {
+    "@workspace/application": "workspace:*",
+    "@workspace/domain": "workspace:*",
+    "@workspace/shared": "workspace:*",
+    "drizzle-orm": "^0.45.1",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.7.0",
+    "typescript": "^5.7.2"
+  }
+}
