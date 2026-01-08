@@ -19,7 +19,6 @@ export class DeleteUserAccountUseCase {
       throw new UserNotFoundError(userId);
     }
 
-    // Vérifier que tous les comptes de l'utilisateur ont un solde nul
     const accounts = await this.accountRepository.findByUserId(userId);
     for (const account of accounts) {
       if (!account.balance.equals(Money.fromAmount(0))) {
@@ -29,12 +28,10 @@ export class DeleteUserAccountUseCase {
       }
     }
 
-    // Supprimer tous les comptes de l'utilisateur
     for (const account of accounts) {
       await this.accountRepository.delete(account.id);
     }
 
-    // Supprimer l'utilisateur
     await this.userRepository.delete(userId);
   }
 }

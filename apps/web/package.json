@@ -20,6 +20,7 @@
         "@workspace/adapter-common": "workspace:*",
         "@workspace/adapter-next": "workspace:*",
         "@workspace/db-in-memory": "workspace:*",
+        "@workspace/db-postgres": "workspace:*",
         "@workspace/service-auth-jwt": "workspace:*",
         "@workspace/service-email-console": "workspace:*",
         "@workspace/service-realtime-sse": "workspace:*",

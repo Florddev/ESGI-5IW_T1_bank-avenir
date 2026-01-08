@@ -63,12 +63,19 @@ export function useRealtime<T = any>(options: UseRealtimeOptions<T>) {
             },
             (error) => {
                 setIsConnected(false);
-                setConnectionError('Erreur de connexion');
+                const errorMessage = error instanceof Error ? error.message : 'Erreur de connexion';
+                setConnectionError(errorMessage);
+
+                // Log error for debugging
+                console.warn('SSE connection error:', error);
+
                 currentOptions.onError?.(error);
 
-                if (currentOptions.autoReconnect !== false) {
+                // Only auto-reconnect if explicitly enabled and not during page unload
+                if (currentOptions.autoReconnect !== false && typeof window !== 'undefined') {
                     const interval = currentOptions.reconnectInterval || 5000;
                     reconnectTimeoutRef.current = setTimeout(() => {
+                        console.log('Attempting to reconnect...');
                         connect();
                     }, interval);
                 }

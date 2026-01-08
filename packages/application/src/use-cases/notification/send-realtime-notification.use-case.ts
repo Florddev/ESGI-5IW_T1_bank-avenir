@@ -19,7 +19,6 @@ export class SendRealtimeNotificationUseCase {
     ) {}
 
     async execute(dto: SendRealtimeNotificationDto): Promise<Notification> {
-        // 1. Créer la notification
         const notification = Notification.create(
             dto.userId,
             dto.type,
@@ -27,15 +26,12 @@ export class SendRealtimeNotificationUseCase {
             dto.message
         );
 
-        // 2. Persister en base de données
         const savedNotification = await this.notificationRepository.save(notification);
 
-        // 3. Envoyer en temps réel si l'utilisateur est connecté
         if (this.realtimeService.isUserConnected(dto.userId)) {
-            // Utiliser la méthode générique avec l'événement 'notification'
             await this.realtimeService.sendEventToUser(
                 dto.userId,
-                'notification',
+                'notification_new',
                 {
                     id: savedNotification.id,
                     userId: savedNotification.userId,

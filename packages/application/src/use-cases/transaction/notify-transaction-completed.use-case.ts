@@ -11,10 +11,6 @@ export interface NotifyTransactionCompletedInput {
     type: 'DEBIT' | 'CREDIT';
 }
 
-/**
- * Use Case : Notifier en temps réel qu'une transaction est terminée
- * Permet de mettre à jour l'UI immédiatement sans rafraîchir
- */
 @injectable()
 export class NotifyTransactionCompletedUseCase {
     constructor(
@@ -32,7 +28,6 @@ export class NotifyTransactionCompletedUseCase {
             createdAt: new Date().toISOString(),
         };
 
-        // Envoyer l'événement à l'utilisateur
         await this.realtimeService.sendEventToUser(
             input.userId,
             'transaction_completed',

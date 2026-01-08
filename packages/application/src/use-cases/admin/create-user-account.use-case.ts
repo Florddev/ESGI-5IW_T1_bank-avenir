@@ -22,7 +22,6 @@ export class CreateUserAccountUseCase {
     const userEmail = Email.fromString(email);
     const userPassword = await Password.fromPlainText(password);
 
-    // Créer l'utilisateur avec statut ACTIVE (pas besoin de confirmation pour admin)
     const user = User.create({
       email: userEmail,
       passwordHash: userPassword,
@@ -34,7 +33,6 @@ export class CreateUserAccountUseCase {
 
     const savedUser = await this.userRepository.save(user);
 
-    // Créer automatiquement un compte courant pour le client
     if (role === UserRole.CLIENT) {
       const account = Account.create(
         savedUser.id,

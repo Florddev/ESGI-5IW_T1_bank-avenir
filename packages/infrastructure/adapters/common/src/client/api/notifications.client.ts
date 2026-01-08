@@ -20,7 +20,7 @@ export class NotificationsClient extends BaseClient {
 
     async markAsRead(notificationId: string): Promise<NotificationDto> {
         const route = getRoute(this.routes?.markAsRead, '/api/notifications/:id/read');
-        return this.put<NotificationDto>(route.replace(':id', notificationId), {});
+        return this.patch<NotificationDto>(route.replace(':id', notificationId), {});
     }
 }
 

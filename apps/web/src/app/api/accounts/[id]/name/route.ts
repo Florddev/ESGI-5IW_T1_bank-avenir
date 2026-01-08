@@ -10,14 +10,15 @@ const controller = new AccountsController();
 
 export const PATCH = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
+  const { id } = await params;
   const body = await parseBody<{ customName: string }>(request);
 
-  const account = await controller.getAccount(params.id);
+  const account = await controller.getAccount(id);
   await requireOwnership(account.userId)(auth);
 
-  const updatedAccount = await controller.updateAccountName(params.id, body.customName);
+  const updatedAccount = await controller.updateAccountName(id, body.customName);
   return successResponse(updatedAccount);
 });

@@ -35,7 +35,7 @@ const DIRECTOR_NAV: NavItem[] = [
     { href: '/dashboard/users', label: 'Utilisateurs', icon: '👥' },
     { href: '/dashboard/savings-rate', label: 'Taux d\'épargne', icon: '📊' },
     { href: '/dashboard/stocks-management', label: 'Gestion actions', icon: '📈' },
-    { href: '/dashboard/reports', label: 'Rapports', icon: '📄' },
+    // { href: '/dashboard/reports', label: 'Rapports', icon: '📄' },
 ];
 
 const getRoleName = (role: UserRole): string => {

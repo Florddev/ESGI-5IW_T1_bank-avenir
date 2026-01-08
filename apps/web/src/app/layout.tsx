@@ -73,6 +73,15 @@ export default function RootLayout({
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+    if (process.env.NODE_ENV === 'development') {
+        const originalError = console.error;
+        console.error = (...args) => {
+            if (args[0]?.includes?.('Warning:')) return;
+            originalError.call(console, ...args);
+        };
+    }
+    
     return (
         <html lang="fr" suppressHydrationWarning>
             <body className={`${fontSans.variable} ${fontMono.variable} font-sans antialiased `}>
