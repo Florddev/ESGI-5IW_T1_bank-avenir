@@ -6,12 +6,14 @@ import { useState } from 'react';
 import { useAllUsers, useCreateUser } from '../hooks';
 import { CreateUserForm } from '../components';
 import type { CreateUserFormData } from '@workspace/adapter-common/validators';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function UsersView() {
     const { users, isLoading, error: fetchError, refetch } = useAllUsers();
     const { createUser, isLoading: isCreating, error: createError } = useCreateUser();
 
     const [showCreateForm, setShowCreateForm] = useState(false);
+    const t = useTranslations();
 
     const handleSubmit = async (data: CreateUserFormData) => {
         try {
@@ -27,11 +29,11 @@ export function UsersView() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Gestion des utilisateurs</h2>
-                    <p className="text-muted-foreground">Créez, modifiez ou supprimez des comptes utilisateurs</p>
+                    <h2 className="text-3xl font-bold tracking-tight">{t('features.admin.messages.userManagement')}</h2>
+                    <p className="text-muted-foreground">{t('features.admin.messages.userManagementDescription')}</p>
                 </div>
                 <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                    {showCreateForm ? 'Annuler' : '+ Nouvel utilisateur'}
+                    {showCreateForm ? t('features.admin.messages.cancel') : t('features.admin.messages.newUser')}
                 </Button>
             </div>
 
@@ -45,34 +47,34 @@ export function UsersView() {
 
             <Tabs defaultValue="all" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="all">Tous</TabsTrigger>
-                    <TabsTrigger value="clients">Clients</TabsTrigger>
-                    <TabsTrigger value="advisors">Conseillers</TabsTrigger>
-                    <TabsTrigger value="directors">Directeurs</TabsTrigger>
+                    <TabsTrigger value="all">{t('features.admin.messages.all')}</TabsTrigger>
+                    <TabsTrigger value="clients">{t('features.admin.messages.clients')}</TabsTrigger>
+                    <TabsTrigger value="advisors">{t('features.admin.messages.advisors')}</TabsTrigger>
+                    <TabsTrigger value="directors">{t('features.admin.messages.directors')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="all" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Tous les utilisateurs ({users.length})</h3>
+                            <h3 className="text-xl font-semibold">{t('features.admin.messages.allUsers')} ({users.length})</h3>
                         </div>
                         {isLoading ? (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Chargement...</p>
+                                <p>{t('features.admin.messages.loading')}</p>
                             </div>
                         ) : users.length === 0 ? (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Aucun utilisateur trouvé</p>
+                                <p>{t('features.admin.messages.noUserFound')}</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-muted">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nom</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Rôle</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Statut</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.name')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.email')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.role')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.status')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y">
@@ -97,21 +99,21 @@ export function UsersView() {
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
                             <h3 className="text-xl font-semibold">
-                                Clients ({users.filter(u => u.role === 'CLIENT').length})
+                                {t('features.admin.messages.clients')} ({users.filter(u => u.role === 'CLIENT').length})
                             </h3>
                         </div>
                         {users.filter(u => u.role === 'CLIENT').length === 0 ? (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Aucun client trouvé</p>
+                                <p>{t('features.admin.messages.noClientFound')}</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-muted">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nom</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Statut</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.name')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.email')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.status')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y">
@@ -135,21 +137,21 @@ export function UsersView() {
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
                             <h3 className="text-xl font-semibold">
-                                Conseillers ({users.filter(u => u.role === 'ADVISOR').length})
+                                {t('features.admin.messages.advisors')} ({users.filter(u => u.role === 'ADVISOR').length})
                             </h3>
                         </div>
                         {users.filter(u => u.role === 'ADVISOR').length === 0 ? (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Aucun conseiller trouvé</p>
+                                <p>{t('features.admin.messages.noAdvisorFound')}</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-muted">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nom</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Statut</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.name')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.email')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.status')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y">
@@ -173,21 +175,21 @@ export function UsersView() {
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
                             <h3 className="text-xl font-semibold">
-                                Directeurs ({users.filter(u => u.role === 'DIRECTOR').length})
+                                {t('features.admin.messages.directors')} ({users.filter(u => u.role === 'DIRECTOR').length})
                             </h3>
                         </div>
                         {users.filter(u => u.role === 'DIRECTOR').length === 0 ? (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Aucun directeur trouvé</p>
+                                <p>{t('features.admin.messages.noDirectorFound')}</p>
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
                                 <table className="w-full">
                                     <thead className="bg-muted">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Nom</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Statut</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.name')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.email')}</th>
+                                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">{t('features.admin.messages.status')}</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y">

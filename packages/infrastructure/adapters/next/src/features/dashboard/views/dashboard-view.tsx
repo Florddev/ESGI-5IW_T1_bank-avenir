@@ -5,9 +5,11 @@ import { UserRole } from '@workspace/domain/entities';
 import { ClientDashboardView } from './client-dashboard-view';
 import { AdvisorDashboardView } from './advisor-dashboard-view';
 import { DirectorDashboardView } from './director-dashboard-view';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function DashboardView() {
     const { user } = useAuth();
+    const t = useTranslations();
 
     if (!user) {
         return null;
@@ -23,7 +25,7 @@ export function DashboardView() {
         default:
             return (
                 <div className="text-center py-12">
-                    <p className="text-muted-foreground">Rôle non reconnu: {user.role}</p>
+                    <p className="text-muted-foreground">{t('features.dashboard.messages.unrecognizedRole')} {user.role}</p>
                 </div>
             );
     }

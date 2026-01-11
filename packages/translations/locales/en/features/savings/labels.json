@@ -1,0 +1,13 @@
+{
+  "savingsRate": "Savings rate",
+  "currentRate": "Current rate",
+  "newRate": "New rate",
+  "notificationMessage": "Notification message",
+  "updateRate": "Update rate",
+  "updatingRate": "Updating...",
+  "rateUpdated": "Savings rate updated successfully",
+  "totalSavings": "Total savings",
+  "perYear": "Per year",
+  "estimatedInterest": "Estimated interest/year",
+  "mySavingsAccounts": "My savings accounts"
+}

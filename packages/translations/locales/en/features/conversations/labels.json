@@ -1,0 +1,14 @@
+{
+  "conversation": "Conversation",
+  "conversations": "Conversations",
+  "message": "Message",
+  "messages": "Messages",
+  "subject": "Subject",
+  "object": "Object",
+  "advisor": "Advisor",
+  "advisorLabel": "Advisor:",
+  "client": "Client",
+  "clientLabel": "Client:",
+  "newMessage": "New message",
+  "yourMessage": "Your message..."
+}

@@ -1,0 +1,13 @@
+{
+  "noAccountsFound": "No accounts found",
+  "editNameDescription": "Edit the custom name of your account",
+  "myAccounts": "My accounts",
+  "manageAccountsDesc": "Manage your bank accounts and view your balances",
+  "createNewAccount": "Create a new account",
+  "allMyAccounts": "All my accounts",
+  "deleteConfirmation": "Are you sure you want to delete this account?",
+  "currentBalance": "Current balance:",
+  "accountCreatedSuccess": "Account created successfully",
+  "accountDeletedSuccess": "Account deleted successfully",
+  "accountUpdatedSuccess": "Account updated successfully"
+}

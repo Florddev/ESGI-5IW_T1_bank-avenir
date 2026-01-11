@@ -1,0 +1,14 @@
+{
+  "invalidUserId": "Invalid user ID",
+  "invalidAccountId": "Invalid account ID",
+  "principalMustBePositive": "Loan amount must be positive",
+  "principalMin": "Minimum amount is 1,000€",
+  "principalMax": "Maximum amount is 500,000€",
+  "rateNonNegative": "Interest rate cannot be negative",
+  "rateMax": "Interest rate cannot exceed 20%",
+  "insuranceRateNonNegative": "Insurance rate cannot be negative",
+  "insuranceRateMax": "Insurance rate cannot exceed 5%",
+  "durationInteger": "Duration must be an integer number of months",
+  "durationMin": "Minimum duration is 12 months",
+  "durationMax": "Maximum duration is 360 months (30 years)"
+}

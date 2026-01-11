@@ -1,0 +1,10 @@
+{
+  "makeDeposit": "Deposit",
+  "makeWithdraw": "Withdraw",
+  "makeTransfer": "Transfer",
+  "depositInProgress": "Depositing...",
+  "withdrawInProgress": "Withdrawing...",
+  "transferInProgress": "Transferring...",
+  "transfer": "Transfer",
+  "cancel": "Cancel"
+}

@@ -1,0 +1,14 @@
+{
+  "invalidUserId": "ID utilisateur invalide",
+  "invalidAccountId": "ID de compte invalide",
+  "principalMustBePositive": "Le montant du prêt doit être positif",
+  "principalMin": "Le montant minimum est de 1 000€",
+  "principalMax": "Le montant maximum est de 500 000€",
+  "rateNonNegative": "Le taux d'intérêt ne peut pas être négatif",
+  "rateMax": "Le taux d'intérêt ne peut pas dépasser 20%",
+  "insuranceRateNonNegative": "Le taux d'assurance ne peut pas être négatif",
+  "insuranceRateMax": "Le taux d'assurance ne peut pas dépasser 5%",
+  "durationInteger": "La durée doit être un nombre entier de mois",
+  "durationMin": "La durée minimum est de 12 mois",
+  "durationMax": "La durée maximum est de 360 mois (30 ans)"
+}

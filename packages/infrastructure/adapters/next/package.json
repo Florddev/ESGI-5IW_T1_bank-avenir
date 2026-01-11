@@ -14,6 +14,7 @@
         "@workspace/service-auth-jwt": "workspace:*",
         "@workspace/service-email-console": "workspace:*",
         "@workspace/shared": "workspace:*",
+        "@workspace/translations": "workspace:*",
         "@workspace/ui-react": "workspace:*",
         "date-fns": "^4.1.0",
         "lucide-react": "^0.469.0",

@@ -20,5 +20,20 @@
   "quantity": "Quantity",
   "accounts": "Accounts",
   "transactions": "Transactions",
-  "investments": "Investments"
+  "investments": "Investments",
+  "overview": "Overview",
+  "myAccounts": "My accounts",
+  "savings": "Savings",
+  "stocks": "Stocks",
+  "messages": "Messages",
+  "myClients": "My clients",
+  "messaging": "Messaging",
+  "users": "Users",
+  "savingsRate": "Savings rate",
+  "stocksManagement": "Stock management",
+  "logout": "Logout",
+  "loggingOut": "Logging out...",
+  "client": "Client",
+  "advisor": "Advisor",
+  "director": "Director"
 }

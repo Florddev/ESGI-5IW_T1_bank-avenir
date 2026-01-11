@@ -5,10 +5,12 @@ import { Button } from '@workspace/ui-react/components/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
 import { useStocks, useCreateStock } from '../hooks';
 import { CreateStockForm } from '../components';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function StocksManagementView() {
     const { stocks, isLoading, refetch } = useStocks();
     const { createStock, isLoading: isCreating, error: createError } = useCreateStock();
+    const t = useTranslations();
 
     const [showCreateForm, setShowCreateForm] = useState(false);
 
@@ -29,17 +31,17 @@ export function StocksManagementView() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Gestion des actions</h2>
-                    <p className="text-muted-foreground">Créez, modifiez ou supprimez les actions disponibles</p>
+                    <h2 className="text-3xl font-bold tracking-tight">{t('features.stocks.messages.managementTitle')}</h2>
+                    <p className="text-muted-foreground">{t('features.stocks.messages.managementDescription')}</p>
                 </div>
                 <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                    {showCreateForm ? 'Annuler' : '+ Nouvelle action'}
+                    {showCreateForm ? t('features.stocks.actions.cancel') : t('features.stocks.actions.newStock')}
                 </Button>
             </div>
 
             {showCreateForm && (
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-xl font-semibold mb-4">Ajouter une nouvelle action</h3>
+                    <h3 className="text-xl font-semibold mb-4">{t('features.stocks.messages.createStockTitle')}</h3>
                     <CreateStockForm
                         onSubmit={handleSubmit}
                         onCancel={() => setShowCreateForm(false)}
@@ -51,7 +53,7 @@ export function StocksManagementView() {
 
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions disponibles</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.labels.availableStocks')}</h3>
                     {isLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
@@ -60,7 +62,7 @@ export function StocksManagementView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions suspendues</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.messages.suspendedStocks')}</h3>
                     {isLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
@@ -69,7 +71,7 @@ export function StocksManagementView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Total actions</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.messages.totalStocks')}</h3>
                     {isLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
@@ -78,23 +80,23 @@ export function StocksManagementView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Investisseurs</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.messages.investors')}</h3>
                     <p className="text-4xl font-bold">0</p>
-                    <p className="text-xs text-muted-foreground mt-1">Clients actifs</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('features.stocks.messages.activeClients')}</p>
                 </div>
             </div>
 
             <Tabs defaultValue="available" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="available">Disponibles</TabsTrigger>
-                    <TabsTrigger value="suspended">Suspendues</TabsTrigger>
-                    <TabsTrigger value="orders">Carnet d'ordres</TabsTrigger>
+                    <TabsTrigger value="available">{t('features.stocks.messages.available')}</TabsTrigger>
+                    <TabsTrigger value="suspended">{t('features.stocks.messages.suspendedStocks')}</TabsTrigger>
+                    <TabsTrigger value="orders">{t('features.stocks.messages.orderBook')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="available" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Actions disponibles à la négociation</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.messages.availableStocksTrading')}</h3>
                         </div>
                         {isLoading ? (
                             <div className="p-6 space-y-3">
@@ -114,16 +116,16 @@ export function StocksManagementView() {
                                             <p className="text-2xl font-bold">
                                                 {stock.currentPrice ? `${stock.currentPrice.toFixed(2)} €` : 'N/A'}
                                             </p>
-                                            <p className="text-xs text-muted-foreground">Prix actuel</p>
+                                            <p className="text-xs text-muted-foreground">{t('features.stocks.messages.currentPriceLabel')}</p>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p className="mb-4">Aucune action disponible</p>
+                                <p className="mb-4">{t('features.stocks.messages.noStocksAvailable')}</p>
                                 <Button onClick={() => setShowCreateForm(true)}>
-                                    Ajouter la première action
+                                    {t('features.stocks.messages.addFirstStock')}
                                 </Button>
                             </div>
                         )}
@@ -133,7 +135,7 @@ export function StocksManagementView() {
                 <TabsContent value="suspended" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Actions temporairement suspendues</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.messages.suspendedStocksTemp')}</h3>
                         </div>
                         {isLoading ? (
                             <div className="p-6 space-y-3">
@@ -151,7 +153,7 @@ export function StocksManagementView() {
                                         </div>
                                         <div className="text-right">
                                             <span className="text-sm bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded">
-                                                Suspendue
+                                                {t('features.stocks.messages.suspended')}
                                             </span>
                                         </div>
                                     </div>
@@ -159,7 +161,7 @@ export function StocksManagementView() {
                             </div>
                         ) : (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Aucune action suspendue</p>
+                                <p>{t('features.stocks.messages.noSuspendedStocks')}</p>
                             </div>
                         )}
                     </div>
@@ -168,13 +170,13 @@ export function StocksManagementView() {
                 <TabsContent value="orders" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Carnet d'ordres global</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.messages.globalOrderBook')}</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                Ordres d'achat et de vente en attente d'exécution
+                                {t('features.stocks.messages.orderBookDescription')}
                             </p>
                         </div>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Aucun ordre en attente</p>
+                            <p>{t('features.stocks.messages.noPendingOrders')}</p>
                         </div>
                     </div>
                 </TabsContent>

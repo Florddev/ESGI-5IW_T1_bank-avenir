@@ -1,0 +1,10 @@
+{
+  "invalidAccountId": "Invalid account ID",
+  "invalidSourceAccountId": "Invalid source account ID",
+  "invalidDestinationAccountId": "Invalid destination account ID",
+  "amountMustBePositive": "Amount must be positive",
+  "amountMaxDeposit": "Amount cannot exceed 1,000,000",
+  "amountMaxWithdraw": "Withdrawal amount cannot exceed 100,000",
+  "descriptionMaxLength": "Description cannot exceed 200 characters",
+  "accountsMustBeDifferent": "Source and destination accounts must be different"
+}

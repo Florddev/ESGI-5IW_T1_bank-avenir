@@ -1,0 +1,8 @@
+{
+  "subjectMinLength": "Le sujet doit contenir au moins 3 caractères",
+  "subjectMaxLength": "Le sujet ne peut pas dépasser 200 caractères",
+  "messageMinLength": "Le message doit contenir au moins 10 caractères",
+  "messageMaxLength": "Le message ne peut pas dépasser 2000 caractères",
+  "messageRequired": "Le message ne peut pas être vide",
+  "invalidAdvisorId": "ID du conseiller invalide"
+}

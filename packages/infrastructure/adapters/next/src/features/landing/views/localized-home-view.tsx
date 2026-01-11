@@ -3,9 +3,11 @@
 import { useTranslations } from '@workspace/ui-react/contexts';
 import { Button } from '@workspace/ui-react/components/button';
 import Link from 'next/link';
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath';
 
 export function LocalizedHomeView() {
     const t = useTranslations();
+    const localizedPath = useLocalizedPath();
 
     return (
         <div className="min-h-screen bg-background">
@@ -22,12 +24,12 @@ export function LocalizedHomeView() {
 
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                         <Button asChild size="lg">
-                            <Link href="/auth/login">
+                            <Link href={localizedPath('/auth/login')}>
                                 {t('features.auth.actions.login.label')}
                             </Link>
                         </Button>
                         <Button asChild variant="outline" size="lg">
-                            <Link href="/auth/register">
+                            <Link href={localizedPath('/auth/register')}>
                                 {t('features.auth.actions.register.label')}
                             </Link>
                         </Button>

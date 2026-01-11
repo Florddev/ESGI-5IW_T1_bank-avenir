@@ -1,0 +1,20 @@
+{
+  "title": "Loans",
+  "description": "Manage your loan requests",
+  "manageDescription": "Manage your clients' loans",
+  "allLoans": "All loans",
+  "createLoan": "Grant a new loan",
+  "estimatedCalculation": "Estimated calculation",
+  "calculationInfoTitle": "💡 Loan Calculation",
+  "calculationMethod": "Method: Fixed monthly payments",
+  "calculationInterest": "Interest rate: Calculated on the remaining principal each month",
+  "calculationInsurance": "Insurance: Mandatory, calculated on the total loan amount and deducted from monthly payments",
+  "calculationIncludes": "Monthly payments include principal + interest + insurance",
+  "grantLoan": "Grant loan",
+  "grantingLoan": "Creating...",
+  "loanGranted": "Loan granted successfully",
+  "noLoans": "No loans yet",
+  "noLoansFound": "No loan found",
+  "loan": "Loan",
+  "makePayment": "Make payment"
+}

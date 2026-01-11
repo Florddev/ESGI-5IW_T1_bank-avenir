@@ -1,0 +1,13 @@
+{
+  "createAccount": "Créer le compte",
+  "creating": "Création...",
+  "edit": "Modifier",
+  "delete": "Supprimer",
+  "editAccountName": "Modifier le nom du compte",
+  "modifying": "Modification...",
+  "update": "Modifier",
+  "cancel": "Annuler",
+  "deleteAccount": "Supprimer le compte",
+  "deleting": "Suppression...",
+  "newAccount": "Nouveau compte"
+}

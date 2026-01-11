@@ -1,0 +1,23 @@
+{
+  "transaction": "Transaction",
+  "transactions": "Transactions",
+  "deposit": "Dépôt",
+  "withdraw": "Retrait",
+  "transfer": "Transfert",
+  "amount": "Montant",
+  "amountEuro": "Montant (€)",
+  "description": "Description",
+  "descriptionOptional": "Description (optionnel)",
+  "fromAccount": "Compte source",
+  "toAccount": "Compte destination",
+  "accountToCredit": "Compte à créditer",
+  "accountToDebit": "Compte à débiter",
+  "destinationAccount": "Compte destinataire",
+  "sourceAccount": "Compte source",
+  "date": "Date",
+  "type": "Type",
+  "status": "Statut",
+  "selectAccount": "Sélectionner un compte",
+  "externalDeposit": "Dépôt externe",
+  "externalWithdraw": "Retrait externe"
+}

@@ -2,86 +2,88 @@
 
 import { Button } from '@workspace/ui-react/components/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function ReportsView() {
+    const t = useTranslations();
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-3xl font-bold tracking-tight">Rapports et statistiques</h2>
-                <p className="text-muted-foreground">Vue d'ensemble des activités de la banque</p>
+                <h2 className="text-3xl font-bold tracking-tight">{t('features.admin.messages.reportsAndStatistics')}</h2>
+                <p className="text-muted-foreground">{t('features.admin.messages.reportsDescription')}</p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Clients totaux</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.totalClients')}</h3>
                     <p className="text-4xl font-bold">0</p>
-                    <p className="text-xs text-green-600 mt-1">+0 ce mois</p>
+                    <p className="text-xs text-green-600 mt-1">+0 {t('features.admin.messages.thisMonth')}</p>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Comptes actifs</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.activeAccounts')}</h3>
                     <p className="text-4xl font-bold">0</p>
-                    <p className="text-xs text-muted-foreground mt-1">Tous types</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('features.admin.messages.allTypes')}</p>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Volume total</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.totalVolume')}</h3>
                     <p className="text-4xl font-bold">0 €</p>
-                    <p className="text-xs text-muted-foreground mt-1">Dépôts cumulés</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('features.admin.messages.cumulativeDeposits')}</p>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Transactions/jour</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.transactionsPerDay')}</h3>
                     <p className="text-4xl font-bold">0</p>
-                    <p className="text-xs text-muted-foreground mt-1">Moyenne 30j</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t('features.admin.messages.average30Days')}</p>
                 </div>
             </div>
 
             <Tabs defaultValue="overview" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-                    <TabsTrigger value="accounts">Comptes</TabsTrigger>
-                    <TabsTrigger value="transactions">Transactions</TabsTrigger>
-                    <TabsTrigger value="loans">Crédits</TabsTrigger>
-                    <TabsTrigger value="stocks">Actions</TabsTrigger>
+                    <TabsTrigger value="overview">{t('features.admin.messages.overview')}</TabsTrigger>
+                    <TabsTrigger value="accounts">{t('features.admin.messages.accounts')}</TabsTrigger>
+                    <TabsTrigger value="transactions">{t('features.admin.messages.transactions')}</TabsTrigger>
+                    <TabsTrigger value="loans">{t('features.admin.messages.loans')}</TabsTrigger>
+                    <TabsTrigger value="stocks">{t('features.admin.messages.stocks')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="overview" className="space-y-4">
                     <div className="bg-card p-6 rounded-lg border shadow-sm">
-                        <h3 className="text-xl font-semibold mb-4">Activité générale</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.generalActivity')}</h3>
                         <div className="h-64 flex items-center justify-center text-muted-foreground">
-                            <p>Graphique d'activité à venir</p>
+                            <p>{t('features.admin.messages.chartComing')}</p>
                         </div>
                     </div>
 
                     <div className="grid gap-4 md:grid-cols-2">
                         <div className="bg-card p-6 rounded-lg border shadow-sm">
-                            <h3 className="font-semibold mb-4">Répartition des comptes</h3>
+                            <h3 className="font-semibold mb-4">{t('features.admin.messages.accountDistribution')}</h3>
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm text-muted-foreground">Comptes courants</span>
+                                    <span className="text-sm text-muted-foreground">{t('features.admin.messages.checkingAccounts')}</span>
                                     <span className="font-semibold">0</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm text-muted-foreground">Comptes épargne</span>
+                                    <span className="text-sm text-muted-foreground">{t('features.admin.messages.savingsAccounts')}</span>
                                     <span className="font-semibold">0</span>
                                 </div>
                             </div>
                         </div>
 
                         <div className="bg-card p-6 rounded-lg border shadow-sm">
-                            <h3 className="font-semibold mb-4">Répartition des utilisateurs</h3>
+                            <h3 className="font-semibold mb-4">{t('features.admin.messages.userDistribution')}</h3>
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm text-muted-foreground">Clients</span>
+                                    <span className="text-sm text-muted-foreground">{t('features.admin.messages.clients')}</span>
                                     <span className="font-semibold">0</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm text-muted-foreground">Conseillers</span>
+                                    <span className="text-sm text-muted-foreground">{t('features.admin.messages.advisors')}</span>
                                     <span className="font-semibold">0</span>
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span className="text-sm text-muted-foreground">Directeurs</span>
+                                    <span className="text-sm text-muted-foreground">{t('features.admin.messages.directors')}</span>
                                     <span className="font-semibold">0</span>
                                 </div>
                             </div>
@@ -91,44 +93,44 @@ export function ReportsView() {
 
                 <TabsContent value="accounts" className="space-y-4">
                     <div className="bg-card p-6 rounded-lg border shadow-sm">
-                        <h3 className="text-xl font-semibold mb-4">Statistiques des comptes</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.accountStatistics')}</h3>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Rapport détaillé à venir</p>
+                            <p>{t('features.admin.messages.detailedReportComing')}</p>
                         </div>
                     </div>
                 </TabsContent>
 
                 <TabsContent value="transactions" className="space-y-4">
                     <div className="bg-card p-6 rounded-lg border shadow-sm">
-                        <h3 className="text-xl font-semibold mb-4">Statistiques des transactions</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.transactionStatistics')}</h3>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Rapport détaillé à venir</p>
+                            <p>{t('features.admin.messages.detailedReportComing')}</p>
                         </div>
                     </div>
                 </TabsContent>
 
                 <TabsContent value="loans" className="space-y-4">
                     <div className="bg-card p-6 rounded-lg border shadow-sm">
-                        <h3 className="text-xl font-semibold mb-4">Statistiques des crédits</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.loanStatistics')}</h3>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Rapport détaillé à venir</p>
+                            <p>{t('features.admin.messages.detailedReportComing')}</p>
                         </div>
                     </div>
                 </TabsContent>
 
                 <TabsContent value="stocks" className="space-y-4">
                     <div className="bg-card p-6 rounded-lg border shadow-sm">
-                        <h3 className="text-xl font-semibold mb-4">Statistiques du marché</h3>
+                        <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.marketStatistics')}</h3>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Rapport détaillé à venir</p>
+                            <p>{t('features.admin.messages.detailedReportComing')}</p>
                         </div>
                     </div>
                 </TabsContent>
             </Tabs>
 
             <div className="flex gap-2">
-                <Button>Exporter en PDF</Button>
-                <Button variant="outline">Exporter en Excel</Button>
+                <Button>{t('features.admin.messages.exportPDF')}</Button>
+                <Button variant="outline">{t('features.admin.messages.exportExcel')}</Button>
             </div>
         </div>
     );

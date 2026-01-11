@@ -1,0 +1,9 @@
+{
+  "invalidEmail": "Invalid email",
+  "passwordMinLength": "Password must be at least 8 characters",
+  "firstNameMinLength": "First name must be at least 2 characters",
+  "firstNameMaxLength": "First name cannot exceed 50 characters",
+  "lastNameMinLength": "Last name must be at least 2 characters",
+  "lastNameMaxLength": "Last name cannot exceed 50 characters",
+  "invalidRole": "Invalid role"
+}

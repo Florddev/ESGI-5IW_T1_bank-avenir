@@ -1,0 +1,11 @@
+{
+  "title": "Transactions",
+  "description": "Effectuez des opérations et consultez l'historique",
+  "depositSuccess": "Dépôt effectué avec succès",
+  "withdrawSuccess": "Retrait effectué avec succès",
+  "transferSuccess": "Transfert effectué avec succès",
+  "noTransactions": "Aucune transaction trouvée",
+  "newTransaction": "+ Nouvelle transaction",
+  "performTransaction": "Effectuer une transaction",
+  "transactionHistory": "Historique des transactions"
+}

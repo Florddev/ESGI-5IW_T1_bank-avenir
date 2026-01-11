@@ -7,6 +7,7 @@ import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui-react/components/select';
 import { createUserSchema, type CreateUserFormData } from '@workspace/adapter-common/validators';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 interface CreateUserFormProps {
     onSubmit: (data: CreateUserFormData) => Promise<void>;
@@ -15,6 +16,7 @@ interface CreateUserFormProps {
 }
 
 export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserFormProps) {
+    const t = useTranslations();
     const {
         register,
         handleSubmit,
@@ -36,11 +38,11 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
 
     return (
         <div className="bg-card p-6 rounded-lg border shadow-sm">
-            <h3 className="text-xl font-semibold mb-4">Créer un utilisateur</h3>
+            <h3 className="text-xl font-semibold mb-4">{t('features.admin.messages.createUser')}</h3>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <Label htmlFor="firstName">Prénom</Label>
+                        <Label htmlFor="firstName">{t('features.admin.messages.firstName')}</Label>
                         <Input
                             id="firstName"
                             {...register('firstName')}
@@ -52,7 +54,7 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
                         )}
                     </div>
                     <div>
-                        <Label htmlFor="lastName">Nom</Label>
+                        <Label htmlFor="lastName">{t('features.admin.messages.lastName')}</Label>
                         <Input
                             id="lastName"
                             {...register('lastName')}
@@ -80,7 +82,7 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
                 </div>
 
                 <div>
-                    <Label htmlFor="password">Mot de passe</Label>
+                    <Label htmlFor="password">{t('features.admin.messages.password')}</Label>
                     <Input
                         id="password"
                         type="password"
@@ -94,7 +96,7 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
                 </div>
 
                 <div>
-                    <Label htmlFor="role">Rôle</Label>
+                    <Label htmlFor="role">{t('features.admin.messages.role')}</Label>
                     <Select
                         value={role}
                         onValueChange={(value) => setValue('role', value as 'CLIENT' | 'ADVISOR' | 'DIRECTOR')}
@@ -104,9 +106,9 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
                             <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="CLIENT">Client</SelectItem>
-                            <SelectItem value="ADVISOR">Conseiller</SelectItem>
-                            <SelectItem value="DIRECTOR">Directeur</SelectItem>
+                            <SelectItem value="CLIENT">{t('features.admin.messages.clients')}</SelectItem>
+                            <SelectItem value="ADVISOR">{t('features.admin.messages.advisors')}</SelectItem>
+                            <SelectItem value="DIRECTOR">{t('features.admin.messages.directors')}</SelectItem>
                         </SelectContent>
                     </Select>
                     {errors.role && (
@@ -116,10 +118,10 @@ export function CreateUserForm({ onSubmit, onCancel, isLoading }: CreateUserForm
 
                 <div className="flex gap-2">
                     <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Création...' : "Créer l'utilisateur"}
+                        {isLoading ? t('features.admin.messages.creating') : t('features.admin.messages.createUserButton')}
                     </Button>
                     <Button type="button" variant="outline" onClick={onCancel} disabled={isLoading}>
-                        Annuler
+                        {t('features.admin.messages.cancel')}
                     </Button>
                 </div>
             </form>

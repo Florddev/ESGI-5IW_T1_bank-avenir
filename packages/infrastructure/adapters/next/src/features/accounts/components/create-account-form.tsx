@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from '@workspace/ui-react/contexts';
 import { useCreateAccount } from '../hooks/useCreateAccount';
 import { createAccountSchema, type CreateAccountFormData } from '@workspace/adapter-common/validators';
 import { Button } from '@workspace/ui-react/components/button';
@@ -15,6 +16,7 @@ interface CreateAccountFormProps {
 }
 
 export function CreateAccountForm({ userId, onSuccess }: CreateAccountFormProps) {
+    const t = useTranslations();
     const { createAccount, isLoading, error } = useCreateAccount();
     const form = useForm<CreateAccountFormData>({
         resolver: zodResolver(createAccountSchema),
@@ -40,13 +42,13 @@ export function CreateAccountForm({ userId, onSuccess }: CreateAccountFormProps)
                     name="customName"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Nom du compte</FormLabel>
+                            <FormLabel>{t('features.accounts.labels.accountName')}</FormLabel>
                             <FormControl>
                                 <Input
                                     {...field}
                                     type="text"
                                     disabled={isLoading}
-                                    placeholder="Mon compte courant"
+                                    placeholder={t('features.accounts.placeholders.myCheckingAccount')}
                                 />
                             </FormControl>
                             <FormMessage />
@@ -59,7 +61,7 @@ export function CreateAccountForm({ userId, onSuccess }: CreateAccountFormProps)
                     name="type"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Type de compte</FormLabel>
+                            <FormLabel>{t('features.accounts.labels.accountType')}</FormLabel>
                             <Select
                                 value={field.value}
                                 onValueChange={field.onChange}
@@ -71,8 +73,8 @@ export function CreateAccountForm({ userId, onSuccess }: CreateAccountFormProps)
                                     </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                    <SelectItem value="CHECKING">Compte courant</SelectItem>
-                                    <SelectItem value="SAVINGS">Compte épargne</SelectItem>
+                                    <SelectItem value="CHECKING">{t('features.accounts.labels.checkingAccount')}</SelectItem>
+                                    <SelectItem value="SAVINGS">{t('features.accounts.labels.savingsAccount')}</SelectItem>
                                 </SelectContent>
                             </Select>
                             <FormMessage />
@@ -87,7 +89,7 @@ export function CreateAccountForm({ userId, onSuccess }: CreateAccountFormProps)
                 )}
 
                 <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? 'Création...' : 'Créer le compte'}
+                    {isLoading ? t('features.accounts.actions.creating') : t('features.accounts.actions.createAccount')}
                 </Button>
             </form>
         </Form>

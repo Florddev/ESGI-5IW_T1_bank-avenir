@@ -1,0 +1,8 @@
+{
+  "subjectMinLength": "Subject must be at least 3 characters",
+  "subjectMaxLength": "Subject cannot exceed 200 characters",
+  "messageMinLength": "Message must be at least 10 characters",
+  "messageMaxLength": "Message cannot exceed 2000 characters",
+  "messageRequired": "Message cannot be empty",
+  "invalidAdvisorId": "Invalid advisor ID"
+}

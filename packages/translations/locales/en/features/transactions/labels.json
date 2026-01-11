@@ -1,0 +1,23 @@
+{
+  "transaction": "Transaction",
+  "transactions": "Transactions",
+  "deposit": "Deposit",
+  "withdraw": "Withdraw",
+  "transfer": "Transfer",
+  "amount": "Amount",
+  "amountEuro": "Amount (€)",
+  "description": "Description",
+  "descriptionOptional": "Description (optional)",
+  "fromAccount": "Source account",
+  "toAccount": "Destination account",
+  "accountToCredit": "Account to credit",
+  "accountToDebit": "Account to debit",
+  "destinationAccount": "Destination account",
+  "sourceAccount": "Source account",
+  "date": "Date",
+  "type": "Type",
+  "status": "Status",
+  "selectAccount": "Select an account",
+  "externalDeposit": "External deposit",
+  "externalWithdraw": "External withdraw"
+}

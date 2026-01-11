@@ -1,0 +1,20 @@
+{
+  "title": "Messages",
+  "conversationsTitle": "Conversations",
+  "description": "Communiquez avec votre conseiller",
+  "yourMessages": "Vos messages",
+  "myConversations": "Mes conversations",
+  "messageSent": "Message envoyé avec succès",
+  "conversationCreated": "Conversation créée avec succès",
+  "noConversations": "Aucune conversation pour le moment",
+  "noConversation": "Aucune conversation",
+  "noMessages": "Aucun message pour le moment",
+  "noMessage": "Aucun message",
+  "loading": "Chargement...",
+  "loadingMessages": "Chargement des messages...",
+  "pending": "En attente",
+  "open": "Ouverte",
+  "closed": "Fermée",
+  "sending": "Envoi...",
+  "writeMessage": "Écrivez votre message..."
+}

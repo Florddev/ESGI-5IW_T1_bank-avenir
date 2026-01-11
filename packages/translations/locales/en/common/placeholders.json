@@ -1,0 +1,9 @@
+{
+  "emailPlaceholder": "example@email.com",
+  "passwordPlaceholder": "••••••••",
+  "firstNamePlaceholder": "John",
+  "lastNamePlaceholder": "Doe",
+  "amountPlaceholder": "e.g.: 10000",
+  "searchPlaceholder": "Search...",
+  "selectPlaceholder": "Select..."
+}

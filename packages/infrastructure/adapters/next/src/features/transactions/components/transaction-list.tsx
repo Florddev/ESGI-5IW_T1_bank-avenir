@@ -3,6 +3,7 @@
 import type { TransactionDto, AccountDto } from '@workspace/application/dtos';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/components/card';
 import { ArrowRight } from 'lucide-react';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 interface TransactionListProps {
     transactions: TransactionDto[];
@@ -11,6 +12,8 @@ interface TransactionListProps {
 }
 
 export function TransactionList({ transactions, accounts, isLoading }: TransactionListProps) {
+    const t = useTranslations();
+    
     if (isLoading) {
         return (
             <div className="space-y-3 p-6">
@@ -24,14 +27,14 @@ export function TransactionList({ transactions, accounts, isLoading }: Transacti
     if (transactions.length === 0) {
         return (
             <div className="text-center py-8 text-muted-foreground">
-                Aucune transaction trouvée
+                {t('features.transactions.messages.noTransactions')}
             </div>
         );
     }
 
     const getAccountName = (accountId: string) => {
-        if (accountId === 'system-deposit') return 'Dépôt externe';
-        if (accountId === 'system-withdrawal') return 'Retrait externe';
+        if (accountId === 'system-deposit') return t('features.transactions.labels.externalDeposit');
+        if (accountId === 'system-withdrawal') return t('features.transactions.labels.externalWithdraw');
         const account = accounts?.find(acc => acc.id === accountId);
         return account ? account.customName : accountId.slice(0, 8);
     };
@@ -64,9 +67,9 @@ export function TransactionList({ transactions, accounts, isLoading }: Transacti
                         <CardHeader className="pb-3">
                             <CardTitle className="flex justify-between items-center">
                                 <span className="text-base">
-                                    {transaction.type === 'TRANSFER' ? 'Transfert' :
-                                     transaction.type === 'DEPOSIT' ? 'Dépôt' :
-                                     transaction.type === 'WITHDRAWAL' ? 'Retrait' : transaction.type}
+                                    {transaction.type === 'TRANSFER' ? t('features.transactions.labels.transfer') :
+                                     transaction.type === 'DEPOSIT' ? t('features.transactions.labels.deposit') :
+                                     transaction.type === 'WITHDRAWAL' ? t('features.transactions.labels.withdraw') : transaction.type}
                                 </span>
                                 <span className={`text-lg font-bold ${colorClass}`}>
                                     {sign}{transaction.amount.toFixed(2)} €
@@ -86,11 +89,11 @@ export function TransactionList({ transactions, accounts, isLoading }: Transacti
                                     <p className="text-muted-foreground">{transaction.description}</p>
                                 )}
                                 <div className="flex justify-between">
-                                    <span>Statut:</span>
+                                    <span>{t('features.transactions.labels.status')}:</span>
                                     <span className="font-medium capitalize">{transaction.status.toLowerCase()}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                    <span>Date:</span>
+                                    <span>{t('features.transactions.labels.date')}:</span>
                                     <span className="font-medium">
                                         {new Date(transaction.createdAt).toLocaleString('fr-FR', {
                                             day: '2-digit',

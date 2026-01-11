@@ -4,11 +4,13 @@ import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Button } from '@workspace/ui-react/components/button';
 import { useConfirmEmail } from '../hooks/useConfirmEmail';
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath';
 
 export function ConfirmEmailFlow() {
     const searchParams = useSearchParams();
     const token = searchParams.get('token');
     const { status, message } = useConfirmEmail(token);
+    const localizedPath = useLocalizedPath();
 
     if (status === 'success') {
         return (
@@ -31,7 +33,7 @@ export function ConfirmEmailFlow() {
                 <p className="text-sm text-muted-foreground">
                     Redirection vers la page de connexion...
                 </p>
-                <Link href="/auth/login">
+                <Link href={localizedPath('/auth/login')}>
                     <Button className="w-full">Se connecter maintenant</Button>
                 </Link>
             </div>
@@ -57,12 +59,12 @@ export function ConfirmEmailFlow() {
                 <h1 className="text-3xl font-bold tracking-tight">Erreur</h1>
                 <p className="text-destructive">{message}</p>
                 <div className="space-y-2 pt-4">
-                    <Link href="/auth/register">
+                    <Link href={localizedPath('/auth/register')}>
                         <Button variant="outline" className="w-full">
                             Créer un nouveau compte
                         </Button>
                     </Link>
-                    <Link href="/auth/login">
+                    <Link href={localizedPath('/auth/login')}>
                         <Button variant="ghost" className="w-full">
                             Retour à la connexion
                         </Button>
@@ -118,7 +120,7 @@ export function ConfirmEmailFlow() {
                 </div>
             </div>
             <div className="text-center">
-                <Link href="/auth/login">
+                <Link href={localizedPath('/auth/login')}>
                     <Button variant="outline" className="w-full">
                         Retour à la connexion
                     </Button>

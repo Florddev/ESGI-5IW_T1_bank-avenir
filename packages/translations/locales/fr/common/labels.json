@@ -20,5 +20,20 @@
   "quantity": "Quantité",
   "accounts": "Comptes",
   "transactions": "Transactions",
-  "investments": "Investissements"
+  "investments": "Investissements",
+  "overview": "Vue d'ensemble",
+  "myAccounts": "Mes comptes",
+  "savings": "Épargne",
+  "stocks": "Actions",
+  "messages": "Messages",
+  "myClients": "Mes clients",
+  "messaging": "Messagerie",
+  "users": "Utilisateurs",
+  "savingsRate": "Taux d'épargne",
+  "stocksManagement": "Gestion actions",
+  "logout": "Déconnexion",
+  "loggingOut": "Déconnexion...",
+  "client": "Client",
+  "advisor": "Conseiller",
+  "director": "Directeur"
 }

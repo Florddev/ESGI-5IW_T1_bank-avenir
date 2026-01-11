@@ -1,0 +1,9 @@
+{
+  "invalidEmail": "Email invalide",
+  "passwordMinLength": "Le mot de passe doit contenir au moins 8 caractères",
+  "firstNameMinLength": "Le prénom doit contenir au moins 2 caractères",
+  "firstNameMaxLength": "Le prénom ne peut pas dépasser 50 caractères",
+  "lastNameMinLength": "Le nom doit contenir au moins 2 caractères",
+  "lastNameMaxLength": "Le nom ne peut pas dépasser 50 caractères",
+  "invalidRole": "Rôle invalide"
+}

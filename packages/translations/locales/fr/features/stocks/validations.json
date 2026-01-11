@@ -1,0 +1,18 @@
+{
+  "symbolRequired": "Le symbole est requis",
+  "symbolMaxLength": "Le symbole ne peut pas dépasser 10 caractères",
+  "symbolUppercaseOnly": "Le symbole doit contenir uniquement des lettres majuscules",
+  "companyNameMinLength": "Le nom de la société doit contenir au moins 2 caractères",
+  "companyNameMaxLength": "Le nom de la société ne peut pas dépasser 100 caractères",
+  "descriptionMinLength": "La description doit contenir au moins 10 caractères",
+  "descriptionMaxLength": "La description ne peut pas dépasser 500 caractères",
+  "pricePositive": "Le prix initial doit être positif",
+  "priceMin": "Le prix minimum est de 0.01€",
+  "priceMax": "Le prix maximum est de 100 000€",
+  "quantityInteger": "La quantité doit être un nombre entier",
+  "quantityPositive": "La quantité doit être positive",
+  "quantityMin": "La quantité minimale est de 1",
+  "quantityMax": "La quantité ne peut pas dépasser 10 000",
+  "invalidStockId": "ID d'action invalide",
+  "invalidOrderType": "Type d'ordre invalide"
+}

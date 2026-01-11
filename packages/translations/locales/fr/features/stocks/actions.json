@@ -1,0 +1,10 @@
+{
+  "placeOrder": "Placer l'ordre",
+  "placingOrder": "Placement en cours...",
+  "buyStock": "Acheter",
+  "sellStock": "Vendre",
+  "createStock": "Créer une action",
+  "creatingStock": "Création...",
+  "updateStock": "Modifier",
+  "updatingStock": "Modification..."
+}

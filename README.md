@@ -26,6 +26,7 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
 
 2. **Installer les dépendances**
    ```bash
+   pnpm --filter @workspace/translations build
    pnpm install
    ```
 
@@ -44,6 +45,23 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
 4. **Lancer l'application**
    ```bash
    pnpm dev
+   ```
+
+5. **Lancer la db**
+   ```bash
+   docker compose up -d
+   pnpm --filter @workspace/db-postgres generate
+   pnpm --filter @workspace/db-postgres migrate
+   ```
+
+6. **Lancer les seeders**
+   ```bash
+   pnpm --filter @workspace/db-postgres seed
+   ```
+
+7. **Lancer le studio**
+   ```bash
+   pnpm --filter @workspace/db-postgres studio
    ```
    
    L'app sera disponible sur [http://localhost:3000](http://localhost:3000)

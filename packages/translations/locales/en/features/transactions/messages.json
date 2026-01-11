@@ -1,0 +1,11 @@
+{
+  "title": "Transactions",
+  "description": "Perform operations and view history",
+  "depositSuccess": "Deposit made successfully",
+  "withdrawSuccess": "Withdrawal made successfully",
+  "transferSuccess": "Transfer made successfully",
+  "noTransactions": "No transactions found",
+  "newTransaction": "+ New transaction",
+  "performTransaction": "Perform a transaction",
+  "transactionHistory": "Transaction history"
+}

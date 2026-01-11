@@ -1,0 +1,20 @@
+{
+  "title": "Messages",
+  "conversationsTitle": "Conversations",
+  "description": "Communicate with your advisor",
+  "yourMessages": "Your messages",
+  "myConversations": "My conversations",
+  "messageSent": "Message sent successfully",
+  "conversationCreated": "Conversation created successfully",
+  "noConversations": "No conversations yet",
+  "noConversation": "No conversation",
+  "noMessages": "No messages yet",
+  "noMessage": "No message",
+  "loading": "Loading...",
+  "loadingMessages": "Loading messages...",
+  "pending": "Pending",
+  "open": "Open",
+  "closed": "Closed",
+  "sending": "Sending...",
+  "writeMessage": "Write your message..."
+}

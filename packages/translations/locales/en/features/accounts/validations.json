@@ -1,0 +1,4 @@
+{
+  "balanceNotZero": "⚠️ You cannot delete this account because its balance is not zero. Please transfer or withdraw all funds before deleting this account.",
+  "irreversibleAction": "⚠️ This action is irreversible. All data associated with this account will be permanently deleted."
+}

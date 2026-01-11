@@ -2,8 +2,11 @@
 
 import Link from 'next/link';
 import { LoginForm } from '../components/login-form';
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath';
 
 export function LoginView() {
+    const localizedPath = useLocalizedPath();
+    
     return (
         <div className="min-h-screen flex items-center justify-center bg-background p-4">
             <div className="w-full max-w-md space-y-8">
@@ -20,7 +23,7 @@ export function LoginView() {
 
                 <div className="text-center text-sm">
                     <span className="text-muted-foreground">Vous n&apos;avez pas de compte ? </span>
-                    <Link href="/auth/register" className="text-primary hover:underline font-medium">
+                    <Link href={localizedPath('/auth/register')} className="text-primary hover:underline font-medium">
                         S&apos;inscrire
                     </Link>
                 </div>

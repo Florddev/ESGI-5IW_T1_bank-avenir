@@ -1,0 +1,4 @@
+{
+  "balanceNotZero": "⚠️ Vous ne pouvez pas supprimer ce compte car son solde n'est pas à zéro. Veuillez transférer ou retirer tous les fonds avant de supprimer ce compte.",
+  "irreversibleAction": "⚠️ Cette action est irréversible. Toutes les données associées à ce compte seront définitivement supprimées."
+}

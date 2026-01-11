@@ -1,0 +1,14 @@
+{
+  "accountName": "Account name",
+  "accountType": "Account type",
+  "checkingAccount": "Checking account",
+  "savingsAccount": "Savings account",
+  "type": "Type",
+  "balance": "Balance",
+  "rate": "Rate",
+  "newName": "New name",
+  "status": "Status",
+  "iban": "IBAN",
+  "accountNumber": "Account number",
+  "currentBalance": "Current balance"
+}

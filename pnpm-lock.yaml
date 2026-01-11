@@ -423,6 +423,9 @@ importers:
       '@workspace/shared':
         specifier: workspace:*
         version: link:../../../shared
+      '@workspace/translations':
+        specifier: workspace:*
+        version: link:../../../translations
       '@workspace/ui-react':
         specifier: workspace:*
         version: link:../../../ui/react

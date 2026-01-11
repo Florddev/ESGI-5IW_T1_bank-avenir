@@ -1,0 +1,6 @@
+{
+  "rateNonNegative": "Le taux d'épargne ne peut pas être négatif",
+  "rateMax": "Le taux d'épargne ne peut pas dépasser 100%",
+  "messageMinLength": "Le message doit contenir au moins 10 caractères",
+  "messageMaxLength": "Le message ne peut pas dépasser 500 caractères"
+}

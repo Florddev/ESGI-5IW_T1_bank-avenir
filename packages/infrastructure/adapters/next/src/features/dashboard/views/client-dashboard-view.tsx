@@ -5,6 +5,8 @@ import { useStocks } from '@workspace/adapter-next/features/stocks';
 import type { UserDto } from '@workspace/application/dtos';
 import Link from 'next/link';
 import { Button } from '@workspace/ui-react/components/button';
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 interface ClientDashboardViewProps {
     user: UserDto;
@@ -13,6 +15,8 @@ interface ClientDashboardViewProps {
 export function ClientDashboardView({ user }: ClientDashboardViewProps) {
     const { accounts, isLoading: accountsLoading } = useAccounts();
     const { stocks, isLoading: stocksLoading } = useStocks();
+    const localizedPath = useLocalizedPath();
+    const t = useTranslations();
 
     const totalBalance = accounts?.reduce((sum, acc) => sum + acc.balance, 0) || 0;
     const savingsAccounts = accounts?.filter(acc => acc.accountType === 'SAVINGS') || [];
@@ -24,59 +28,59 @@ export function ClientDashboardView({ user }: ClientDashboardViewProps) {
         <div className="space-y-6">
             <div>
                 <h2 className="text-3xl font-bold tracking-tight mb-2">
-                    Bienvenue, {user.firstName} !
+                    {t('features.dashboard.messages.welcomeClient')} {user.firstName}{t('features.dashboard.messages.exclamation')}
                 </h2>
                 <p className="text-muted-foreground">
-                    Voici votre vue d'ensemble financière
+                    {t('features.dashboard.messages.financialOverview')}
                 </p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Solde total</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.dashboard.messages.totalBalance')}</h3>
                     {accountsLoading ? (
                         <div className="h-8 w-32 bg-muted animate-pulse rounded" />
                     ) : (
                         <p className="text-3xl font-bold">{totalBalance.toFixed(2)} €</p>
                     )}
-                    <Link href="/dashboard/accounts" className="text-xs text-primary hover:underline mt-2 inline-block">
-                        Voir les comptes →
+                    <Link href={localizedPath('/dashboard/accounts')} className="text-xs text-primary hover:underline mt-2 inline-block">
+                        {t('features.dashboard.messages.viewAccounts')}
                     </Link>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Épargne</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.dashboard.messages.savings')}</h3>
                     {accountsLoading ? (
                         <div className="h-8 w-32 bg-muted animate-pulse rounded" />
                     ) : (
                         <p className="text-3xl font-bold">{totalSavings.toFixed(2)} €</p>
                     )}
-                    <Link href="/dashboard/savings" className="text-xs text-primary hover:underline mt-2 inline-block">
-                        Gérer l'épargne →
+                    <Link href={localizedPath('/dashboard/savings')} className="text-xs text-primary hover:underline mt-2 inline-block">
+                        {t('features.dashboard.messages.manageSavings')}
                     </Link>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Portfolio actions</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.dashboard.messages.stockPortfolio')}</h3>
                     {stocksLoading ? (
                         <div className="h-8 w-32 bg-muted animate-pulse rounded" />
                     ) : (
                         <p className="text-3xl font-bold">{portfolioValue.toFixed(2)} €</p>
                     )}
-                    <Link href="/dashboard/stocks" className="text-xs text-primary hover:underline mt-2 inline-block">
-                        Voir le portfolio →
+                    <Link href={localizedPath('/dashboard/stocks')} className="text-xs text-primary hover:underline mt-2 inline-block">
+                        {t('features.dashboard.messages.viewPortfolio')}
                     </Link>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Mes comptes</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.dashboard.messages.myAccounts')}</h3>
                     {accountsLoading ? (
                         <div className="h-8 w-16 bg-muted animate-pulse rounded" />
                     ) : (
                         <p className="text-3xl font-bold">{accounts?.length || 0}</p>
                     )}
-                    <Link href="/dashboard/accounts" className="text-xs text-primary hover:underline mt-2 inline-block">
-                        Créer un compte →
+                    <Link href={localizedPath('/dashboard/accounts')} className="text-xs text-primary hover:underline mt-2 inline-block">
+                        {t('features.dashboard.messages.createAccount')}
                     </Link>
                 </div>
             </div>
@@ -84,31 +88,31 @@ export function ClientDashboardView({ user }: ClientDashboardViewProps) {
             <div className="grid gap-6 md:grid-cols-2">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold">Actions rapides</h3>
+                        <h3 className="text-xl font-semibold">{t('features.dashboard.messages.quickActions')}</h3>
                     </div>
                     <div className="grid gap-3">
-                        <Link href="/dashboard/transactions">
+                        <Link href={localizedPath('/dashboard/transactions')}>
                             <Button className="w-full justify-start" variant="outline">
                                 <span className="mr-2">💸</span>
-                                Effectuer un transfert
+                                {t('features.dashboard.messages.makeTransfer')}
                             </Button>
                         </Link>
-                        <Link href="/dashboard/accounts">
+                        <Link href={localizedPath('/dashboard/accounts')}>
                             <Button className="w-full justify-start" variant="outline">
                                 <span className="mr-2">💳</span>
-                                Créer un nouveau compte
+                                {t('features.dashboard.messages.createNewAccount')}
                             </Button>
                         </Link>
-                        <Link href="/dashboard/stocks">
+                        <Link href={localizedPath('/dashboard/stocks')}>
                             <Button className="w-full justify-start" variant="outline">
                                 <span className="mr-2">📈</span>
-                                Acheter des actions
+                                {t('features.dashboard.messages.buyStocks')}
                             </Button>
                         </Link>
-                        <Link href="/dashboard/messages">
+                        <Link href={localizedPath('/dashboard/messages')}>
                             <Button className="w-full justify-start" variant="outline">
                                 <span className="mr-2">💬</span>
-                                Contacter un conseiller
+                                {t('features.dashboard.messages.contactAdvisor')}
                             </Button>
                         </Link>
                     </div>
@@ -116,9 +120,9 @@ export function ClientDashboardView({ user }: ClientDashboardViewProps) {
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold">Mes comptes</h3>
-                        <Link href="/dashboard/accounts">
-                            <Button variant="ghost" size="sm">Voir tout</Button>
+                        <h3 className="text-xl font-semibold">{t('features.dashboard.messages.myAccounts')}</h3>
+                        <Link href={localizedPath('/dashboard/accounts')}>
+                            <Button variant="ghost" size="sm">{t('features.dashboard.messages.viewAll')}</Button>
                         </Link>
                     </div>
                     {accountsLoading ? (
@@ -141,9 +145,9 @@ export function ClientDashboardView({ user }: ClientDashboardViewProps) {
                         </div>
                     ) : (
                         <div className="text-center py-8 text-muted-foreground">
-                            <p className="mb-4">Aucun compte</p>
-                            <Link href="/dashboard/accounts">
-                                <Button size="sm">Créer mon premier compte</Button>
+                            <p className="mb-4">{t('features.dashboard.messages.noAccounts')}</p>
+                            <Link href={localizedPath('/dashboard/accounts')}>
+                                <Button size="sm">{t('features.dashboard.messages.createFirstAccount')}</Button>
                             </Link>
                         </div>
                     )}

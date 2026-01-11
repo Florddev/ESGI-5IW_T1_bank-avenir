@@ -1,0 +1,10 @@
+{
+  "placeOrder": "Place order",
+  "placingOrder": "Placing order...",
+  "buyStock": "Buy",
+  "sellStock": "Sell",
+  "createStock": "Create stock",
+  "creatingStock": "Creating...",
+  "updateStock": "Update",
+  "updatingStock": "Updating..."
+}

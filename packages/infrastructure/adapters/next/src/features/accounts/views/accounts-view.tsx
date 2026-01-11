@@ -3,11 +3,13 @@
 import { useAccounts, useUpdateAccount, useDeleteAccount } from '@workspace/adapter-next/features/accounts';
 import { CreateAccountForm, AccountList, EditAccountDialog, DeleteAccountDialog } from '@workspace/adapter-next/features/accounts/components';
 import { useAuth } from '@workspace/adapter-next/features/auth';
+import { useTranslations } from '@workspace/ui-react/contexts';
 import { Button } from '@workspace/ui-react/components/button';
 import { useState } from 'react';
 import type { AccountDto } from '@workspace/application/dtos';
 
 export function AccountsView() {
+    const t = useTranslations();
     const { user } = useAuth();
     const { accounts, isLoading, refetch } = useAccounts();
     const { updateAccountName } = useUpdateAccount();
@@ -53,24 +55,24 @@ export function AccountsView() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Mes comptes</h2>
-                    <p className="text-muted-foreground">Gérez vos comptes bancaires et consultez vos soldes</p>
+                    <h2 className="text-3xl font-bold tracking-tight">{t('features.accounts.messages.myAccounts')}</h2>
+                    <p className="text-muted-foreground">{t('features.accounts.messages.manageAccountsDesc')}</p>
                 </div>
                 <Button onClick={() => setShowCreateForm(!showCreateForm)}>
-                    {showCreateForm ? 'Annuler' : '+ Nouveau compte'}
+                    {showCreateForm ? t('common.actions.cancel') : `+ ${t('features.accounts.actions.newAccount')}`}
                 </Button>
             </div>
 
             {showCreateForm && (
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-xl font-semibold mb-4">Créer un nouveau compte</h3>
+                    <h3 className="text-xl font-semibold mb-4">{t('features.accounts.messages.createNewAccount')}</h3>
                     <CreateAccountForm userId={user.id} onSuccess={handleSuccess} />
                 </div>
             )}
 
             <div className="bg-card rounded-lg border shadow-sm">
                 <div className="p-6 border-b">
-                    <h3 className="text-xl font-semibold">Tous mes comptes</h3>
+                    <h3 className="text-xl font-semibold">{t('features.accounts.messages.allMyAccounts')}</h3>
                 </div>
                 <AccountList
                     accounts={accounts}

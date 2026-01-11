@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRegister } from '../hooks/useRegister';
+import { useTranslations } from '@workspace/ui-react/contexts';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';
@@ -12,6 +13,7 @@ import type { z } from 'zod';
 type RegisterFormData = z.infer<typeof registerSchema>;
 
 export function RegisterForm() {
+    const t = useTranslations();
     const { register: registerUser, isLoading, error } = useRegister();
     const form = useForm<RegisterFormData>({
         resolver: zodResolver(registerSchema),
@@ -36,11 +38,11 @@ export function RegisterForm() {
                         name="firstName"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Prénom</FormLabel>
+                                <FormLabel>{t('common.labels.firstName')}</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        placeholder="Jean"
+                                        placeholder={t('common.placeholders.firstNamePlaceholder')}
                                         disabled={isLoading}
                                         {...field}
                                     />
@@ -55,11 +57,11 @@ export function RegisterForm() {
                         name="lastName"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nom</FormLabel>
+                                <FormLabel>{t('common.labels.lastName')}</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="text"
-                                        placeholder="Dupont"
+                                        placeholder={t('common.placeholders.lastNamePlaceholder')}
                                         disabled={isLoading}
                                         {...field}
                                     />
@@ -75,11 +77,11 @@ export function RegisterForm() {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t('common.labels.email')}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
-                                    placeholder="exemple@email.com"
+                                    placeholder={t('common.placeholders.emailPlaceholder')}
                                     disabled={isLoading}
                                     {...field}
                                 />
@@ -94,7 +96,7 @@ export function RegisterForm() {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mot de passe</FormLabel>
+                            <FormLabel>{t('entities.user.fields.password')}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
@@ -115,7 +117,7 @@ export function RegisterForm() {
                 )}
 
                 <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? "Inscription en cours..." : "S'inscrire"}
+                    {isLoading ? t('features.auth.actions.register.loading') : t('features.auth.actions.register.label')}
                 </Button>
             </form>
         </Form>

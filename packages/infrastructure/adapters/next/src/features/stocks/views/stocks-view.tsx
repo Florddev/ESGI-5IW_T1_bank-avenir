@@ -5,11 +5,13 @@ import { useStocks, usePortfolio } from '../hooks';
 import { StockList } from '../components';
 import { Button } from '@workspace/ui-react/components/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function StocksView() {
     const { user } = useAuth();
     const { stocks, isLoading } = useStocks();
     const { portfolio, isLoading: portfolioLoading } = usePortfolio();
+    const t = useTranslations();
 
     const portfolioValue = portfolio?.totalValue || 0;
     const portfolioGain = portfolio?.totalGainLoss || 0;
@@ -18,13 +20,13 @@ export function StocksView() {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-3xl font-bold tracking-tight">Actions</h2>
-                <p className="text-muted-foreground">Investissez dans les actions disponibles et gérez votre portfolio</p>
+                <h2 className="text-3xl font-bold tracking-tight">{t('features.stocks.messages.title')}</h2>
+                <p className="text-muted-foreground">{t('features.stocks.messages.description')}</p>
             </div>
 
             <div className="grid gap-4 md:grid-cols-4">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Valeur du portfolio</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.labels.portfolioValue')}</h3>
                     {portfolioLoading ? (
                         <div className="h-10 w-32 bg-muted animate-pulse rounded" />
                     ) : (
@@ -33,7 +35,7 @@ export function StocksView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Plus/Moins-value</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.labels.gainLoss')}</h3>
                     {portfolioLoading ? (
                         <div className="h-10 w-32 bg-muted animate-pulse rounded" />
                     ) : (
@@ -49,7 +51,7 @@ export function StocksView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions détenues</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.labels.sharesOwned')}</h3>
                     {portfolioLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
@@ -58,7 +60,7 @@ export function StocksView() {
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Actions disponibles</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.stocks.labels.availableStocks')}</h3>
                     {isLoading ? (
                         <div className="h-10 w-16 bg-muted animate-pulse rounded" />
                     ) : (
@@ -69,17 +71,17 @@ export function StocksView() {
 
             <Tabs defaultValue="market" className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="market">Marché</TabsTrigger>
-                    <TabsTrigger value="portfolio">Mon Portfolio</TabsTrigger>
-                    <TabsTrigger value="orders">Mes ordres</TabsTrigger>
+                    <TabsTrigger value="market">{t('features.stocks.labels.market')}</TabsTrigger>
+                    <TabsTrigger value="portfolio">{t('features.stocks.labels.myPortfolio')}</TabsTrigger>
+                    <TabsTrigger value="orders">{t('features.stocks.labels.myOrders')}</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="market" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Actions disponibles</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.messages.availableStocksLabel')}</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                Frais : 1€ par transaction (achat ou vente)
+                                {t('features.stocks.messages.feesShort')}
                             </p>
                         </div>
                         <StockList stocks={stocks} isLoading={isLoading} mode="buy" />
@@ -89,9 +91,9 @@ export function StocksView() {
                 <TabsContent value="portfolio" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Mon Portfolio</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.labels.myPortfolio')}</h3>
                             <p className="text-sm text-muted-foreground mt-1">
-                                Actions que vous possédez actuellement
+                                {t('features.stocks.messages.sharesYouOwn')}
                             </p>
                         </div>
                         {portfolioLoading ? (
@@ -115,9 +117,9 @@ export function StocksView() {
                                                 <p className="text-sm text-muted-foreground">ID: {item.stockId}</p>
                                             </div>
                                             <div className="text-right mr-8">
-                                                <p className="font-semibold">{item.quantity} actions</p>
+                                                <p className="font-semibold">{item.quantity} {t('features.stocks.labels.stocks')}</p>
                                                 <p className="text-sm text-muted-foreground">
-                                                    Prix moyen: {item.averagePurchasePrice.toFixed(2)} €
+                                                    {t('features.stocks.labels.averagePrice')}: {item.averagePurchasePrice.toFixed(2)} €
                                                 </p>
                                             </div>
                                             <div className="text-right mr-8">
@@ -126,14 +128,14 @@ export function StocksView() {
                                                     {gainLoss >= 0 ? '+' : ''}{gainLoss.toFixed(2)} € ({gainLoss >= 0 ? '+' : ''}{gainPercent.toFixed(2)}%)
                                                 </p>
                                             </div>
-                                            <Button variant="outline" size="sm">Vendre</Button>
+                                            <Button variant="outline" size="sm">{t('features.stocks.actions.sellStock')}</Button>
                                         </div>
                                     );
                                 })}
                             </div>
                         ) : (
                             <div className="p-12 text-center text-muted-foreground">
-                                <p>Vous ne possédez aucune action pour le moment</p>
+                                <p>{t('features.stocks.messages.noPortfolioShort')}</p>
                             </div>
                         )}
                     </div>
@@ -142,10 +144,10 @@ export function StocksView() {
                 <TabsContent value="orders" className="space-y-4">
                     <div className="bg-card rounded-lg border shadow-sm">
                         <div className="p-6 border-b">
-                            <h3 className="text-xl font-semibold">Historique des ordres</h3>
+                            <h3 className="text-xl font-semibold">{t('features.stocks.messages.orderHistory')}</h3>
                         </div>
                         <div className="p-12 text-center text-muted-foreground">
-                            <p>Aucun ordre pour le moment</p>
+                            <p>{t('features.stocks.messages.noOrders')}</p>
                         </div>
                     </div>
                 </TabsContent>

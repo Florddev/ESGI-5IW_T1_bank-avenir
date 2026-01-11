@@ -1,0 +1,6 @@
+{
+  "rateNonNegative": "Savings rate cannot be negative",
+  "rateMax": "Savings rate cannot exceed 100%",
+  "messageMinLength": "Message must be at least 10 characters",
+  "messageMaxLength": "Message cannot exceed 500 characters"
+}

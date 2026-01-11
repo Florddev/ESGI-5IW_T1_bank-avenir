@@ -1,0 +1,14 @@
+{
+  "accountName": "Nom du compte",
+  "accountType": "Type de compte",
+  "checkingAccount": "Compte courant",
+  "savingsAccount": "Compte épargne",
+  "type": "Type",
+  "balance": "Solde",
+  "rate": "Taux",
+  "newName": "Nouveau nom",
+  "status": "Statut",
+  "iban": "IBAN",
+  "accountNumber": "Numéro de compte",
+  "currentBalance": "Solde actuel"
+}

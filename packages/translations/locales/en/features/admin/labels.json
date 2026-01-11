@@ -1,0 +1,16 @@
+{
+  "user": "User",
+  "users": "Users",
+  "clients": "Clients",
+  "email": "Email",
+  "firstName": "First name",
+  "lastName": "Last name",
+  "role": "Role",
+  "password": "Password",
+  "createUser": "Create user",
+  "client": "Client",
+  "advisor": "Advisor",
+  "director": "Director",
+  "reports": "Reports",
+  "statistics": "Statistics"
+}

@@ -1,0 +1,13 @@
+{
+  "title": "Savings",
+  "description": "Manage your savings accounts and track their performance",
+  "rateUpdateTitle": "Update savings rate",
+  "rateUpdateDescription": "This will notify all clients with savings accounts",
+  "currentRateTitle": "Current rate",
+  "newRateTitle": "New rate",
+  "updateSuccess": "Rate updated successfully",
+  "updateError": "Error updating rate",
+  "noSavingsAccount": "You don't have a savings account yet",
+  "goodToKnowTitle": "💡 Good to know",
+  "goodToKnowText": "Your savings accounts earn interest daily at the current rate. Interest is calculated on the end-of-day balance and credited automatically."
+}

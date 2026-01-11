@@ -1,0 +1,7 @@
+{
+  "title": "Notifications",
+  "description": "Consultez et gérez vos notifications",
+  "markAsReadSuccess": "Notification marquée comme lue",
+  "markAllAsReadSuccess": "Toutes les notifications marquées comme lues",
+  "deleteSuccess": "Notification supprimée avec succès"
+}

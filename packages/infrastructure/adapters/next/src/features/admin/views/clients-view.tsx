@@ -5,9 +5,11 @@ import { useAdvisorClients } from '@workspace/adapter-next/features/advisor';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { MessageSquare, User } from 'lucide-react';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function ClientsView() {
     const { clients, isLoading } = useAdvisorClients();
+    const t = useTranslations();
 
     const totalClients = clients.length;
     const totalActiveConversations = clients.reduce((sum, c) => sum + c.activeConversationsCount, 0);
@@ -20,39 +22,39 @@ export function ClientsView() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">Mes clients</h2>
-                    <p className="text-muted-foreground">Liste des clients que vous accompagnez</p>
+                    <h2 className="text-3xl font-bold tracking-tight">{t('features.admin.messages.myClients')}</h2>
+                    <p className="text-muted-foreground">{t('features.admin.messages.myClientsDescription')}</p>
                 </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Total clients</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.totalClients')}</h3>
                     <p className="text-4xl font-bold">{isLoading ? '...' : totalClients}</p>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Nouveaux ce mois</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.newThisMonth')}</h3>
                     <p className="text-4xl font-bold">{isLoading ? '...' : newClientsThisMonth}</p>
                 </div>
 
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-sm font-medium text-muted-foreground mb-2">Conversations actives</h3>
+                    <h3 className="text-sm font-medium text-muted-foreground mb-2">{t('features.admin.messages.activeConversations')}</h3>
                     <p className="text-4xl font-bold">{isLoading ? '...' : totalActiveConversations}</p>
                 </div>
             </div>
 
             <div className="bg-card rounded-lg border shadow-sm">
                 <div className="p-6 border-b">
-                    <h3 className="text-xl font-semibold">Liste des clients</h3>
+                    <h3 className="text-xl font-semibold">{t('features.admin.messages.clientList')}</h3>
                 </div>
                 {isLoading ? (
                     <div className="p-12 text-center text-muted-foreground">
-                        <p>Chargement...</p>
+                        <p>{t('features.admin.messages.loading')}</p>
                     </div>
                 ) : clients.length === 0 ? (
                     <div className="p-12 text-center text-muted-foreground">
-                        <p>Aucun client assigné pour le moment</p>
+                        <p>{t('features.admin.messages.noClientsAssigned')}</p>
                     </div>
                 ) : (
                     <div className="divide-y">
@@ -70,7 +72,7 @@ export function ClientsView() {
                                                 </h4>
                                                 <p className="text-sm text-muted-foreground">{client.email}</p>
                                                 <p className="text-xs text-muted-foreground mt-1">
-                                                    Client depuis {formatDistanceToNow(new Date(client.createdAt), {
+                                                    {t('features.admin.messages.clientSince')} {formatDistanceToNow(new Date(client.createdAt), {
                                                         addSuffix: true,
                                                         locale: fr
                                                     })}

@@ -1,0 +1,13 @@
+{
+  "title": "Épargne",
+  "description": "Gérez vos comptes d'épargne et suivez leur rendement",
+  "rateUpdateTitle": "Mettre à jour le taux d'épargne",
+  "rateUpdateDescription": "Cela notifiera tous les clients avec des comptes d'épargne",
+  "currentRateTitle": "Taux actuel",
+  "newRateTitle": "Nouveau taux",
+  "updateSuccess": "Taux mis à jour avec succès",
+  "updateError": "Erreur lors de la mise à jour du taux",
+  "noSavingsAccount": "Vous n'avez pas encore de compte d'épargne",
+  "goodToKnowTitle": "💡 Bon à savoir",
+  "goodToKnowText": "Vos comptes d'épargne sont rémunérés quotidiennement au taux en vigueur. Les intérêts sont calculés sur le solde de fin de journée et versés automatiquement."
+}

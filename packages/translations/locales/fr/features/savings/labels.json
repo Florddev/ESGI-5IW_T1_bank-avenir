@@ -1,0 +1,13 @@
+{
+  "savingsRate": "Taux d'épargne",
+  "currentRate": "Taux actuel",
+  "newRate": "Nouveau taux",
+  "notificationMessage": "Message de notification",
+  "updateRate": "Mettre à jour le taux",
+  "updatingRate": "Mise à jour...",
+  "rateUpdated": "Taux d'épargne mis à jour avec succès",
+  "totalSavings": "Épargne totale",
+  "perYear": "Par an",
+  "estimatedInterest": "Intérêts estimés/an",
+  "mySavingsAccounts": "Mes comptes d'épargne"
+}

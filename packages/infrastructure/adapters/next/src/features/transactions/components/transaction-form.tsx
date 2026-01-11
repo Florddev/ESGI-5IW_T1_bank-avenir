@@ -2,6 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslations } from '@workspace/ui-react/contexts';
 import { useTransactionOperations } from '../hooks/useTransactionOperations';
 import { useAccounts } from '../../accounts/hooks/useAccounts';
 import { depositSchema, withdrawSchema, transferSchema, type DepositFormData, type WithdrawFormData, type TransferFormData } from '@workspace/adapter-common/validators';
@@ -16,6 +17,7 @@ interface TransactionFormProps {
 }
 
 export function TransactionForm({ onSuccess }: TransactionFormProps) {
+    const t = useTranslations();
     const { deposit, withdraw, transfer, isLoading, error } = useTransactionOperations();
     const { accounts, isLoading: accountsLoading } = useAccounts();
 
@@ -72,9 +74,9 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
     return (
         <Tabs defaultValue="deposit" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="deposit">Dépôt</TabsTrigger>
-                <TabsTrigger value="withdraw">Retrait</TabsTrigger>
-                <TabsTrigger value="transfer">Transfert</TabsTrigger>
+                <TabsTrigger value="deposit">{t('features.transactions.labels.deposit')}</TabsTrigger>
+                <TabsTrigger value="withdraw">{t('features.transactions.labels.withdraw')}</TabsTrigger>
+                <TabsTrigger value="transfer">{t('features.transactions.labels.transfer')}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="deposit">
@@ -85,7 +87,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                             name="accountId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Compte à créditer</FormLabel>
+                                    <FormLabel>{t('features.transactions.labels.accountToCredit')}</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
                                         <FormControl>
                                             <SelectTrigger>
@@ -126,7 +128,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                         />
                         {error && <div className="text-sm text-destructive">{error}</div>}
                         <Button type="submit" disabled={isLoading || accountsLoading} className="w-full">
-                            {isLoading ? 'Dépôt en cours...' : 'Déposer'}
+                            {isLoading ? t('features.transactions.actions.depositInProgress') : t('features.transactions.actions.makeDeposit')}
                         </Button>
                     </form>
                 </Form>
@@ -140,7 +142,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                             name="accountId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Compte à débiter</FormLabel>
+                                    <FormLabel>{t('features.transactions.labels.accountToDebit')}</FormLabel>
                                     <Select onValueChange={field.onChange} value={field.value} disabled={accountsLoading || isLoading}>
                                         <FormControl>
                                             <SelectTrigger>
@@ -181,7 +183,7 @@ export function TransactionForm({ onSuccess }: TransactionFormProps) {
                         />
                         {error && <div className="text-sm text-destructive">{error}</div>}
                         <Button type="submit" disabled={isLoading || accountsLoading} className="w-full">
-                            {isLoading ? 'Retrait en cours...' : 'Retirer'}
+                            {isLoading ? t('features.transactions.actions.withdrawInProgress') : t('features.transactions.actions.makeWithdraw')}
                         </Button>
                     </form>
                 </Form>

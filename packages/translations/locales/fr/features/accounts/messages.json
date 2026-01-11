@@ -1,0 +1,13 @@
+{
+  "noAccountsFound": "Aucun compte trouvé",
+  "editNameDescription": "Modifiez le nom personnalisé de votre compte",
+  "myAccounts": "Mes comptes",
+  "manageAccountsDesc": "Gérez vos comptes bancaires et consultez vos soldes",
+  "createNewAccount": "Créer un nouveau compte",
+  "allMyAccounts": "Tous mes comptes",
+  "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer ce compte ?",
+  "currentBalance": "Solde actuel:",
+  "accountCreatedSuccess": "Compte créé avec succès",
+  "accountDeletedSuccess": "Compte supprimé avec succès",
+  "accountUpdatedSuccess": "Compte modifié avec succès"
+}

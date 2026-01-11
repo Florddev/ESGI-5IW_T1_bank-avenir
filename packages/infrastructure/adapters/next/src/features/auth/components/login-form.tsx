@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useLogin } from '../hooks/useLogin';
+import { useTranslations } from '@workspace/ui-react/contexts';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@workspace/ui-react/components/form';
@@ -12,6 +13,7 @@ import type { z } from 'zod';
 type LoginFormData = z.infer<typeof loginSchema>;
 
 export function LoginForm() {
+    const t = useTranslations();
     const { login, isLoading, error } = useLogin();
     const form = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
@@ -33,11 +35,11 @@ export function LoginForm() {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t('common.labels.email')}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="email"
-                                    placeholder="exemple@email.com"
+                                    placeholder={t('common.placeholders.emailPlaceholder')}
                                     disabled={isLoading}
                                     {...field}
                                 />
@@ -52,11 +54,11 @@ export function LoginForm() {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Mot de passe</FormLabel>
+                            <FormLabel>{t('entities.user.fields.password')}</FormLabel>
                             <FormControl>
                                 <Input
                                     type="password"
-                                    placeholder="••••••••"
+                                    placeholder={t('common.placeholders.passwordPlaceholder')}
                                     disabled={isLoading}
                                     {...field}
                                 />
@@ -73,7 +75,7 @@ export function LoginForm() {
                 )}
 
                 <Button type="submit" disabled={isLoading} className="w-full">
-                    {isLoading ? 'Connexion en cours...' : 'Se connecter'}
+                    {isLoading ? t('features.auth.actions.login.loading') : t('features.auth.actions.login.label')}
                 </Button>
             </form>
         </Form>

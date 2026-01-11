@@ -1,0 +1,10 @@
+{
+  "makeDeposit": "Déposer",
+  "makeWithdraw": "Retirer",
+  "makeTransfer": "Transférer",
+  "depositInProgress": "Dépôt en cours...",
+  "withdrawInProgress": "Retrait en cours...",
+  "transferInProgress": "Transfert en cours...",
+  "transfer": "Transférer",
+  "cancel": "Annuler"
+}

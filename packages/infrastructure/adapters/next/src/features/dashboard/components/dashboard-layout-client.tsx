@@ -9,45 +9,45 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { UserRole } from '@workspace/domain/entities';
+import { useLocalizedPath } from '../../../hooks/useLocalizedPath';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 interface DashboardLayoutClientProps {
     children: ReactNode;
 }
 
-const CLIENT_NAV: NavItem[] = [
-    { href: '/dashboard', label: 'Vue d\'ensemble', icon: '🏠' },
-    { href: '/dashboard/accounts', label: 'Mes comptes', icon: '💳' },
-    { href: '/dashboard/transactions', label: 'Transactions', icon: '💸' },
-    { href: '/dashboard/savings', label: 'Épargne', icon: '💰' },
-    { href: '/dashboard/stocks', label: 'Actions', icon: '📈' },
-    { href: '/dashboard/messages', label: 'Messages', icon: '💬' },
-];
-
-const ADVISOR_NAV: NavItem[] = [
-    { href: '/dashboard', label: 'Vue d\'ensemble', icon: '🏠' },
-    { href: '/dashboard/clients', label: 'Mes clients', icon: '👥' },
-    // { href: '/dashboard/loans', label: 'Crédits', icon: '🏦' },
-    { href: '/dashboard/messages', label: 'Messagerie', icon: '💬' },
-];
-
-const DIRECTOR_NAV: NavItem[] = [
-    { href: '/dashboard', label: 'Vue d\'ensemble', icon: '🏠' },
-    { href: '/dashboard/users', label: 'Utilisateurs', icon: '👥' },
-    { href: '/dashboard/savings-rate', label: 'Taux d\'épargne', icon: '📊' },
-    { href: '/dashboard/stocks-management', label: 'Gestion actions', icon: '📈' },
-    // { href: '/dashboard/reports', label: 'Rapports', icon: '📄' },
-];
-
-const getRoleName = (role: UserRole): string => {
+const getRoleName = (role: UserRole, t: (key: string) => string): string => {
     switch (role) {
-        case UserRole.CLIENT: return 'Client';
-        case UserRole.ADVISOR: return 'Conseiller';
-        case UserRole.DIRECTOR: return 'Directeur';
+        case UserRole.CLIENT: return t('common.labels.client');
+        case UserRole.ADVISOR: return t('common.labels.advisor');
+        case UserRole.DIRECTOR: return t('common.labels.director');
         default: return role;
     }
 };
 
-const getNavigationByRole = (role: UserRole): NavItem[] => {
+const getNavigationByRole = (role: UserRole, localizedPath: (path: string) => string): NavItem[] => {
+    const CLIENT_NAV: NavItem[] = [
+        { href: localizedPath('/dashboard'), label: 'Vue d\'ensemble', icon: '🏠' },
+        { href: localizedPath('/dashboard/accounts'), label: 'Mes comptes', icon: '💳' },
+        { href: localizedPath('/dashboard/transactions'), label: 'Transactions', icon: '💸' },
+        { href: localizedPath('/dashboard/savings'), label: 'Épargne', icon: '💰' },
+        { href: localizedPath('/dashboard/stocks'), label: 'Actions', icon: '📈' },
+        { href: localizedPath('/dashboard/messages'), label: 'Messages', icon: '💬' },
+    ];
+
+    const ADVISOR_NAV: NavItem[] = [
+        { href: localizedPath('/dashboard'), label: 'Vue d\'ensemble', icon: '🏠' },
+        { href: localizedPath('/dashboard/clients'), label: 'Mes clients', icon: '👥' },
+        { href: localizedPath('/dashboard/messages'), label: 'Messagerie', icon: '💬' },
+    ];
+
+    const DIRECTOR_NAV: NavItem[] = [
+        { href: localizedPath('/dashboard'), label: 'Vue d\'ensemble', icon: '🏠' },
+        { href: localizedPath('/dashboard/users'), label: 'Utilisateurs', icon: '👥' },
+        { href: localizedPath('/dashboard/savings-rate'), label: 'Taux d\'épargne', icon: '📊' },
+        { href: localizedPath('/dashboard/stocks-management'), label: 'Gestion actions', icon: '📈' },
+    ];
+    
     switch (role) {
         case UserRole.CLIENT: return CLIENT_NAV;
         case UserRole.ADVISOR: return ADVISOR_NAV;
@@ -61,12 +61,14 @@ export function DashboardLayoutClient({ children }: DashboardLayoutClientProps) 
     const { logout, isLoading: isLoggingOut } = useLogout();
     const router = useRouter();
     const pathname = usePathname();
+    const localizedPath = useLocalizedPath();
+    const t = useTranslations();
 
     useEffect(() => {
         if (!isLoading && !isAuthenticated) {
-            router.push('/auth/login');
+            router.push(localizedPath('/auth/login'));
         }
-    }, [isLoading, isAuthenticated, router]);
+    }, [isLoading, isAuthenticated, router, localizedPath]);
 
     if (isLoading) {
         return <DashboardLoading />;
@@ -76,12 +78,12 @@ export function DashboardLayoutClient({ children }: DashboardLayoutClientProps) 
         return null;
     }
 
-    const navigation = getNavigationByRole(user.role);
+    const navigation = getNavigationByRole(user.role, localizedPath, t);
 
     const header = (
         <DashboardHeader
             title="Avenir Bank"
-            badge={getRoleName(user.role)}
+            badge={getRoleName(user.role, t)}
             userInfo={
                 <DashboardUserInfo
                     firstName={user.firstName}
@@ -93,16 +95,16 @@ export function DashboardLayoutClient({ children }: DashboardLayoutClientProps) 
                 <>
                     <NotificationBadge 
                         userId={user.id}
-                        onClick={() => router.push('/dashboard/notifications')}
+                        onClick={() => router.push(localizedPath('/dashboard/notifications'))}
                     />
                     <Button
                         variant="outline"
                         size="sm"
                         onClick={logout}
                         disabled={isLoggingOut}
-                        aria-label="Se déconnecter"
+                        aria-label={t('common.labels.logout')}
                     >
-                        {isLoggingOut ? '...' : 'Déconnexion'}
+                        {isLoggingOut ? t('common.labels.loggingOut') : t('common.labels.logout')}
                     </Button>
                 </>
             }

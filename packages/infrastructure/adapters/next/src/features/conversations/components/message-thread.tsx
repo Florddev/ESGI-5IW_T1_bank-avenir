@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/co
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { SendMessageForm } from './send-message-form';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 interface Message {
     id: string;
@@ -41,6 +42,7 @@ export function MessageThread({
     isSending,
     isAdvisor,
 }: MessageThreadProps) {
+    const t = useTranslations();
     const handleSendMessage = async (content: string) => {
         await onSendMessage(content);
     };
@@ -53,12 +55,12 @@ export function MessageThread({
                         <CardTitle className="text-xl">{conversation.subject}</CardTitle>
                         {isAdvisor && conversation.clientName && (
                             <p className="text-sm text-muted-foreground mt-1">
-                                Client: {conversation.clientName}
+                                {t('features.conversations.labels.clientLabel')} {conversation.clientName}
                             </p>
                         )}
                         {conversation.advisorName && (
                             <p className="text-sm text-muted-foreground">
-                                Conseiller: {conversation.advisorName}
+                                {t('features.conversations.labels.advisorLabel')} {conversation.advisorName}
                             </p>
                         )}
                     </div>
@@ -69,8 +71,8 @@ export function MessageThread({
                             ? 'bg-amber-500/10 text-amber-700 dark:text-amber-500 border border-amber-500/20'
                             : 'bg-muted text-muted-foreground border border-border'
                     }`}>
-                        {conversation.status === 'ASSIGNED' || conversation.status === 'OPEN' ? 'Ouverte' :
-                         conversation.status === 'WAITING' ? 'En attente' : 'Fermée'}
+                        {conversation.status === 'ASSIGNED' || conversation.status === 'OPEN' ? t('features.conversations.messages.open') :
+                         conversation.status === 'WAITING' ? t('features.conversations.messages.pending') : t('features.conversations.messages.closed')}
                     </span>
                 </div>
             </CardHeader>
@@ -78,11 +80,11 @@ export function MessageThread({
                 <div className="flex-1 overflow-y-auto px-6 py-4 bg-muted/30">
                     {messagesLoading ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-sm text-muted-foreground">Chargement des messages...</p>
+                            <p className="text-sm text-muted-foreground">{t('features.conversations.messages.loadingMessages')}</p>
                         </div>
                     ) : messages.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-sm text-muted-foreground">Aucun message</p>
+                            <p className="text-sm text-muted-foreground">{t('features.conversations.messages.noMessage')}</p>
                         </div>
                     ) : (
                         <div className="space-y-4 w-full">

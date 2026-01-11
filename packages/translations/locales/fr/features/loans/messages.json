@@ -1,0 +1,20 @@
+{
+  "title": "Crédits",
+  "description": "Gérez vos demandes de crédit",
+  "manageDescription": "Gérez les crédits de vos clients",
+  "allLoans": "Tous les crédits",
+  "createLoan": "Octroyer un nouveau crédit",
+  "estimatedCalculation": "Calcul estimatif",
+  "calculationInfoTitle": "💡 Calcul des crédits",
+  "calculationMethod": "Méthode : Mensualités constantes",
+  "calculationInterest": "Taux d'intérêt : Calculé sur le capital restant dû chaque mois",
+  "calculationInsurance": "Assurance : Obligatoire, calculée sur le total du crédit et prélevée sur les mensualités",
+  "calculationIncludes": "Les mensualités incluent capital + intérêts + assurance",
+  "grantLoan": "Octroyer le crédit",
+  "grantingLoan": "Création...",
+  "loanGranted": "Crédit octroyé avec succès",
+  "noLoans": "Aucun crédit pour le moment",
+  "noLoansFound": "Aucun prêt trouvé",
+  "loan": "Prêt",
+  "makePayment": "Effectuer le paiement"
+}

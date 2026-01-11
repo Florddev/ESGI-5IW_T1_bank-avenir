@@ -20,6 +20,7 @@ import { useRealtimeMessages } from '@workspace/adapter-next/features/realtime';
 import { useRealtimeNotifications, useMarkAsRead } from '@workspace/adapter-next/features/notifications';
 import { CreateConversationForm, SendMessageForm } from '../components';
 import type { CreateConversationFormData } from '@workspace/adapter-common/validators';
+import { useTranslations } from '@workspace/ui-react/contexts';
 
 export function MessagesView() {
     const { user } = useAuth();
@@ -37,6 +38,7 @@ export function MessagesView() {
     const { events: realtimeEvents } = useRealtimeMessages(user?.id || '');
     const { events: notificationEvents } = useRealtimeNotifications(user?.id || '');
     const { markAsRead } = useMarkAsRead();
+    const t = useTranslations();
 
     useEffect(() => {
         setMessages(loadedMessages);
