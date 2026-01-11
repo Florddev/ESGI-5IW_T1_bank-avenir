@@ -47,7 +47,26 @@ export const sellStockSchema = z.object({
     .max(10000, 'La quantité ne peut pas dépasser 10 000'),
 });
 
+export const placeOrderSchema = z.object({
+  stockId: z.string().uuid('ID d\'action invalide'),
+  type: z.enum(['BUY', 'SELL'], {
+    errorMap: () => ({ message: 'Type d\'ordre invalide' }),
+  }),
+  quantity: z
+    .number()
+    .int('La quantité doit être un nombre entier')
+    .positive('La quantité doit être positive')
+    .min(1, 'La quantité minimale est de 1')
+    .max(10000, 'La quantité ne peut pas dépasser 10 000'),
+  price: z
+    .number()
+    .positive('Le prix doit être positif')
+    .min(0.01, 'Le prix minimum est de 0.01€')
+    .max(100000, 'Le prix maximum est de 100 000€'),
+});
+
 export type CreateStockFormData = z.infer<typeof createStockSchema>;
 export type UpdateStockFormData = z.infer<typeof updateStockSchema>;
 export type BuyStockFormData = z.infer<typeof buyStockSchema>;
 export type SellStockFormData = z.infer<typeof sellStockSchema>;
+export type PlaceOrderFormData = z.infer<typeof placeOrderSchema>;

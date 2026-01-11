@@ -1,7 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { StockDto } from '@workspace/application/dtos';
+import { placeOrderSchema, type PlaceOrderFormData } from '@workspace/adapter-common/validators';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
@@ -30,45 +33,62 @@ export function PlaceOrderDialog({
     onConfirm,
     maxQuantity,
 }: PlaceOrderDialogProps) {
-    const [quantity, setQuantity] = useState('');
-    const [pricePerShare, setPricePerShare] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+        watch,
+        setError: setFormError,
+    } = useForm<PlaceOrderFormData>({
+        resolver: zodResolver(placeOrderSchema),
+        defaultValues: {
+            stockId: '',
+            type: orderType,
+            quantity: 0,
+            price: 0,
+        },
+    });
+
+    const quantity = watch('quantity');
+    const price = watch('price');
+
+    useEffect(() => {
+        if (open && stock) {
+            reset({
+                stockId: stock.id,
+                type: orderType,
+                quantity: 0,
+                price: stock.currentPrice || 0,
+            });
+            setError(null);
+            setSuccess(false);
+        }
+    }, [open, stock, orderType, reset]);
+
+    const onSubmit = async (data: PlaceOrderFormData) => {
         setError(null);
         setSuccess(false);
         setIsSubmitting(true);
 
-        const qty = parseInt(quantity);
-        const price = parseFloat(pricePerShare);
-
-        if (qty <= 0) {
-            setError('La quantité doit être supérieure à 0');
-            setIsSubmitting(false);
-            return;
-        }
-
-        if (price <= 0) {
-            setError('Le prix doit être supérieur à 0');
-            setIsSubmitting(false);
-            return;
-        }
-
-        if (maxQuantity && qty > maxQuantity) {
-            setError(`Vous ne possédez que ${maxQuantity} action(s)`);
+        if (maxQuantity && data.quantity > maxQuantity) {
+            setFormError('quantity', {
+                type: 'manual',
+                message: `Vous ne possédez que ${maxQuantity} action(s)`,
+            });
             setIsSubmitting(false);
             return;
         }
 
         try {
-            await onConfirm(qty, price);
+            await onConfirm(data.quantity, data.price);
             setSuccess(true);
             setTimeout(() => {
-                setQuantity('');
-                setPricePerShare('');
+                reset();
                 setSuccess(false);
                 onOpenChange(false);
             }, 1500);
@@ -79,8 +99,8 @@ export function PlaceOrderDialog({
         }
     };
 
-    const totalCost = quantity && pricePerShare
-        ? (parseInt(quantity) * parseFloat(pricePerShare) + 1).toFixed(2)
+    const totalCost = quantity && price
+        ? (quantity * price + 1).toFixed(2)
         : '0.00';
 
     return (
@@ -95,20 +115,19 @@ export function PlaceOrderDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                         <Label htmlFor="quantity">Quantité</Label>
                         <Input
                             id="quantity"
                             type="number"
-                            min="1"
-                            max={maxQuantity}
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
+                            {...register('quantity', { valueAsNumber: true })}
                             placeholder="Nombre d'actions"
-                            required
                         />
-                        {maxQuantity && (
+                        {errors.quantity && (
+                            <p className="text-sm text-destructive mt-1">{errors.quantity.message}</p>
+                        )}
+                        {maxQuantity && !errors.quantity && (
                             <p className="text-xs text-muted-foreground mt-1">
                                 Maximum disponible: {maxQuantity} action(s)
                             </p>
@@ -121,13 +140,13 @@ export function PlaceOrderDialog({
                             id="price"
                             type="number"
                             step="0.01"
-                            min="0.01"
-                            value={pricePerShare}
-                            onChange={(e) => setPricePerShare(e.target.value)}
+                            {...register('price', { valueAsNumber: true })}
                             placeholder="Prix souhaité"
-                            required
                         />
-                        {stock?.currentPrice && (
+                        {errors.price && (
+                            <p className="text-sm text-destructive mt-1">{errors.price.message}</p>
+                        )}
+                        {stock?.currentPrice && !errors.price && (
                             <p className="text-xs text-muted-foreground mt-1">
                                 Prix actuel du marché: {stock.currentPrice.toFixed(2)} €
                             </p>
@@ -137,7 +156,7 @@ export function PlaceOrderDialog({
                     <div className="bg-muted p-4 rounded-lg space-y-2">
                         <div className="flex justify-between text-sm">
                             <span>Coût des actions:</span>
-                            <span>{(parseInt(quantity || '0') * parseFloat(pricePerShare || '0')).toFixed(2)} €</span>
+                            <span>{((quantity || 0) * (price || 0)).toFixed(2)} €</span>
                         </div>
                         <div className="flex justify-between text-sm">
                             <span>Frais de transaction:</span>

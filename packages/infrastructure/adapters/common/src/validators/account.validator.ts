@@ -27,6 +27,10 @@ export const updateSavingsRateSchema = z.object({
     .number()
     .min(0, 'Le taux d\'épargne ne peut pas être négatif')
     .max(100, 'Le taux d\'épargne ne peut pas dépasser 100%'),
+  notificationMessage: z
+    .string()
+    .min(10, 'Le message doit contenir au moins 10 caractères')
+    .max(500, 'Le message ne peut pas dépasser 500 caractères'),
 });
 
 export type CreateAccountFormData = z.infer<typeof createAccountSchema>;

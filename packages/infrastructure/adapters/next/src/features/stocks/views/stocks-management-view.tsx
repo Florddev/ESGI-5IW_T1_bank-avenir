@@ -2,37 +2,26 @@
 
 import { useState } from 'react';
 import { Button } from '@workspace/ui-react/components/button';
-import { Input } from '@workspace/ui-react/components/input';
-import { Label } from '@workspace/ui-react/components/label';
-import { Textarea } from '@workspace/ui-react/components/textarea';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
 import { useStocks, useCreateStock } from '../hooks';
+import { CreateStockForm } from '../components';
 
 export function StocksManagementView() {
     const { stocks, isLoading, refetch } = useStocks();
     const { createStock, isLoading: isCreating, error: createError } = useCreateStock();
 
     const [showCreateForm, setShowCreateForm] = useState(false);
-    const [symbol, setSymbol] = useState('');
-    const [name, setName] = useState('');
-    const [description, setDescription] = useState('');
-    const [initialPrice, setInitialPrice] = useState('');
 
     const availableStocks = stocks?.filter(s => s.status === 'AVAILABLE') || [];
     const suspendedStocks = stocks?.filter(s => s.status === 'UNAVAILABLE') || [];
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const handleSubmit = async (data: { symbol: string; companyName: string }) => {
         try {
-            await createStock({ symbol, companyName: name });
-            setSymbol('');
-            setName('');
-            setDescription('');
-            setInitialPrice('');
+            await createStock(data);
             setShowCreateForm(false);
             await refetch();
         } catch (err) {
+            // Error is handled by the hook
         }
     };
 
@@ -51,72 +40,12 @@ export function StocksManagementView() {
             {showCreateForm && (
                 <div className="bg-card p-6 rounded-lg border shadow-sm">
                     <h3 className="text-xl font-semibold mb-4">Ajouter une nouvelle action</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="symbol">Symbole</Label>
-                                <Input
-                                    id="symbol"
-                                    value={symbol}
-                                    onChange={(e) => setSymbol(e.target.value)}
-                                    placeholder="Ex: AAPL"
-                                    required
-                                />
-                                <p className="text-xs text-muted-foreground mt-1">
-                                    Code boursier unique (3-5 caractères)
-                                </p>
-                            </div>
-                            <div>
-                                <Label htmlFor="initialPrice">Prix initial (€)</Label>
-                                <Input
-                                    id="initialPrice"
-                                    type="number"
-                                    step="0.01"
-                                    value={initialPrice}
-                                    onChange={(e) => setInitialPrice(e.target.value)}
-                                    placeholder="Ex: 150.00"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <Label htmlFor="name">Nom de l'entreprise</Label>
-                            <Input
-                                id="name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Ex: Apple Inc."
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="description">Description</Label>
-                            <Textarea
-                                id="description"
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Description de l'entreprise et de son secteur d'activité..."
-                                rows={4}
-                            />
-                        </div>
-
-                        {createError && (
-                            <div className="bg-red-50 dark:bg-red-950 p-4 rounded-lg border border-red-200 dark:border-red-800">
-                                <p className="text-sm text-red-700 dark:text-red-300">{createError}</p>
-                            </div>
-                        )}
-
-                        <div className="flex gap-2">
-                            <Button type="submit" disabled={isCreating}>
-                                {isCreating ? 'Création...' : 'Créer l\'action'}
-                            </Button>
-                            <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
-                                Annuler
-                            </Button>
-                        </div>
-                    </form>
+                    <CreateStockForm
+                        onSubmit={handleSubmit}
+                        onCancel={() => setShowCreateForm(false)}
+                        isLoading={isCreating}
+                        error={createError}
+                    />
                 </div>
             )}
 

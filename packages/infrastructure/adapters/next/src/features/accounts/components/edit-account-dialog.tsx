@@ -1,7 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import type { AccountDto } from '@workspace/application/dtos';
+import { updateAccountNameSchema, type UpdateAccountNameFormData } from '@workspace/adapter-common/validators';
 import { Button } from '@workspace/ui-react/components/button';
 import { Input } from '@workspace/ui-react/components/input';
 import { Label } from '@workspace/ui-react/components/label';
@@ -27,34 +30,40 @@ export function EditAccountDialog({
     onOpenChange,
     onConfirm,
 }: EditAccountDialogProps) {
-    const [customName, setCustomName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const handleOpenChange = (newOpen: boolean) => {
-        if (newOpen && account) {
-            setCustomName(account.customName);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+    } = useForm<UpdateAccountNameFormData>({
+        resolver: zodResolver(updateAccountNameSchema),
+        defaultValues: {
+            customName: '',
+        },
+    });
+
+    useEffect(() => {
+        if (open && account) {
+            reset({ customName: account.customName });
             setError(null);
         }
+    }, [open, account, reset]);
+
+    const handleOpenChange = (newOpen: boolean) => {
         onOpenChange(newOpen);
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const onSubmit = async (data: UpdateAccountNameFormData) => {
         if (!account) return;
 
         setError(null);
         setIsSubmitting(true);
 
-        if (customName.trim().length < 2) {
-            setError('Le nom doit contenir au moins 2 caractères');
-            setIsSubmitting(false);
-            return;
-        }
-
         try {
-            await onConfirm(account.id, customName.trim());
+            await onConfirm(account.id, data.customName.trim());
             onOpenChange(false);
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Une erreur est survenue');
@@ -73,18 +82,18 @@ export function EditAccountDialog({
                     </DialogDescription>
                 </DialogHeader>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                         <Label htmlFor="customName">Nouveau nom</Label>
                         <Input
                             id="customName"
                             type="text"
-                            value={customName}
-                            onChange={(e) => setCustomName(e.target.value)}
+                            {...register('customName')}
                             placeholder="Mon compte courant"
-                            required
-                            minLength={2}
                         />
+                        {errors.customName && (
+                            <p className="text-sm text-destructive mt-1">{errors.customName.message}</p>
+                        )}
                     </div>
 
                     {error && (

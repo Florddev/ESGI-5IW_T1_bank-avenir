@@ -3,11 +3,9 @@
 import { useState } from 'react';
 import { useLoans, useLoanOperations } from '../hooks';
 import { useAuth } from '@workspace/adapter-next/features/auth';
-import { LoanList } from '../components';
+import { LoanList, CreateLoanForm } from '../components';
 import { Button } from '@workspace/ui-react/components/button';
-import { Input } from '@workspace/ui-react/components/input';
-import { Label } from '@workspace/ui-react/components/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui-react/components/select';
+import type { CreateLoanFormData } from '@workspace/adapter-common/validators';
 
 export function LoansView() {
     const { user } = useAuth();
@@ -15,23 +13,14 @@ export function LoansView() {
     const { create, isCreating } = useLoanOperations();
     const [showCreateForm, setShowCreateForm] = useState(false);
 
-    const [clientId, setClientId] = useState('');
-    const [amount, setAmount] = useState('');
-    const [annualRate, setAnnualRate] = useState('');
-    const [insuranceRate, setInsuranceRate] = useState('');
-    const [durationMonths, setDurationMonths] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await create({
-            clientId,
-            amount: parseFloat(amount),
-            annualRate: parseFloat(annualRate),
-            insuranceRate: parseFloat(insuranceRate),
-            durationMonths: parseInt(durationMonths),
-        });
-        refetch();
-        setShowCreateForm(false);
+    const handleSubmit = async (data: CreateLoanFormData) => {
+        try {
+            await create(data);
+            await refetch();
+            setShowCreateForm(false);
+        } catch (err) {
+            // Error is handled by the hook
+        }
     };
 
     return (
@@ -47,105 +36,12 @@ export function LoansView() {
             </div>
 
             {showCreateForm && (
-                <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-xl font-semibold mb-4">Octroyer un nouveau crédit</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="clientId">Client</Label>
-                                <Select value={clientId} onValueChange={setClientId}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Sélectionner un client" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="client1">Jean Dupont</SelectItem>
-                                        <SelectItem value="client2">Marie Martin</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-
-                            <div>
-                                <Label htmlFor="amount">Montant du crédit (€)</Label>
-                                <Input
-                                    id="amount"
-                                    type="number"
-                                    step="0.01"
-                                    value={amount}
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    placeholder="Ex: 10000"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-4">
-                            <div>
-                                <Label htmlFor="annualRate">Taux annuel (%)</Label>
-                                <Input
-                                    id="annualRate"
-                                    type="number"
-                                    step="0.01"
-                                    value={annualRate}
-                                    onChange={(e) => setAnnualRate(e.target.value)}
-                                    placeholder="Ex: 3.5"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <Label htmlFor="insuranceRate">Taux assurance (%)</Label>
-                                <Input
-                                    id="insuranceRate"
-                                    type="number"
-                                    step="0.01"
-                                    value={insuranceRate}
-                                    onChange={(e) => setInsuranceRate(e.target.value)}
-                                    placeholder="Ex: 0.36"
-                                    required
-                                />
-                            </div>
-
-                            <div>
-                                <Label htmlFor="durationMonths">Durée (mois)</Label>
-                                <Input
-                                    id="durationMonths"
-                                    type="number"
-                                    value={durationMonths}
-                                    onChange={(e) => setDurationMonths(e.target.value)}
-                                    placeholder="Ex: 120"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div className="bg-muted p-4 rounded-lg">
-                            <h4 className="font-semibold mb-2">Calcul estimatif</h4>
-                            <div className="grid grid-cols-3 gap-4 text-sm">
-                                <div>
-                                    <p className="text-muted-foreground">Mensualité</p>
-                                    <p className="font-semibold">--- €</p>
-                                </div>
-                                <div>
-                                    <p className="text-muted-foreground">Coût total</p>
-                                    <p className="font-semibold">--- €</p>
-                                </div>
-                                <div>
-                                    <p className="text-muted-foreground">Coût crédit</p>
-                                    <p className="font-semibold">--- €</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <Button type="submit" disabled={isCreating}>
-                                {isCreating ? 'Création...' : 'Octroyer le crédit'}
-                            </Button>
-                            <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
-                                Annuler
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                <CreateLoanForm
+                    onSubmit={handleSubmit}
+                    onCancel={() => setShowCreateForm(false)}
+                    isLoading={isCreating}
+                    clients={[]}
+                />
             )}
 
             <div className="bg-card rounded-lg border shadow-sm">

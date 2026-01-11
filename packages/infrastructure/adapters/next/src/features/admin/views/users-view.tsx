@@ -1,45 +1,25 @@
 'use client';
 
 import { Button } from '@workspace/ui-react/components/button';
-import { Input } from '@workspace/ui-react/components/input';
-import { Label } from '@workspace/ui-react/components/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@workspace/ui-react/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@workspace/ui-react/components/tabs';
 import { useState } from 'react';
 import { useAllUsers, useCreateUser } from '../hooks';
+import { CreateUserForm } from '../components';
+import type { CreateUserFormData } from '@workspace/adapter-common/validators';
 
 export function UsersView() {
     const { users, isLoading, error: fetchError, refetch } = useAllUsers();
     const { createUser, isLoading: isCreating, error: createError } = useCreateUser();
 
     const [showCreateForm, setShowCreateForm] = useState(false);
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [role, setRole] = useState('CLIENT');
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    const handleSubmit = async (data: CreateUserFormData) => {
         try {
-            await createUser({
-                email,
-                password,
-                firstName,
-                lastName,
-                role,
-            });
-
-            setEmail('');
-            setPassword('');
-            setFirstName('');
-            setLastName('');
-            setRole('CLIENT');
+            await createUser(data);
             setShowCreateForm(false);
-
             await refetch();
         } catch (err) {
+            // Error is handled by the hook
         }
     };
 
@@ -56,78 +36,11 @@ export function UsersView() {
             </div>
 
             {showCreateForm && (
-                <div className="bg-card p-6 rounded-lg border shadow-sm">
-                    <h3 className="text-xl font-semibold mb-4">Créer un utilisateur</h3>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <Label htmlFor="firstName">Prénom</Label>
-                                <Input
-                                    id="firstName"
-                                    value={firstName}
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                    placeholder="Jean"
-                                    required
-                                />
-                            </div>
-                            <div>
-                                <Label htmlFor="lastName">Nom</Label>
-                                <Input
-                                    id="lastName"
-                                    value={lastName}
-                                    onChange={(e) => setLastName(e.target.value)}
-                                    placeholder="Dupont"
-                                    required
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <Label htmlFor="email">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="jean.dupont@example.com"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="password">Mot de passe</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <Label htmlFor="role">Rôle</Label>
-                            <Select value={role} onValueChange={setRole}>
-                                <SelectTrigger>
-                                    <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="CLIENT">Client</SelectItem>
-                                    <SelectItem value="ADVISOR">Conseiller</SelectItem>
-                                    <SelectItem value="DIRECTOR">Directeur</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        <div className="flex gap-2">
-                            <Button type="submit">Créer l'utilisateur</Button>
-                            <Button type="button" variant="outline" onClick={() => setShowCreateForm(false)}>
-                                Annuler
-                            </Button>
-                        </div>
-                    </form>
-                </div>
+                <CreateUserForm
+                    onSubmit={handleSubmit}
+                    onCancel={() => setShowCreateForm(false)}
+                    isLoading={isCreating}
+                />
             )}
 
             <Tabs defaultValue="all" className="space-y-4">

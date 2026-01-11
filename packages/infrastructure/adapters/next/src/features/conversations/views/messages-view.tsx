@@ -1,9 +1,6 @@
 'use client';
 
 import { Button } from '@workspace/ui-react/components/button';
-import { Input } from '@workspace/ui-react/components/input';
-import { Label } from '@workspace/ui-react/components/label';
-import { Textarea } from '@workspace/ui-react/components/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/components/card';
 import { useState, useEffect } from 'react';
 import {
@@ -21,19 +18,18 @@ import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { useRealtimeMessages } from '@workspace/adapter-next/features/realtime';
 import { useRealtimeNotifications, useMarkAsRead } from '@workspace/adapter-next/features/notifications';
+import { CreateConversationForm, SendMessageForm } from '../components';
+import type { CreateConversationFormData } from '@workspace/adapter-common/validators';
 
 export function MessagesView() {
     const { user } = useAuth();
     const { conversations, isLoading, refresh } = useConversations();
     const { createConversation, isLoading: isCreating } = useCreateConversation();
-    const [subject, setSubject] = useState('');
-    const [message, setMessage] = useState('');
     const [showNewMessage, setShowNewMessage] = useState(false);
     const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
     const { messages: loadedMessages, isLoading: messagesLoading, refresh: refreshMessages } = useConversationMessages(selectedConversationId);
     const [messages, setMessages] = useState(loadedMessages);
     const { sendMessage, isLoading: isSending } = useSendMessage();
-    const [replyMessage, setReplyMessage] = useState('');
     const { waitingConversations, count: waitingCount, refresh: refreshWaiting } = useWaitingConversations();
     const { assignConversation } = useAssignConversation();
     const { markAsRead: markConversationAsRead } = useMarkConversationRead();
@@ -92,22 +88,16 @@ export function MessagesView() {
         }
     }, [notificationEvents.length, markAsRead]);
 
-    const handleCreateConversation = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!subject.trim() || !message.trim()) return;
-        
-        const result = await createConversation(subject, message);
+    const handleCreateConversation = async (data: CreateConversationFormData) => {
+        const result = await createConversation(data.subject, data.message);
         if (result) {
-            setSubject('');
-            setMessage('');
             setShowNewMessage(false);
             refresh();
         }
     };
 
-    const handleSendReply = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!selectedConversationId || !replyMessage.trim() || !user?.id) return;
+    const handleSendReply = async (content: string) => {
+        if (!selectedConversationId || !user?.id) return;
 
         const tempId = `temp-${Date.now()}`;
         const tempMessage = {
@@ -115,15 +105,14 @@ export function MessagesView() {
             conversationId: selectedConversationId,
             authorId: user.id,
             authorName: `${user.firstName} ${user.lastName}`,
-            content: replyMessage,
+            content: content,
             isRead: false,
             createdAt: new Date()
         };
 
         setMessages(prev => [...prev, tempMessage]);
-        setReplyMessage('');
 
-        const success = await sendMessage(selectedConversationId, replyMessage);
+        const success = await sendMessage(selectedConversationId, content);
         if (!success) {
             setMessages(prev => prev.filter(m => m.id !== tempId));
         }
@@ -162,32 +151,10 @@ export function MessagesView() {
                             <CardTitle>Nouveau message</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <form onSubmit={handleCreateConversation} className="space-y-4">
-                                <div>
-                                    <Label htmlFor="subject">Sujet</Label>
-                                    <Input
-                                        id="subject"
-                                        placeholder="Objet"
-                                        value={subject}
-                                        onChange={(e) => setSubject(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <div>
-                                    <Label htmlFor="message">Message</Label>
-                                    <Textarea
-                                        id="message"
-                                        placeholder="Votre message..."
-                                        rows={4}
-                                        value={message}
-                                        onChange={(e) => setMessage(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                                <Button type="submit" className="w-full" disabled={isCreating}>
-                                    {isCreating ? 'Envoi...' : 'Envoyer'}
-                                </Button>
-                            </form>
+                            <CreateConversationForm
+                                onSubmit={handleCreateConversation}
+                                isLoading={isCreating}
+                            />
                         </CardContent>
                     </Card>
                 )}
@@ -353,18 +320,10 @@ export function MessagesView() {
                             </div>
                             {(selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN') && (
                                 <div className="border-t bg-background px-6 py-4 flex-shrink-0">
-                                    <form onSubmit={handleSendReply} className="flex gap-3">
-                                        <Input
-                                            placeholder="Écrivez votre message..."
-                                            value={replyMessage}
-                                            onChange={(e) => setReplyMessage(e.target.value)}
-                                            required
-                                            className="flex-1"
-                                        />
-                                        <Button type="submit" disabled={isSending} size="default">
-                                            {isSending ? 'Envoi...' : 'Envoyer'}
-                                        </Button>
-                                    </form>
+                                    <SendMessageForm
+                                        onSend={handleSendReply}
+                                        isSending={isSending}
+                                    />
                                 </div>
                             )}
                         </CardContent>
