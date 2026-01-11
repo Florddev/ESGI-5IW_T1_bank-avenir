@@ -17,10 +17,12 @@
     "@workspace/application": "workspace:*",
     "@workspace/domain": "workspace:*",
     "@workspace/shared": "workspace:*",
+    "bcryptjs": "^2.4.3",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.5"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^22.10.2",
     "drizzle-kit": "^0.31.8",
     "tsx": "^4.7.0",
