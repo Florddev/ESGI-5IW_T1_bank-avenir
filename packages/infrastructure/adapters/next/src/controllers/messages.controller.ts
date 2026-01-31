@@ -23,7 +23,7 @@ export class MessagesController {
   async notifyTyping(
     conversationId: string,
     userId: string,
-    recipientId: string,
+    recipientId: string | undefined,
     isTyping: boolean
   ) {
     const useCase = container.resolve(NotifyTypingUseCase);

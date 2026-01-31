@@ -29,6 +29,7 @@ export class GetConversationMessagesUseCase {
           conversationId: message.conversationId,
           authorId: message.senderId,
           authorName: author ? `${author.firstName} ${author.lastName}` : 'Unknown',
+          authorRole: author?.role,
           content: message.content,
           isRead: message.isRead,
           createdAt: message.createdAt,
@@ -36,7 +37,9 @@ export class GetConversationMessagesUseCase {
       })
     );
 
-    const client = await this.userRepository.findById(conversation.clientId);
+    const client = conversation.clientId 
+      ? await this.userRepository.findById(conversation.clientId)
+      : null;
     const advisor = conversation.advisorId
       ? await this.userRepository.findById(conversation.advisorId)
       : null;
@@ -45,7 +48,7 @@ export class GetConversationMessagesUseCase {
       id: conversation.id,
       subject: conversation.subject,
       clientId: conversation.clientId,
-      clientName: client ? `${client.firstName} ${client.lastName}` : 'Unknown',
+      clientName: client ? `${client.firstName} ${client.lastName}` : 'Group Chat',
       advisorId: conversation.advisorId,
       advisorName: advisor ? `${advisor.firstName} ${advisor.lastName}` : undefined,
       status: conversation.status,

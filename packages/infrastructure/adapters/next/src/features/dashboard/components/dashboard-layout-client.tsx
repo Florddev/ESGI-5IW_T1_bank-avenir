@@ -41,6 +41,7 @@ const getNavigationByRole = (role: UserRole, localizedPath: (path: string) => st
         { href: localizedPath('/dashboard/clients'), label: 'Mes clients', icon: '👥' },
         { href: localizedPath('/dashboard/news'), label: 'Actualités', icon: '📰' },
         { href: localizedPath('/dashboard/messages'), label: 'Messagerie', icon: '💬' },
+        { href: localizedPath('/dashboard/staff-chat'), label: 'Chat équipe', icon: '👨‍💼' },
     ];
 
     const DIRECTOR_NAV: NavItem[] = [
@@ -48,6 +49,7 @@ const getNavigationByRole = (role: UserRole, localizedPath: (path: string) => st
         { href: localizedPath('/dashboard/users'), label: 'Utilisateurs', icon: '👥' },
         { href: localizedPath('/dashboard/savings-rate'), label: 'Taux d\'épargne', icon: '📊' },
         { href: localizedPath('/dashboard/stocks-management'), label: 'Gestion actions', icon: '📈' },
+        { href: localizedPath('/dashboard/staff-chat'), label: 'Chat équipe', icon: '👨‍💼' },
     ];
     
     switch (role) {

@@ -31,13 +31,42 @@ function initializeRealtimeFactory() {
     );
 
     const protocol = (process.env.NEXT_PUBLIC_REALTIME_PROTOCOL || 'sse') as 'sse' | 'websocket';
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3001';
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:3000/ws';
     const sseUrl = process.env.NEXT_PUBLIC_SSE_URL || '/api/realtime/sse';
 
-    RealtimeConnectionFactory.configure({
-      protocol,
-      wsUrl: protocol === 'websocket' ? wsUrl : undefined,
-      sseUrl: protocol === 'sse' ? sseUrl : undefined,
+    const testWs = () => {
+      return new Promise<boolean>((resolve) => {
+        try {
+          const ws = new WebSocket(wsUrl);
+          const timeout = setTimeout(() => {
+            ws.close();
+            resolve(false);
+          }, 1000);
+          ws.onopen = () => {
+            clearTimeout(timeout);
+            ws.close();
+            resolve(true);
+          };
+          ws.onerror = () => {
+            clearTimeout(timeout);
+            resolve(false);
+          };
+        } catch {
+          resolve(false);
+        }
+      });
+    };
+
+    testWs().then(wsAvailable => {
+      const finalProtocol = protocol === 'websocket' || wsAvailable ? 'websocket' : 'sse';
+      
+      RealtimeConnectionFactory.configure({
+        protocol: finalProtocol,
+        wsUrl: finalProtocol === 'websocket' ? wsUrl : undefined,
+        sseUrl: finalProtocol === 'sse' ? sseUrl : undefined,
+      });
+
+      console.log(`[Realtime] Using ${finalProtocol.toUpperCase()} (WS available: ${wsAvailable})`);
     });
 
     isRealtimeInitialized = true;

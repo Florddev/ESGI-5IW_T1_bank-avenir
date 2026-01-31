@@ -2,6 +2,14 @@
 
 Application bancaire construite avec une **architecture Clean/Hexagonale** en monorepo.
 
+## Informations
+
+### Membres
+
+- Defay Florian   (5IW1)
+- Azarkane Issam  (5IW1)
+
+
 ## Architecture
 
 - **Domain** : Entités métier pures (User, Account, Transaction, etc.)
@@ -56,7 +64,7 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
    pnpm --filter @workspace/db-postgres migrate
    ```
 
-6. **Lancer les seeders**
+6. **Lancer les seeders (fixtures)**
    ```bash
    pnpm --filter @workspace/db-postgres seed
    ```

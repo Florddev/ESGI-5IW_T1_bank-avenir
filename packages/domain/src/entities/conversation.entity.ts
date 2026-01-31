@@ -8,9 +8,10 @@ export enum ConversationStatus {
 export interface ConversationProps {
     id: string;
     subject: string;
-    clientId: string;
+    clientId?: string;
     advisorId?: string;
     status: ConversationStatus;
+    isGroupChat: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -28,6 +29,18 @@ export class Conversation {
             subject: subject.trim(),
             clientId,
             status: ConversationStatus.WAITING,
+            isGroupChat: false,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        });
+    }
+
+    static createGroupChat(subject: string): Conversation {
+        return new Conversation({
+            id: crypto.randomUUID(),
+            subject: subject.trim(),
+            status: ConversationStatus.OPEN,
+            isGroupChat: true,
             createdAt: new Date(),
             updatedAt: new Date(),
         });
@@ -85,7 +98,7 @@ export class Conversation {
         return this.props.subject;
     }
 
-    get clientId(): string {
+    get clientId(): string | undefined {
         return this.props.clientId;
     }
 
@@ -95,6 +108,10 @@ export class Conversation {
 
     get status(): ConversationStatus {
         return this.props.status;
+    }
+
+    get isGroupChat(): boolean {
+        return this.props.isGroupChat;
     }
 
     get createdAt(): Date {

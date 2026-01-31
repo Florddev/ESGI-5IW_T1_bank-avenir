@@ -1,5 +1,5 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
-import { Message, Notification, NotificationType } from '@workspace/domain';
+import { Message, Notification, NotificationType, UserRole } from '@workspace/domain/entities';
 import type { IMessageRepository, IRealtimeService, IConversationRepository, INotificationRepository, IUserRepository } from '../../ports';
 import type { MessageDto, RealtimeMessageDto } from '../../dtos';
 
@@ -37,14 +37,25 @@ export class SendMessageUseCase {
         conversationId: savedMessage.conversationId,
         senderId: savedMessage.senderId,
         senderName,
+        senderRole: sender?.role,
         content: savedMessage.content,
         createdAt: savedMessage.createdAt.toISOString(),
         isRead: savedMessage.isRead,
       };
 
-      const participants = [conversation.clientId, conversation.advisorId].filter(
-        (id): id is string => id !== undefined && id !== senderId
-      );
+      let participants: string[] = [];
+      
+      if (conversation.isGroupChat) {
+        const advisors = await this.userRepository.findByRole(UserRole.ADVISOR);
+        const directors = await this.userRepository.findByRole(UserRole.DIRECTOR);
+        participants = [...advisors, ...directors]
+          .map(u => u.id)
+          .filter(id => id !== senderId);
+      } else {
+        participants = [conversation.clientId, conversation.advisorId].filter(
+          (id): id is string => id !== undefined && id !== senderId
+        );
+      }
 
       for (const participantId of participants) {
         await this.realtimeService.sendEventToUser(

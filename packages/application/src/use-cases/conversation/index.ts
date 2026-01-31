@@ -7,3 +7,4 @@ export * from './get-conversation-messages.use-case';
 export * from './get-waiting-conversations.use-case';
 export * from './transfer-conversation.use-case';
 export * from './mark-conversation-read.use-case';
+export * from './get-or-create-staff-group-chat.use-case';

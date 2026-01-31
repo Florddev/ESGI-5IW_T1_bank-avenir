@@ -37,6 +37,7 @@ export interface MessageDto {
     authorId?: string;
     senderId?: string;
     authorName?: string;
+    authorRole?: string;
     content: string;
     isRead: boolean;
     createdAt: Date;

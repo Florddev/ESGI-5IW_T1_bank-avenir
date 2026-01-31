@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
         const body = await request.json();
         const { conversationId, userId, recipientId, isTyping } = body;
 
-        if (!conversationId || !userId || !recipientId || typeof isTyping !== 'boolean') {
+        if (!conversationId || !userId || typeof isTyping !== 'boolean') {
             return NextResponse.json(
                 { error: 'Champs manquants ou invalides' },
                 { status: 400 }

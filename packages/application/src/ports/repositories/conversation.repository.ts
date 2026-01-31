@@ -6,6 +6,7 @@ export interface IConversationRepository {
     findByAdvisorId(advisorId: string): Promise<Conversation[]>;
     findWaitingConversations(): Promise<Conversation[]>;
     findByUserId(userId: string): Promise<Conversation[]>;
+    findGroupChat(): Promise<Conversation | null>;
     save(conversation: Conversation): Promise<Conversation>;
     update(conversation: Conversation): Promise<Conversation>;
 }

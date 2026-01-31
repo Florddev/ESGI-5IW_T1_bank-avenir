@@ -68,9 +68,10 @@ export class PostgresConversationRepository implements IConversationRepository {
     const values = {
       id: conversation.id,
       subject: conversation.subject,
-      clientId: conversation.clientId,
-      advisorId: conversation.advisorId || undefined,
+      clientId: conversation.clientId || null,
+      advisorId: conversation.advisorId || null,
       status: conversation.status as any,
+      isGroupChat: conversation.isGroupChat,
       createdAt: conversation.createdAt,
       updatedAt: conversation.updatedAt,
     };
@@ -90,7 +91,7 @@ export class PostgresConversationRepository implements IConversationRepository {
     await this.db
       .update(conversations)
       .set({
-        advisorId: conversation.advisorId || undefined,
+        advisorId: conversation.advisorId || null,
         status: conversation.status as any,
         updatedAt: conversation.updatedAt,
       })
@@ -99,13 +100,25 @@ export class PostgresConversationRepository implements IConversationRepository {
     return conversation;
   }
 
+  async findGroupChat(): Promise<Conversation | null> {
+    const result = await this.db
+      .select()
+      .from(conversations)
+      .where(eq(conversations.isGroupChat, true))
+      .limit(1);
+
+    if (result.length === 0) return null;
+    return this.rowToEntity(result[0]!);
+  }
+
   private rowToEntity(row: typeof conversations.$inferSelect): Conversation {
     return Conversation.fromPersistence({
       id: row.id,
       subject: row.subject,
-      clientId: row.clientId,
+      clientId: row.clientId || undefined,
       advisorId: row.advisorId || undefined,
       status: row.status as ConversationStatus,
+      isGroupChat: row.isGroupChat,
       createdAt: row.createdAt,
       updatedAt: row.updatedAt,
     });

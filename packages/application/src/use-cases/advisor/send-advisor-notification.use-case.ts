@@ -20,7 +20,10 @@ export class SendAdvisorNotificationUseCase {
 
     async execute(advisorId: string, title: string, message: string): Promise<SendAdvisorNotificationResult> {
         const conversations = await this.conversationRepository.findByAdvisorId(advisorId);
-        const clientIds = [...new Set(conversations.map((c: Conversation) => c.clientId))];
+        const allClientIds = conversations
+            .map((c: Conversation) => c.clientId)
+            .filter((id): id is string => id !== undefined);
+        const clientIds = [...new Set(allClientIds)];
 
         if (clientIds.length === 0) {
             return { notifiedCount: 0 };

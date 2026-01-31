@@ -1,0 +1,2 @@
+CREATE TYPE "public"."conversation_type" AS ENUM('CLIENT_ADVISOR', 'STAFF_GROUP');--> statement-breakpoint
+ALTER TABLE "conversations" ADD COLUMN "type" "conversation_type" DEFAULT 'CLIENT_ADVISOR' NOT NULL;

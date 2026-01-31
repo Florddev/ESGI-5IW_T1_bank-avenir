@@ -28,6 +28,7 @@ export interface RealtimeMessageDto {
     conversationId: string;
     senderId: string;
     senderName: string;
+    senderRole?: string;
     content: string;
     createdAt: string;
     isRead: boolean;
