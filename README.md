@@ -2,14 +2,14 @@
 
 Application bancaire construite avec une **architecture Clean/Hexagonale** en monorepo.
 
-## 🏗️ Architecture
+## Architecture
 
 - **Domain** : Entités métier pures (User, Account, Transaction, etc.)
 - **Application** : Use cases et ports (interfaces)
 - **Infrastructure** : Implémentations concrètes (repositories, services, adapters)
 - **Apps** : Applications frontend (Next.js)
 
-## 🚀 Installation
+## Installation
 
 ### Prérequis
 
@@ -26,8 +26,8 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
 
 2. **Installer les dépendances**
    ```bash
-   pnpm --filter @workspace/translations build
    pnpm install
+   pnpm --filter @workspace/translations build  # Générer les traductions
    ```
 
 3. **Configurer les variables d'environnement**
@@ -86,6 +86,7 @@ packages/
 │   ├── adapters/
 │   │   └── next/       # Handlers API, Hooks React, Composants
 │   ├── data/
+│   │   ├── postgres/   # Postgres implémentations
 │   │   └── in-memory/  # Repositories in-memory
 │   └── services/
 │       ├── auth-jwt/   # Service JWT + bcrypt
