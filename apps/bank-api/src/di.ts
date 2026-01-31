@@ -15,7 +15,11 @@ function initializeDI() {
     registerPostgresModule();
     container.registerSingleton(TOKENS.IAuthService, AuthJwtService);
     container.registerSingleton(TOKENS.IEmailService, EmailConsoleService);
-    container.registerSingleton(TOKENS.IRealtimeService, SSERealtimeService);
+    
+    const sseService = new SSERealtimeService();
+    container.registerInstance(TOKENS.IRealtimeService, sseService);
+    container.registerInstance(TOKENS.IRealtimeServiceMessages, sseService);
+    container.registerInstance(TOKENS.IRealtimeServiceNotifications, sseService);
 
     isInitialized = true;
 }

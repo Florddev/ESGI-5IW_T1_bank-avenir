@@ -4,31 +4,22 @@ import { parse } from 'url';
 import next from 'next';
 import { WebSocketServer, type WebSocket } from 'ws';
 
-// ---------------------------------------------------------------------------
-// Dynamic import of the workspace package (avoids ESM/CJS mismatch)
-// ---------------------------------------------------------------------------
 const { WebSocketRealtimeService } = await import('@workspace/service-realtime-websocket');
 
 const dev = process.env.NODE_ENV !== 'production';
 const port = parseInt(process.env.PORT || '3000', 10);
 
-// ---------------------------------------------------------------------------
-// 1. Initialize WebSocketRealtimeService and store it on globalThis
-//    so that di.ts can pick it up when REALTIME_PROTOCOL=websocket.
-// ---------------------------------------------------------------------------
 const globalForWs = globalThis as typeof globalThis & {
     __wsRealtimeService?: InstanceType<typeof WebSocketRealtimeService>;
 };
 
 if (!globalForWs.__wsRealtimeService) {
     globalForWs.__wsRealtimeService = new WebSocketRealtimeService();
+    console.log('[Server] ✓ WebSocketRealtimeService initialized for messages/conversations');
 }
 
 const wsRealtimeService = globalForWs.__wsRealtimeService;
 
-// ---------------------------------------------------------------------------
-// 2. Prepare the Next.js application
-// ---------------------------------------------------------------------------
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -39,9 +30,6 @@ const server = createServer((req, res) => {
     handle(req, res, parsedUrl);
 });
 
-// ---------------------------------------------------------------------------
-// 3. Attach WebSocket server in noServer mode (path: /ws)
-// ---------------------------------------------------------------------------
 const wss = new WebSocketServer({ noServer: true });
 
 server.on('upgrade', (request, socket, head) => {
@@ -52,7 +40,6 @@ server.on('upgrade', (request, socket, head) => {
             wss.emit('connection', ws, request);
         });
     }
-    // Other upgrade requests (e.g. Next.js HMR) are handled by Next.js internally
 });
 
 wss.on('connection', (ws: WebSocket, request) => {
@@ -77,18 +64,14 @@ wss.on('connection', (ws: WebSocket, request) => {
     });
 });
 
-// ---------------------------------------------------------------------------
-// 4. Start listening
-// ---------------------------------------------------------------------------
 server.listen(port, () => {
     console.log(`> Ready on http://localhost:${port}`);
-    console.log(`> WebSocket available on ws://localhost:${port}/ws`);
+    console.log(`> WebSocket (Messages) available on ws://localhost:${port}/ws`);
+    console.log(`> SSE (Notifications) available on /api/realtime/sse`);
+    console.log(`> Dual Realtime Strategy: WebSocket for conversations, SSE for notifications`);
     console.log(`> Mode: ${dev ? 'development' : 'production'}`);
 });
 
-// ---------------------------------------------------------------------------
-// 5. Graceful shutdown
-// ---------------------------------------------------------------------------
 const shutdown = () => {
     console.log('[Server] Shutting down...');
     wsRealtimeService.shutdown();

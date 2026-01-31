@@ -14,7 +14,7 @@ export interface NotifyTransactionCompletedInput {
 @injectable()
 export class NotifyTransactionCompletedUseCase {
     constructor(
-        @inject(TOKENS.IRealtimeService)
+        @inject(TOKENS.IRealtimeServiceNotifications)
         private realtimeService: IRealtimeService
     ) {}
 

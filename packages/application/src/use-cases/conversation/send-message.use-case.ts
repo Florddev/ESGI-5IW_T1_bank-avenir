@@ -8,7 +8,7 @@ export class SendMessageUseCase {
   constructor(
     @Inject(TOKENS.IMessageRepository)
     private messageRepository: IMessageRepository,
-    @Inject(TOKENS.IRealtimeService)
+    @Inject(TOKENS.IRealtimeServiceMessages)
     private realtimeService: IRealtimeService,
     @Inject(TOKENS.IConversationRepository)
     private conversationRepository: IConversationRepository,

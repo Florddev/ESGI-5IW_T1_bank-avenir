@@ -46,6 +46,8 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
    ```bash
    pnpm dev
    ```
+   
+   > 💡 **Note**: La commande `pnpm dev` démarre automatiquement le serveur avec **WebSocket + SSE**
 
 5. **Lancer la db**
    ```bash
@@ -95,6 +97,77 @@ packages/
 ├── ui/react/          # Composants UI (shadcn/ui)
 └── config/            # Configs partagées (eslint, typescript, prettier)
 ```
+
+## Architecture Temps Réel (Dual Strategy)
+
+L'application utilise une **stratégie double** pour la communication temps réel, optimisée selon les cas d'usage :
+
+### WebSocket (Bidirectionnel)
+**Utilisé pour :** Conversations et messagerie instantanée
+- Communication bidirectionnelle en temps réel
+- Indicateur de frappe (typing indicator)
+- Envoi et réception de messages
+
+**Token DI :** `TOKENS.IRealtimeServiceMessages`
+
+**Service :** `@workspace/service-realtime-websocket`
+
+**Configuration :** Automatiquement activé avec `pnpm dev` via `server.ts`
+
+### SSE - Server-Sent Events (Unidirectionnel)
+**Utilisé pour :** Notifications, actualités, transactions
+- Événements serveur → client
+- Notifications système
+- Mises à jour de taux d'épargne
+- Confirmation de transactions
+
+**Token DI :** `TOKENS.IRealtimeServiceNotifications`
+
+**Service :** `@workspace/service-realtime-sse`
+
+**Configuration :** Toujours actif, initialisé automatiquement dans `di.ts`
+
+### Configuration dans la DI
+
+Les services sont injectés via des tokens distincts dans `/apps/web/src/lib/di.ts` avec résolution **lazy** :
+
+```typescript
+// Résolution dynamique au moment de l'injection (permet à server.ts d'initialiser après)
+container.register(TOKENS.IRealtimeServiceMessages, {
+    useFactory: () => wsService || sseService  // WebSocket si disponible, sinon SSE
+});
+
+container.register(TOKENS.IRealtimeServiceNotifications, {
+    useFactory: () => sseService  // Toujours SSE
+});
+```
+
+**Important :** Les services sont résolus dynamiquement via des factories, permettant au WebSocket d'être initialisé par `server.ts` après le chargement du module DI.
+
+### Commandes
+
+```bash
+pnpm dev        # Lance avec WebSocket + SSE (recommandé)
+pnpm dev:next   # Lance avec Next.js uniquement (SSE only, fallback)
+```
+
+> **Note :** `pnpm dev` lance le serveur custom (`server.ts`) qui :
+> 1. Initialise le WebSocketRealtimeService sur `globalThis`
+> 2. Démarre Next.js avec support WebSocket sur `/ws`
+> 3. Les API Routes résolvent dynamiquement le service WebSocket via la DI
+> 4. SSE reste disponible sur `/api/realtime/sse` pour les notifications
+
+### Vérification du Service Actif
+
+Au démarrage avec `pnpm dev`, vous devriez voir :
+```
+[Server] ✓ WebSocketRealtimeService initialized for messages/conversations
+> Ready on http://localhost:3000
+> WebSocket (Messages) available on ws://localhost:3000/ws
+> SSE (Notifications) available on /api/realtime/sse
+```
+
+Si vous voyez `[DI] WebSocketRealtimeService not available` dans les logs des API calls, cela signifie que le service WebSocket n'est pas correctement initialisé. Redémarrez avec `pnpm dev`.
 
 ## Scripts disponibles
 

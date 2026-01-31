@@ -7,7 +7,7 @@ export class MarkNotificationAsReadUseCase {
   constructor(
     @Inject(TOKENS.INotificationRepository)
     private notificationRepository: INotificationRepository,
-    @Inject(TOKENS.IRealtimeService)
+    @Inject(TOKENS.IRealtimeServiceNotifications)
     private realtimeService: IRealtimeService
   ) {}
 

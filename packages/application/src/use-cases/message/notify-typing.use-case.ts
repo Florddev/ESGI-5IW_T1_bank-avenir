@@ -12,7 +12,7 @@ export interface NotifyTypingInput {
 @injectable()
 export class NotifyTypingUseCase {
     constructor(
-        @inject(TOKENS.IRealtimeService)
+        @inject(TOKENS.IRealtimeServiceMessages)
         private realtimeService: IRealtimeService
     ) {}
 

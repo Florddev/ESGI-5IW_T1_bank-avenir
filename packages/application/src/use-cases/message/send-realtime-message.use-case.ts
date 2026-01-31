@@ -6,6 +6,7 @@ import type { RealtimeMessageDto } from '../../dtos';
 export interface SendRealtimeMessageInput {
     conversationId: string;
     senderId: string;
+    senderName: string;
     recipientId: string;
     content: string;
 }
@@ -13,7 +14,7 @@ export interface SendRealtimeMessageInput {
 @injectable()
 export class SendRealtimeMessageUseCase {
     constructor(
-        @inject(TOKENS.IRealtimeService) private realtimeService: IRealtimeService
+        @inject(TOKENS.IRealtimeServiceMessages) private realtimeService: IRealtimeService
     ) {}
 
     async execute(input: SendRealtimeMessageInput): Promise<void> {
@@ -21,6 +22,7 @@ export class SendRealtimeMessageUseCase {
             id: crypto.randomUUID(),
             conversationId: input.conversationId,
             senderId: input.senderId,
+            senderName: input.senderName,
             content: input.content,
             createdAt: new Date().toISOString(),
             isRead: false,

@@ -14,7 +14,7 @@ export class SendRealtimeNotificationUseCase {
     constructor(
         @Inject(TOKENS.INotificationRepository)
         private readonly notificationRepository: INotificationRepository,
-        @Inject(TOKENS.IRealtimeService)
+        @Inject(TOKENS.IRealtimeServiceNotifications)
         private readonly realtimeService: IRealtimeService
     ) {}
 

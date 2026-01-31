@@ -9,7 +9,7 @@ export class UpdateGlobalSavingsRateUseCase {
     private accountRepository: IAccountRepository,
     @Inject(TOKENS.INotificationRepository)
     private notificationRepository: INotificationRepository,
-    @Inject(TOKENS.IRealtimeService)
+    @Inject(TOKENS.IRealtimeServiceNotifications)
     private realtimeService: IRealtimeService,
     @Inject(TOKENS.ISettingsRepository)
     private settingsRepository: ISettingsRepository
