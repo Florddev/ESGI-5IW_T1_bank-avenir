@@ -74,31 +74,9 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
    
    L'app sera disponible sur [http://localhost:3000](http://localhost:3000)
 
-## 🔐 Fonctionnalités d'authentification
+> ***ATTENTION:*** A la création d'un nouveau  compte, le lien de confirmation de l'email est envoyé dans la console (Adapter email-console utilisé dans l'app web)
 
-### Flux complet
-
-1. **Inscription** : `/auth/register`
-   - Formulaire avec email, mot de passe, prénom, nom
-   - Hash du mot de passe avec bcrypt
-   - Envoi email de confirmation (console en dev)
-   
-2. **Confirmation** : `/auth/confirm-email?token=xxx`
-   - Cliquer sur le lien dans l'email (console)
-   - Activation automatique du compte
-   - Redirection vers login
-
-3. **Connexion** : `/auth/login`
-   - Email + mot de passe
-   - JWT stocké dans cookie httpOnly (7 jours)
-   - Redirection vers dashboard
-
-4. **Dashboard** : `/dashboard`
-   - Accès protégé (redirection si non authentifié)
-   - Affichage infos utilisateur
-   - Déconnexion
-
-## 📦 Structure des packages
+## Structure des packages
 
 ```
 packages/
@@ -117,7 +95,7 @@ packages/
 └── config/            # Configs partagées (eslint, typescript, prettier)
 ```
 
-## 🛠️ Scripts disponibles
+## Scripts disponibles
 
 ```bash
 pnpm dev          # Lance tous les packages en mode dev
@@ -126,33 +104,3 @@ pnpm lint         # Lint tous les packages
 pnpm format       # Format le code avec Prettier
 pnpm clean:all    # Nettoie node_modules et caches
 ```
-
-## 🎨 Ajouter des composants shadcn/ui
-
-```bash
-pnpm dlx shadcn@latest add button -c apps/web
-```
-
-Les composants sont placés dans `packages/ui-react/src/components/`.
-
-## 🧪 Tester l'authentification
-
-1. Créer un compte sur `/auth/register`
-2. Copier le lien de confirmation depuis la console
-3. Ouvrir le lien dans le navigateur
-4. Se connecter sur `/auth/login`
-5. Accéder au dashboard
-
-## 📚 Documentation
-
-- [Guide DI](docs/dependency-injection.md) - 873 lignes sur l'injection de dépendances
-- [Auth Example](docs/auth-example.md) - Exemples d'authentification
-
-## 🔧 Technologies
-
-- **Frontend** : Next.js 16, React 19, TailwindCSS, shadcn/ui
-- **Backend** : Next.js API Routes
-- **Auth** : JWT (jsonwebtoken), bcrypt
-- **DI** : tsyringe + reflect-metadata
-- **Monorepo** : pnpm workspaces + Turborepo
-- **TypeScript** : 5.7

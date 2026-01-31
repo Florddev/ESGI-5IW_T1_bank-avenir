@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: avenir-bank-postgres
-    restart: unless-stopped
+    #restart: unless-stopped
     environment:
       POSTGRES_DB: avenir_bank
       POSTGRES_USER: postgres

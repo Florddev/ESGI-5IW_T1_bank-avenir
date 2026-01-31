@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 export async function seedUsers(db: PostgresJsDatabase<typeof schema>) {
   console.log('🌱 Seeding users...');
 
-  const hashedPassword = await bcrypt.hash('password123', 10);
+  const hashedPassword = await bcrypt.hash('$$Password123!', 10);
 
   const usersData = [
     {
