@@ -1,6 +1,6 @@
 import { Inject, TOKENS, UseCase } from '@workspace/shared/di';
 import { Message, Notification, NotificationType } from '@workspace/domain';
-import type { IMessageRepository, IRealtimeService, IConversationRepository, INotificationRepository } from '../../ports';
+import type { IMessageRepository, IRealtimeService, IConversationRepository, INotificationRepository, IUserRepository } from '../../ports';
 import type { MessageDto, RealtimeMessageDto } from '../../dtos';
 
 @UseCase()
@@ -13,7 +13,9 @@ export class SendMessageUseCase {
     @Inject(TOKENS.IConversationRepository)
     private conversationRepository: IConversationRepository,
     @Inject(TOKENS.INotificationRepository)
-    private notificationRepository: INotificationRepository
+    private notificationRepository: INotificationRepository,
+    @Inject(TOKENS.IUserRepository)
+    private userRepository: IUserRepository
   ) {}
 
   async execute(
@@ -27,10 +29,14 @@ export class SendMessageUseCase {
 
     const conversation = await this.conversationRepository.findById(conversationId);
     if (conversation) {
+      const sender = await this.userRepository.findById(senderId);
+      const senderName = sender ? `${sender.firstName} ${sender.lastName}` : 'Utilisateur';
+
       const realtimeDto: RealtimeMessageDto = {
         id: savedMessage.id,
         conversationId: savedMessage.conversationId,
         senderId: savedMessage.senderId,
+        senderName,
         content: savedMessage.content,
         createdAt: savedMessage.createdAt.toISOString(),
         isRead: savedMessage.isRead,

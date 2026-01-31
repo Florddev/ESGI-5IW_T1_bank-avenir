@@ -2,7 +2,7 @@
 
 import { Button } from '@workspace/ui-react/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/components/card';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
     useConversations,
     useConversationMessages,
@@ -21,6 +21,7 @@ import { useRealtimeNotifications, useMarkAsRead } from '@workspace/adapter-next
 import { CreateConversationForm, SendMessageForm } from '../components';
 import type { CreateConversationFormData } from '@workspace/adapter-common/validators';
 import { useTranslations } from '@workspace/ui-react/contexts';
+import { getMessagesClient } from '@workspace/adapter-common/client';
 
 export function MessagesView() {
     const { user } = useAuth();
@@ -41,12 +42,24 @@ export function MessagesView() {
     const t = useTranslations();
     const processedRealtimeRef = useRef(0);
     const processedNotifRef = useRef(0);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+    const [isRecipientTyping, setIsRecipientTyping] = useState(false);
+    const typingClearTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
 
     useEffect(() => {
         setMessages(loadedMessages);
     }, [loadedMessages]);
 
     useEffect(() => {
+        scrollToBottom();
+    }, [messages.length, scrollToBottom]);
+
+    useEffect(() => {
+        setIsRecipientTyping(false);
         if (selectedConversationId) {
             markConversationAsRead(selectedConversationId);
         }
@@ -62,18 +75,33 @@ export function MessagesView() {
             if (realtimeEvent.event === 'message_new') {
                 const messageData = realtimeEvent.data as any;
                 if (messageData?.conversationId === selectedConversationId) {
+                    setIsRecipientTyping(false);
                     setMessages(prev => {
                         if (prev.some(m => m.id === messageData.id)) return prev;
                         return [...prev, {
                             id: messageData.id,
                             conversationId: messageData.conversationId,
                             authorId: messageData.senderId,
-                            authorName: messageData.authorName || 'Unknown',
+                            authorName: messageData.senderName || messageData.authorName || 'Utilisateur',
                             content: messageData.content,
                             isRead: false,
                             createdAt: new Date(messageData.createdAt)
                         }];
                     });
+                }
+            }
+            if (realtimeEvent.event === 'typing_start') {
+                const typingData = realtimeEvent.data as any;
+                if (typingData?.conversationId === selectedConversationId) {
+                    setIsRecipientTyping(true);
+                    if (typingClearTimeoutRef.current) clearTimeout(typingClearTimeoutRef.current);
+                    typingClearTimeoutRef.current = setTimeout(() => setIsRecipientTyping(false), 4000);
+                }
+            }
+            if (realtimeEvent.event === 'typing_stop') {
+                const typingData = realtimeEvent.data as any;
+                if (typingData?.conversationId === selectedConversationId) {
+                    setIsRecipientTyping(false);
                 }
             }
         }
@@ -139,6 +167,15 @@ export function MessagesView() {
 
     const isAdvisor = user?.role === UserRole.ADVISOR;
     const selectedConversation = conversations.find(c => c.id === selectedConversationId);
+
+    const recipientId = selectedConversation
+        ? (user?.id === selectedConversation.clientId ? selectedConversation.advisorId : selectedConversation.clientId)
+        : undefined;
+
+    const handleTypingChange = useCallback((isTyping: boolean) => {
+        if (!selectedConversationId || !user?.id || !recipientId) return;
+        getMessagesClient().notifyTyping(selectedConversationId, user.id, recipientId, isTyping).catch(() => {});
+    }, [selectedConversationId, user?.id, recipientId]);
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
@@ -322,14 +359,28 @@ export function MessagesView() {
                                                 </div>
                                             );
                                         })}
+                                        <div ref={messagesEndRef} />
                                     </div>
                                 )}
                             </div>
                             {(selectedConversation.status === 'ASSIGNED' || selectedConversation.status === 'OPEN') && (
                                 <div className="border-t bg-background px-6 py-4 flex-shrink-0">
+                                    {isRecipientTyping && (
+                                        <div className="flex items-center gap-2 px-1 pb-2">
+                                            <div className="flex gap-1">
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce [animation-delay:0ms]" />
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce [animation-delay:150ms]" />
+                                                <span className="w-1.5 h-1.5 bg-muted-foreground/60 rounded-full animate-bounce [animation-delay:300ms]" />
+                                            </div>
+                                            <span className="text-xs text-muted-foreground italic">
+                                                {isAdvisor ? selectedConversation.clientName : selectedConversation.advisorName || 'Votre conseiller'} est en train d'écrire...
+                                            </span>
+                                        </div>
+                                    )}
                                     <SendMessageForm
                                         onSend={handleSendReply}
                                         isSending={isSending}
+                                        onTypingChange={handleTypingChange}
                                     />
                                 </div>
                             )}
