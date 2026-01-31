@@ -32,12 +32,14 @@ const getNavigationByRole = (role: UserRole, localizedPath: (path: string) => st
         { href: localizedPath('/dashboard/transactions'), label: 'Transactions', icon: '💸' },
         { href: localizedPath('/dashboard/savings'), label: 'Épargne', icon: '💰' },
         { href: localizedPath('/dashboard/stocks'), label: 'Actions', icon: '📈' },
+        { href: localizedPath('/dashboard/news'), label: 'Actualités', icon: '📰' },
         { href: localizedPath('/dashboard/messages'), label: 'Messages', icon: '💬' },
     ];
 
     const ADVISOR_NAV: NavItem[] = [
         { href: localizedPath('/dashboard'), label: 'Vue d\'ensemble', icon: '🏠' },
         { href: localizedPath('/dashboard/clients'), label: 'Mes clients', icon: '👥' },
+        { href: localizedPath('/dashboard/news'), label: 'Actualités', icon: '📰' },
         { href: localizedPath('/dashboard/messages'), label: 'Messagerie', icon: '💬' },
     ];
 

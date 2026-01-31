@@ -60,12 +60,12 @@ Application bancaire construite avec une **architecture Clean/Hexagonale** en mo
    ```
 
    **Comptes disponibles après seeding :**
-   - Directeur : `director@avenir-bank.com` / `password123`
-   - Conseiller 1 : `advisor1@avenir-bank.com` / `password123`
-   - Conseiller 2 : `advisor2@avenir-bank.com` / `password123`
-   - Client 1 : `client1@example.com` / `password123`
-   - Client 2 : `client2@example.com` / `password123`
-   - Client 3 : `client3@example.com` / `password123` (compte en attente de confirmation)
+   - Directeur : `director@avenir-bank.com` / `$$Password123!`
+   - Conseiller 1 : `advisor1@avenir-bank.com` / `$$Password123!`
+   - Conseiller 2 : `advisor2@avenir-bank.com` / `$$Password123!`
+   - Client 1 : `client1@example.com` / `$$Password123!`
+   - Client 2 : `client2@example.com` / `$$Password123!`
+   - Client 3 : `client3@example.com` / `$$Password123!` (compte en attente de confirmation)
 
 7. **Lancer le studio**
    ```bash

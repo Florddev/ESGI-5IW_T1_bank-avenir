@@ -10,27 +10,29 @@ const controller = new AdminController();
 
 export const PATCH = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);
-  
+
+  const { id } = await params;
   const body = await parseBody<{
     firstName: string;
     lastName: string;
   }>(request);
 
-  const user = await controller.updateUser(params.id, body.firstName, body.lastName);
+  const user = await controller.updateUser(id, body.firstName, body.lastName);
   return successResponse(user);
 });
 
 export const DELETE = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);
 
-  await controller.deleteUser(params.id);
+  const { id } = await params;
+  await controller.deleteUser(id);
   return successResponse({ message: 'User deleted successfully' });
 });

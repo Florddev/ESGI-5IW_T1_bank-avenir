@@ -12,6 +12,7 @@ import { seedMessages } from './messages.seeder';
 import { seedNotifications } from './notifications.seeder';
 import { seedOrders } from './orders.seeder';
 import { seedSettings } from './settings.seeder';
+import { seedArticles } from './articles.seeder';
 
 async function runSeeders() {
   const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/avenir_bank';
@@ -35,6 +36,7 @@ async function runSeeders() {
     await seedNotifications(db);
     await seedOrders(db);
     await seedSettings(db);
+    await seedArticles(db);
 
     console.log('\n✨ Database seeding completed successfully!');
   } catch (error) {

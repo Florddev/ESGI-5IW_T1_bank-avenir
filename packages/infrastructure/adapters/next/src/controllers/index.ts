@@ -9,3 +9,4 @@ export { ConversationsController } from './conversations.controller';
 export { MessagesController } from './messages.controller';
 export { RealtimeController } from './realtime.controller';
 export { AdvisorController } from './advisor.controller';
+export { ArticlesController } from './articles.controller';

@@ -10,6 +10,7 @@ export const TOKENS = {
     IMessageRepository: Symbol('IMessageRepository'),
     INotificationRepository: Symbol('INotificationRepository'),
     ISettingsRepository: Symbol('ISettingsRepository'),
+    IArticleRepository: Symbol('IArticleRepository'),
 
     IAuthService: Symbol('IAuthService'),
     IEmailService: Symbol('IEmailService'),

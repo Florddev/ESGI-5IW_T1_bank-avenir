@@ -9,10 +9,11 @@ const controller = new LoansController();
 
 export const POST = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   await requireAuth()(request);
-  
-  const payment = await controller.processPayment(params.id);
+
+  const { id } = await params;
+  const payment = await controller.processPayment(id);
   return successResponse(payment);
 });

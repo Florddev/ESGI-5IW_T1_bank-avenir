@@ -9,3 +9,4 @@ export * from './conversation.dto';
 export * from './notification.dto';
 export * from './realtime.dto';
 export * from './settings.dto';
+export * from './article.dto';

@@ -9,3 +9,4 @@ export * from './admin.client';
 export * from './messages.client';
 export * from './realtime.client';
 export * from './advisor.client';
+export * from './articles.client';

@@ -8,3 +8,4 @@ export * from './loan';
 export * from './notification';
 export * from './stock';
 export * from './transaction';
+export * from './article';

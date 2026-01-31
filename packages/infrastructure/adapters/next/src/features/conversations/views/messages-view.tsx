@@ -2,7 +2,7 @@
 
 import { Button } from '@workspace/ui-react/components/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@workspace/ui-react/components/card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     useConversations,
     useConversationMessages,
@@ -39,6 +39,8 @@ export function MessagesView() {
     const { events: notificationEvents } = useRealtimeNotifications(user?.id || '');
     const { markAsRead } = useMarkAsRead();
     const t = useTranslations();
+    const processedRealtimeRef = useRef(0);
+    const processedNotifRef = useRef(0);
 
     useEffect(() => {
         setMessages(loadedMessages);
@@ -51,42 +53,45 @@ export function MessagesView() {
     }, [selectedConversationId, markConversationAsRead]);
 
     useEffect(() => {
-        if (!realtimeEvents || realtimeEvents.length === 0) return;
+        if (realtimeEvents.length <= processedRealtimeRef.current) return;
 
-        const lastEvent = realtimeEvents[realtimeEvents.length - 1];
-        if (lastEvent.event === 'message_new') {
-            const messageData = lastEvent.data as any;
-            if (messageData?.conversationId === selectedConversationId) {
-                setMessages(prev => {
-                    if (prev.some(m => m.id === messageData.id)) return prev;
-                    return [...prev, {
-                        id: messageData.id,
-                        conversationId: messageData.conversationId,
-                        authorId: messageData.senderId,
-                        authorName: messageData.authorName || 'Unknown',
-                        content: messageData.content,
-                        isRead: false,
-                        createdAt: new Date(messageData.createdAt)
-                    }];
-                });
+        const newEvents = realtimeEvents.slice(0, realtimeEvents.length - processedRealtimeRef.current);
+        processedRealtimeRef.current = realtimeEvents.length;
+
+        for (const realtimeEvent of newEvents) {
+            if (realtimeEvent.event === 'message_new') {
+                const messageData = realtimeEvent.data as any;
+                if (messageData?.conversationId === selectedConversationId) {
+                    setMessages(prev => {
+                        if (prev.some(m => m.id === messageData.id)) return prev;
+                        return [...prev, {
+                            id: messageData.id,
+                            conversationId: messageData.conversationId,
+                            authorId: messageData.senderId,
+                            authorName: messageData.authorName || 'Unknown',
+                            content: messageData.content,
+                            isRead: false,
+                            createdAt: new Date(messageData.createdAt)
+                        }];
+                    });
+                }
             }
         }
     }, [realtimeEvents.length, selectedConversationId]);
 
     useEffect(() => {
-        if (!notificationEvents || notificationEvents.length === 0) return;
+        if (notificationEvents.length <= processedNotifRef.current) return;
 
-        const lastNotification = notificationEvents[notificationEvents.length - 1];
-        if (!lastNotification || !lastNotification.data) return;
+        const newEvents = notificationEvents.slice(0, notificationEvents.length - processedNotifRef.current);
+        processedNotifRef.current = notificationEvents.length;
 
-        const { event, data } = lastNotification;
-
-        // Check for both 'notification' and 'notification_new' events for compatibility
-        if ((event === 'notification' || event === 'notification_new') &&
-            data.type === 'MESSAGE_RECEIVED' &&
-            !data.isRead &&
-            data.id) {
-            markAsRead(data.id);
+        for (const notifEvent of newEvents) {
+            if ((notifEvent.event === 'notification' || notifEvent.event === 'notification_new') &&
+                notifEvent.data?.type === 'MESSAGE_RECEIVED' &&
+                !notifEvent.data?.isRead &&
+                notifEvent.data?.id) {
+                markAsRead(notifEvent.data.id);
+            }
         }
     }, [notificationEvents.length, markAsRead]);
 

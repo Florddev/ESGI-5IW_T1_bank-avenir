@@ -9,10 +9,11 @@ const controller = new NotificationsController();
 
 export const PATCH = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   await requireAuth()(request);
 
-  await controller.markAsRead(params.id);
+  const { id } = await params;
+  await controller.markAsRead(id);
   return successResponse({ message: 'Notification marked as read' });
 });

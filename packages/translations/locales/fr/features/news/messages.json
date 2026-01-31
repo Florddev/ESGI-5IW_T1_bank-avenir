@@ -1,0 +1,16 @@
+{
+  "title": "Actualités",
+  "description": "Consultez les dernières actualités de votre banque en temps réel.",
+  "manageDescription": "Gérez et publiez des actualités pour vos clients.",
+  "createArticle": "Nouvelle actualité",
+  "articleTitle": "Titre",
+  "articleTitlePlaceholder": "Ex: Nouveau service disponible",
+  "articleContent": "Contenu",
+  "articleContentPlaceholder": "Rédigez le contenu de votre actualité...",
+  "publish": "Publier",
+  "publishing": "Publication en cours...",
+  "cancel": "Annuler",
+  "articlePublished": "Actualité publiée avec succès.",
+  "loading": "Chargement des actualités...",
+  "noArticles": "Aucune actualité pour le moment."
+}

@@ -10,27 +10,29 @@ const controller = new StocksController();
 
 export const PATCH = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);
-  
+
+  const { id } = await params;
   const body = await parseBody<{
     companyName?: string;
     makeAvailable?: boolean;
   }>(request);
 
-  const stock = await controller.updateStock(params.id, body.companyName, body.makeAvailable);
+  const stock = await controller.updateStock(id, body.companyName, body.makeAvailable);
   return successResponse(stock);
 });
 
 export const DELETE = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
   await requireRole([UserRole.DIRECTOR])(auth);
-  
-  await controller.deleteStock(params.id);
+
+  const { id } = await params;
+  await controller.deleteStock(id);
   return successResponse({ message: 'Stock deleted successfully' });
 });

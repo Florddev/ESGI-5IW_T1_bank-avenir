@@ -1,0 +1,16 @@
+{
+  "title": "News",
+  "description": "View the latest news from your bank in real time.",
+  "manageDescription": "Manage and publish news for your clients.",
+  "createArticle": "New article",
+  "articleTitle": "Title",
+  "articleTitlePlaceholder": "E.g.: New service available",
+  "articleContent": "Content",
+  "articleContentPlaceholder": "Write the content of your article...",
+  "publish": "Publish",
+  "publishing": "Publishing...",
+  "cancel": "Cancel",
+  "articlePublished": "Article published successfully.",
+  "loading": "Loading news...",
+  "noArticles": "No news yet."
+}

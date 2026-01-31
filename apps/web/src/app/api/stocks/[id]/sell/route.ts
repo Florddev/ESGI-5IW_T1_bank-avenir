@@ -9,11 +9,12 @@ const controller = new StocksController();
 
 export const POST = withErrorHandler(async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) => {
   const auth = await requireAuth()(request);
+  const { id } = await params;
   const body = await parseBody<{ quantity: number }>(request);
 
-  const order = await controller.sellStock(auth.userId, params.id, body.quantity);
+  const order = await controller.sellStock(auth.userId, id, body.quantity);
   return successResponse(order, 201);
 });
