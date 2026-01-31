@@ -9,7 +9,7 @@ export class WebSocketConnection implements IRealtimeConnection {
     private reconnectDelay = 1000;
 
     constructor(wsUrl?: string) {
-        this.wsUrl = wsUrl || 'ws://localhost:3001';
+        this.wsUrl = wsUrl || 'ws://localhost:3000/ws';
     }
 
     connect(userId: string, clientId: string, onMessage: (data: any) => void, onError: (error: any) => void): void {
