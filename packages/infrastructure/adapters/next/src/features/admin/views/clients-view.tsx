@@ -1,14 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import { Card, CardContent } from '@workspace/ui-react/components/card';
-import { useAdvisorClients } from '@workspace/adapter-next/features/advisor';
+import { Button } from '@workspace/ui-react/components/button';
+import { useAdvisorClients, useSendAdvisorNotification } from '@workspace/adapter-next/features/advisor';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import { MessageSquare, User } from 'lucide-react';
+import { Bell, MessageSquare, User } from 'lucide-react';
 import { useTranslations } from '@workspace/ui-react/contexts';
+import { SendNotificationForm } from '../components/send-notification-form';
+import type { SendAdvisorNotificationFormData } from '@workspace/adapter-common/validators';
 
 export function ClientsView() {
     const { clients, isLoading } = useAdvisorClients();
+    const { sendNotification, isLoading: isSending, error: sendError, success, reset } = useSendAdvisorNotification();
+    const [showNotificationForm, setShowNotificationForm] = useState(false);
     const t = useTranslations();
 
     const totalClients = clients.length;
@@ -18,6 +24,21 @@ export function ClientsView() {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
     const newClientsThisMonth = clients.filter(c => new Date(c.createdAt) >= oneMonthAgo).length;
 
+    const handleSendNotification = async (data: SendAdvisorNotificationFormData) => {
+        const result = await sendNotification(data);
+        if (result) {
+            setTimeout(() => {
+                setShowNotificationForm(false);
+                reset();
+            }, 2000);
+        }
+    };
+
+    const handleCancel = () => {
+        setShowNotificationForm(false);
+        reset();
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex items-center justify-between">
@@ -25,7 +46,35 @@ export function ClientsView() {
                     <h2 className="text-3xl font-bold tracking-tight">{t('features.admin.messages.myClients')}</h2>
                     <p className="text-muted-foreground">{t('features.admin.messages.myClientsDescription')}</p>
                 </div>
+                {clients.length > 0 && (
+                    <Button
+                        onClick={() => {
+                            setShowNotificationForm(!showNotificationForm);
+                            reset();
+                        }}
+                        variant={showNotificationForm ? 'outline' : 'default'}
+                    >
+                        <Bell className="h-4 w-4 mr-2" />
+                        {t('features.advisor.messages.notifyClients')}
+                    </Button>
+                )}
             </div>
+
+            {showNotificationForm && (
+                <div className="space-y-2">
+                    <SendNotificationForm
+                        onSubmit={handleSendNotification}
+                        onCancel={handleCancel}
+                        isLoading={isSending}
+                    />
+                    {sendError && (
+                        <p className="text-sm text-destructive">{sendError}</p>
+                    )}
+                    {success && (
+                        <p className="text-sm text-green-600">{t('features.advisor.messages.notificationSent')}</p>
+                    )}
+                </div>
+            )}
 
             <div className="grid gap-4 md:grid-cols-3">
                 <div className="bg-card p-6 rounded-lg border shadow-sm">

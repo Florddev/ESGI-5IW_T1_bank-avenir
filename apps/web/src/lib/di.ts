@@ -7,6 +7,14 @@ import { EmailConsoleService } from '@workspace/service-email-console';
 import { SSERealtimeService } from '@workspace/service-realtime-sse';
 import type { DependencyContainer } from 'tsyringe';
 
+const globalForRealtime = globalThis as typeof globalThis & {
+    __sseRealtimeService?: SSERealtimeService;
+};
+
+if (!globalForRealtime.__sseRealtimeService) {
+    globalForRealtime.__sseRealtimeService = new SSERealtimeService();
+}
+
 let isInitialized = false;
 
 function initializeDI() {
@@ -21,7 +29,7 @@ function initializeDI() {
     // Register services
     container.registerSingleton(TOKENS.IAuthService, AuthJwtService);
     container.registerSingleton(TOKENS.IEmailService, EmailConsoleService);
-    container.registerSingleton(TOKENS.IRealtimeService, SSERealtimeService);
+    container.registerInstance(TOKENS.IRealtimeService, globalForRealtime.__sseRealtimeService!);
 
     isInitialized = true;
 }

@@ -6,6 +6,10 @@ export class AdvisorClient extends BaseClient {
     async getClients(): Promise<AdvisorClientDto[]> {
         return this.get<AdvisorClientDto[]>('/api/advisor/clients');
     }
+
+    async notifyClients(data: { title: string; message: string }): Promise<{ notifiedCount: number }> {
+        return this.post<{ notifiedCount: number }>('/api/advisor/notifications', data);
+    }
 }
 
 export function getAdvisorClient(): AdvisorClient {

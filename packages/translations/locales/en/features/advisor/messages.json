@@ -1,0 +1,13 @@
+{
+  "notifyClients": "Notify my clients",
+  "sendNotification": "Send a notification",
+  "sendNotificationDescription": "This notification will be sent in real time to all your clients.",
+  "notificationTitle": "Title",
+  "notificationTitlePlaceholder": "Ex: Important information",
+  "notificationMessage": "Message",
+  "notificationMessagePlaceholder": "Write the message to send to your clients...",
+  "send": "Send",
+  "sending": "Sending...",
+  "cancel": "Cancel",
+  "notificationSent": "Notification successfully sent to your clients."
+}

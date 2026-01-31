@@ -4,6 +4,7 @@ export enum NotificationType {
     LOAN_PAYMENT_DUE = 'LOAN_PAYMENT_DUE',
     ORDER_FILLED = 'ORDER_FILLED',
     MESSAGE_RECEIVED = 'MESSAGE_RECEIVED',
+    ADVISOR_MESSAGE = 'ADVISOR_MESSAGE',
 }
 
 export interface NotificationProps {

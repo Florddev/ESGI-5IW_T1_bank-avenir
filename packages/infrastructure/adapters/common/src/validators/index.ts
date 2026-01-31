@@ -5,3 +5,4 @@ export * from './loan.validator';
 export * from './stock.validator';
 export * from './conversation.validator';
 export * from './admin.validator';
+export * from './advisor.validator';
